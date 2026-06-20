@@ -1,0 +1,28 @@
+name: admin
+description: "Task — Admin web dashboard (Phase 3 skeleton)."
+publish_to: none
+version: 1.0.0+1
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  task_core:
+  task_design:
+  task_domain:
+  task_data:
+  flutter_riverpod: ^2.6.1
+  go_router: ^14.6.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  google_fonts: ^6.2.1
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,74 @@
+rules_version = '2';
+
+// Baseline security rules. Role gates + the security-critical sealed-bid
+// blinding (PRD §3.2). Field-level validation is tightened per feature phase.
+// NOTE: App Check enforcement is configured at the API level (PRD §1.1), not in
+// these rules — rules cannot inspect the App Check token directly.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function role() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && role() == 'admin';
+    }
+
+    // --- users (customers + technicians + admins) ---
+    match /users/{userId} {
+      allow read: if isSelf(userId) || isAdmin();
+      allow create: if isSelf(userId);
+      allow update: if isSelf(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // --- addresses ---
+    match /addresses/{addressId} {
+      allow read, delete: if (resource != null && isSelf(resource.data.user_id)) || isAdmin();
+      allow create: if isSelf(request.resource.data.user_id);
+      allow update: if (resource != null && isSelf(resource.data.user_id)) || isAdmin();
+    }
+
+    // --- jobs (source of truth) ---
+    match /jobs/{jobId} {
+      // Reads refined per phase (job owner / assigned technician / admin).
+      allow read: if isSignedIn();
+      allow create: if isSelf(request.resource.data.customer_id);
+      // State transitions are driven server-side by Cloud Functions in later
+      // phases; client writes are locked down then.
+      allow update: if isSignedIn();
+      allow delete: if isAdmin();
+
+      // Sealed bids: a technician writes only their own quote (doc id == uid)
+      // and reads only their own; the job's customer and admins read all.
+      match /quotes/{technicianId} {
+        allow create: if isSelf(technicianId) && role() == 'technician';
+        allow read: if isSelf(technicianId)
+          || isAdmin()
+          || get(/databases/$(database)/documents/jobs/$(jobId)).data.customer_id == request.auth.uid;
+        allow update, delete: if isAdmin();
+      }
+
+      // Live location trail — only the technician writes; participants read.
+      match /tracking/{pointId} {
+        allow read: if isSignedIn();
+        allow write: if isSignedIn() && role() == 'technician';
+      }
+
+      // In-app chat (30-day TTL cleanup handled by a scheduled function).
+      match /chat/{messageId} {
+        allow read, create: if isSignedIn();
+        allow update, delete: if isAdmin();
+      }
+    }
+  }
+}

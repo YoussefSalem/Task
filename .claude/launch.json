@@ -1,0 +1,45 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Customer App (Flutter Web)",
+      "runtimeExecutable": "flutter",
+      "runtimeArgs": [
+        "run",
+        "-d",
+        "web-server",
+        "--web-hostname",
+        "127.0.0.1",
+        "--web-port",
+        "5000",
+        "-t",
+        "lib/main_dev.dart"
+      ],
+      "cwd": "apps/customer",
+      "port": 5000
+    },
+    {
+      "name": "Firebase Emulators",
+      "runtimeExecutable": "firebase",
+      "runtimeArgs": [
+        "emulators:start",
+        "--project",
+        "demo-task"
+      ],
+      "cwd": ".",
+      "port": 4000
+    },
+    {
+      "name": "Cloud Functions (TS watch)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "backend/functions",
+        "run",
+        "build:watch"
+      ],
+      "cwd": ".",
+      "port": 5001
+    }
+  ]
+}

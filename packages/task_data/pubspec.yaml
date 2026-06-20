@@ -1,0 +1,40 @@
+name: task_data
+description: "Data layer — Firebase/Dio/Drift implementations of domain repositories, DTOs, mappers, offline sync."
+publish_to: none
+version: 0.0.1
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  task_core:
+  task_domain:
+
+  # Firebase
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  firebase_storage: ^12.3.4
+  firebase_app_check: ^0.3.1
+  firebase_messaging: ^15.1.3
+
+  # Networking (Paymob)
+  dio: ^5.7.0
+
+  # Offline queue
+  drift: ^2.21.0
+  sqlite3_flutter_libs: ^0.5.24
+  path_provider: ^2.1.4
+  path: ^1.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.4.13
+  drift_dev: ^2.21.0
+
+flutter:

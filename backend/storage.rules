@@ -1,0 +1,21 @@
+rules_version = '2';
+
+// Media storage rules. Job proof images are capped to keep Storage costs and
+// upload sizes within the compression budget (PRD §5.1: ≤800 KB target).
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Before/after job images.
+    match /jobs/{jobId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+        && request.resource.size < 1 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // KYC documents — owner-only (PRD §6.3).
+    match /kyc/{userId}/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

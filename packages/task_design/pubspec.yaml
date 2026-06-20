@@ -1,0 +1,20 @@
+name: task_design
+description: "Design system — Material 3 dark theme, color tokens, Cairo typography, RTL, shared widgets."
+publish_to: none
+version: 0.0.1
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:

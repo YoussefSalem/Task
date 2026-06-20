@@ -1,0 +1,23 @@
+name: task
+description: "Task — home-services marketplace monorepo (pub workspace root)."
+publish_to: none
+version: 0.0.1
+
+environment:
+  sdk: ^3.9.0
+
+# Native Dart pub workspace. Apps are added to this list after they are
+# generated with `flutter create` (see apps/*). Each member declares
+# `resolution: workspace`.
+workspace:
+  - packages/task_core
+  - packages/task_design
+  - packages/task_domain
+  - packages/task_data
+  - apps/customer
+  - apps/technician
+  - apps/admin
+
+dev_dependencies:
+  melos: ^7.0.0
+  flutter_lints: ^6.0.0

@@ -1,0 +1,14 @@
+name: task_core
+description: "Pure Dart core — Result/Failure types, business-rule constants, value objects, utilities. No Flutter, no Firebase."
+publish_to: none
+version: 0.0.1
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  meta: ^1.15.0
+
+dev_dependencies:
+  test: ^1.25.0

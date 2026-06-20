@@ -13,7 +13,10 @@
       "Bash(npm --version)",
       "Bash(firebase --version)",
       "Bash(git --version)",
-      "Bash(melos --version)"
+      "Bash(melos --version)",
+      "Bash(npm install *)",
+      "Bash(echo \"NPM_EXIT=$?\")",
+      "Bash(echo \"=== flutter clone output ===\" && cat \"C:/Users/youss/AppData/Local/Temp/claude/C--Users-youss-Documents-Task-App/14934bf1-fbbf-4ec0-b685-5822312ec8b0/tasks/blqarnpnd.output\" 2>/dev/null | tail -3; echo \"=== flutter bin present? ===\" && ls \"C:/Users/youss/flutter/bin/flutter.bat\" 2>&1; echo \"=== firebase version ===\" && firebase --version 2>&1 | head -1)"
     ]
   }
 }

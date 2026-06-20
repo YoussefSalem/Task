@@ -1,0 +1,15 @@
+name: task_domain
+description: "Domain layer — entities, value objects, repository interfaces, use cases. Pure Dart: no Flutter, no Firebase."
+publish_to: none
+version: 0.0.1
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  task_core:
+  meta: ^1.15.0
+
+dev_dependencies:
+  test: ^1.25.0
