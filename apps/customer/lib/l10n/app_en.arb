@@ -1,0 +1,35 @@
+{
+  "@@locale": "en",
+  "tagline": "On-demand home services",
+  "@tagline": {
+    "description": "Splash screen subtitle under the Task wordmark"
+  },
+  "getStarted": "Get started",
+  "@getStarted": {
+    "description": "Primary call-to-action on the splash screen"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Tooltip/label for the language switcher"
+  },
+  "signInTitle": "Sign in",
+  "@signInTitle": {
+    "description": "Sign-in screen heading"
+  },
+  "signInSubtitle": "Enter your phone number to continue.",
+  "@signInSubtitle": {
+    "description": "Sign-in screen supporting text"
+  },
+  "phoneNumberLabel": "Phone number",
+  "@phoneNumberLabel": {
+    "description": "Label for the phone number field"
+  },
+  "continueAction": "Continue",
+  "@continueAction": {
+    "description": "Primary action on the sign-in screen"
+  },
+  "signInComingSoon": "Phone sign-in arrives with the next update.",
+  "@signInComingSoon": {
+    "description": "Feedback shown when Continue is tapped before auth is wired"
+  }
+}

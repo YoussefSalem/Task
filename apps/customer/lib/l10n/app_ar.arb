@@ -1,0 +1,11 @@
+{
+  "@@locale": "ar",
+  "tagline": "خدمات منزلية عند الطلب",
+  "getStarted": "ابدأ الآن",
+  "language": "اللغة",
+  "signInTitle": "تسجيل الدخول",
+  "signInSubtitle": "أدخل رقم هاتفك للمتابعة.",
+  "phoneNumberLabel": "رقم الهاتف",
+  "continueAction": "متابعة",
+  "signInComingSoon": "تسجيل الدخول عبر الهاتف سيتوفر في التحديث القادم."
+}

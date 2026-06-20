@@ -1,11 +1,14 @@
 import 'package:customer/app/flavor.dart';
 import 'package:customer/app/router.dart';
+import 'package:customer/features/localization/locale_controller.dart';
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_design/task_design.dart';
 
-/// Root widget. Dark-only Material 3, Arabic-first with RTL, English fallback.
+/// Root widget. Dark-only Material 3. Defaults to English; the language can be
+/// switched anywhere via [localeControllerProvider], and Arabic flips to RTL
+/// automatically.
 class CustomerApp extends ConsumerWidget {
   const CustomerApp({required this.flavor, super.key});
 
@@ -14,6 +17,7 @@ class CustomerApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(goRouterProvider);
+    final locale = ref.watch(localeControllerProvider);
 
     return MaterialApp.router(
       title: flavor.appTitle,
@@ -22,14 +26,9 @@ class CustomerApp extends ConsumerWidget {
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.dark,
       routerConfig: router,
-      // Arabic-first; the framework flips to RTL automatically for `ar`.
-      locale: const Locale('ar'),
-      supportedLocales: const <Locale>[Locale('ar'), Locale('en')],
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
     );
   }
 }

@@ -16,7 +16,13 @@
       "Bash(melos --version)",
       "Bash(npm install *)",
       "Bash(echo \"NPM_EXIT=$?\")",
-      "Bash(echo \"=== flutter clone output ===\" && cat \"C:/Users/youss/AppData/Local/Temp/claude/C--Users-youss-Documents-Task-App/14934bf1-fbbf-4ec0-b685-5822312ec8b0/tasks/blqarnpnd.output\" 2>/dev/null | tail -3; echo \"=== flutter bin present? ===\" && ls \"C:/Users/youss/flutter/bin/flutter.bat\" 2>&1; echo \"=== firebase version ===\" && firebase --version 2>&1 | head -1)"
+      "Bash(echo \"=== flutter clone output ===\" && cat \"C:/Users/youss/AppData/Local/Temp/claude/C--Users-youss-Documents-Task-App/14934bf1-fbbf-4ec0-b685-5822312ec8b0/tasks/blqarnpnd.output\" 2>/dev/null | tail -3; echo \"=== flutter bin present? ===\" && ls \"C:/Users/youss/flutter/bin/flutter.bat\" 2>&1; echo \"=== firebase version ===\" && firebase --version 2>&1 | head -1)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(mkdir -p apps/customer/assets/images apps/customer/lib/l10n apps/customer/lib/features/localization)",
+      "Bash(cp \"C:/Users/youss/Downloads/Task Black logo.jpg\" apps/customer/assets/images/task_logo.jpg)",
+      "Bash(cp \"C:/Users/youss/Downloads/Task White Logo.jpg\" apps/customer/assets/images/task_logo_light.jpg)",
+      "Bash(rm -f apps/customer/lib/features/welcome/welcome_screen.dart)",
+      "Bash(rmdir apps/customer/lib/features/welcome)"
     ]
   }
 }
