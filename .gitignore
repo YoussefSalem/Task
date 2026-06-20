@@ -1,0 +1,30 @@
+# Dart/Flutter
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec.lock
+*.iml
+.idea/
+
+# Node / Cloud Functions
+node_modules/
+backend/functions/lib/
+
+# Firebase
+.firebase/
+firebase-debug.log
+*-debug.log
+.runtimeconfig.json
+
+# Env / secrets
+.env
+*.keystore
+google-services.json
+GoogleService-Info.plist
+serviceAccountKey.json
+
+# OS
+.DS_Store
+Thumbs.db

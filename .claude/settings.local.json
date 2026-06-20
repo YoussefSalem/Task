@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"C:\\\\Users\\\\youss\\\\.claude\\\\skills\\\\superpowers\" 2>&1 | head -20)",
+      "Bash(git clone *)",
+      "Bash(mv \"C:\\\\Users\\\\youss\\\\.claude\\\\skills\\\\anthropics-skills-temp\\\\skills\\\\frontend-design\" \"C:\\\\Users\\\\youss\\\\.claude\\\\skills\\\\frontend-design\")",
+      "Bash(rm -r \"C:\\\\Users\\\\youss\\\\.claude\\\\skills\\\\anthropics-skills-temp\")",
+      "Bash(ls -la \"C:\\\\Users\\\\youss\\\\.claude\\\\skills\\\\graphify\" | head -20)",
+      "PowerShell(pip install graphifyy)",
+      "Bash(ls -la \"C:/Users/youss/Documents/Task App\" 2>/dev/null; echo \"---\"; ls \"C:/Users/youss/Downloads\" | grep -i task)",
+      "Bash(flutter --version)",
+      "Bash(dart --version)",
+      "Bash(npm --version)",
+      "Bash(firebase --version)",
+      "Bash(git --version)",
+      "Bash(melos --version)"
+    ]
+  }
+}
