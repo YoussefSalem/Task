@@ -1,44 +1,58 @@
+import 'dart:async';
+
+import 'package:customer/features/auth/auth_controller.dart';
 import 'package:customer/features/auth/sign_in_screen.dart';
+import 'package:customer/features/home/home_shell.dart';
 import 'package:customer/features/localization/language_switcher.dart';
 import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
 
-/// Branded splash / entry screen. A violet→black field flows smoothly to every
-/// edge; the glass Task logo sits in a pool of pure shadow (so its baked black
-/// backdrop dissolves) ringed by a breathing violet halo. A glowing progress
-/// bar fills on launch and then hands off to the single "Get started" CTA,
-/// which animates in — a deliberately futuristic, system-coming-to-life entry.
-class SplashScreen extends StatefulWidget {
+/// Uber-style entry: a brief, polished loading/transition screen. A violet→black
+/// field flows to every edge; the glass Task logo sits in a pool of shadow ringed
+/// by a breathing violet halo, with a slim shimmer line beneath the wordmark.
+///
+/// There is no user interaction. On launch the screen resolves auth state and,
+/// after a short minimum dwell, fades out and routes: signed-in users to the
+/// home shell, everyone else to sign-in.
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   static const String routeName = 'splash';
   static const String routePath = '/';
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with TickerProviderStateMixin {
+  // Brief, deliberate dwell so the brand entrance never flashes by.
+  static const Duration _minDwell = Duration(milliseconds: 1200);
+  static const Duration _reducedDwell = Duration(milliseconds: 400);
+
   // Entrance: logo settles in, then the wordmark + tagline rise.
   late final AnimationController _intro = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 1100),
+    duration: const Duration(milliseconds: 800),
   );
-
-  // Launch progress: fills the bar, then reveals the CTA.
-  late final AnimationController _load = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 2600),
-  );
-
   // Ambient life: the logo glow and scale breathe slowly and forever.
   late final AnimationController _pulse = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 2400),
+  );
+  // Indeterminate loading sweep under the wordmark.
+  late final AnimationController _shimmer = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1400),
+  );
+  // Quick fade-through on exit, so the hand-off feels continuous.
+  late final AnimationController _exit = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 260),
   );
 
   late final Animation<double> _logoFade = CurvedAnimation(
@@ -66,34 +80,52 @@ class _SplashScreenState extends State<SplashScreen>
     curve: Curves.easeInOut,
   );
 
-  bool _ready = false;
-  bool _resolved = false; // reduced-motion fast-path guard
+  bool _started = false; // one-time startup guard (reduced-motion known in build)
+  bool _dwellDone = false;
+  bool _navigated = false;
   Offset _parallax = Offset.zero;
+  Timer? _dwellTimer;
 
-  @override
-  void initState() {
-    super.initState();
-    _intro.forward();
-    _pulse.repeat(reverse: true);
-    _load.addStatusListener((status) {
-      if (status == AnimationStatus.completed && mounted) {
-        setState(() => _ready = true);
-      }
+  void _start(bool reduceMotion) {
+    if (_started) return;
+    _started = true;
+    if (reduceMotion) {
+      _intro.value = 1; // jump to resolved entrance, no breathing/shimmer
+    } else {
+      _intro.forward();
+      _pulse.repeat(reverse: true);
+      _shimmer.repeat();
+    }
+    _dwellTimer = Timer(reduceMotion ? _reducedDwell : _minDwell, () {
+      _dwellDone = true;
+      _maybeNavigate();
     });
-    _load.forward();
+  }
+
+  void _maybeNavigate() {
+    if (_navigated || !mounted || !_dwellDone) return;
+    final AsyncValue<Object?> auth = ref.read(authStateProvider);
+    if (auth.isLoading) return; // wait until auth resolves
+    _navigated = true;
+    final bool signedIn = auth.value != null;
+    final String dest =
+        signedIn ? HomeShell.homeRoutePath : SignInScreen.routePath;
+    _exit.forward().whenComplete(() {
+      if (mounted) context.go(dest);
+    });
   }
 
   @override
   void dispose() {
+    _dwellTimer?.cancel();
     _intro.dispose();
-    _load.dispose();
     _pulse.dispose();
+    _shimmer.dispose();
+    _exit.dispose();
     super.dispose();
   }
 
   void _onPointerHover(PointerHoverEvent event, Size size) {
-    // Subtle parallax drift toward the pointer (web/desktop only — no-op where
-    // there is no hover device).
     final dx = (event.localPosition.dx - size.width / 2) / size.width;
     final dy = (event.localPosition.dy - size.height / 2) / size.height;
     setState(() => _parallax = Offset(dx * 14, dy * 14));
@@ -101,132 +133,108 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final reduceMotion = MediaQuery.of(context).disableAnimations;
-    if (reduceMotion && !_resolved) {
-      // Jump straight to the resolved state — no progress wait, no breathing.
-      _resolved = true;
-      _intro.value = 1;
-      _load.value = 1;
-      _pulse.stop();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) setState(() => _ready = true);
-      });
-    }
+    final bool reduceMotion = MediaQuery.of(context).disableAnimations;
+    _start(reduceMotion);
+
+    // Navigate as soon as auth resolves (the dwell timer covers the other order).
+    ref.listen<AsyncValue<Object?>>(authStateProvider, (previous, next) {
+      _maybeNavigate();
+    });
 
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
-      body: MouseRegion(
-        onHover: reduceMotion
-            ? null
-            : (e) => _onPointerHover(e, MediaQuery.of(context).size),
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            const _SplashBackground(),
-            SafeArea(
-              child: Align(
-                alignment: AlignmentDirectional.topEnd,
-                child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.sm),
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      iconTheme:
-                          const IconThemeData(color: AppColors.textSecondary),
+      body: AnimatedBuilder(
+        animation: _exit,
+        builder: (context, child) =>
+            Opacity(opacity: 1 - _exit.value, child: child),
+        child: MouseRegion(
+          onHover: reduceMotion
+              ? null
+              : (e) => _onPointerHover(e, MediaQuery.of(context).size),
+          child: Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              const _SplashBackground(),
+              SafeArea(
+                child: Align(
+                  alignment: AlignmentDirectional.topEnd,
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppSpacing.sm),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        iconTheme: const IconThemeData(
+                            color: AppColors.textSecondary),
+                      ),
+                      child: const LanguageSwitcher(),
                     ),
-                    child: const LanguageSwitcher(),
                   ),
                 ),
               ),
-            ),
-            SafeArea(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-                child: Column(
-                  children: <Widget>[
-                    const Spacer(flex: 5),
-                    _buildLogo(),
-                    const SizedBox(height: AppSpacing.lg),
-                    FadeTransition(
-                      opacity: _textFade,
-                      child: SlideTransition(
-                        position: _textSlide,
-                        child: Column(
-                          children: <Widget>[
-                            Text(
-                              'Task',
-                              style: AppTypography.wordmark(
-                                color: AppColors.textPrimary,
-                              ).copyWith(
-                                shadows: <Shadow>[
-                                  Shadow(
-                                    color: AppColors.primary
-                                        .withValues(alpha: 0.55),
-                                    blurRadius: 28,
-                                  ),
-                                ],
+              SafeArea(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+                  child: Column(
+                    children: <Widget>[
+                      const Spacer(flex: 5),
+                      _buildLogo(),
+                      const SizedBox(height: AppSpacing.lg),
+                      FadeTransition(
+                        opacity: _textFade,
+                        child: SlideTransition(
+                          position: _textSlide,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Task',
+                                style: AppTypography.wordmark(
+                                  color: AppColors.textPrimary,
+                                ).copyWith(
+                                  shadows: <Shadow>[
+                                    Shadow(
+                                      color: AppColors.primary
+                                          .withValues(alpha: 0.55),
+                                      blurRadius: 28,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: AppSpacing.md),
-                            Text(
-                              l10n.tagline,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                    color: AppColors.textSecondary
-                                        .withValues(alpha: 0.8),
-                                    letterSpacing: 0.2,
-                                  ),
-                            ),
-                          ],
+                              const SizedBox(height: AppSpacing.md),
+                              Text(
+                                l10n.tagline,
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color: AppColors.textSecondary
+                                          .withValues(alpha: 0.8),
+                                      letterSpacing: 0.2,
+                                    ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    const Spacer(flex: 6),
-                    // Bottom slot: progress bar → CTA, fixed height so the
-                    // hand-off doesn't shift the layout.
-                    SizedBox(
-                      height: 64,
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 520),
-                        switchInCurve: Curves.easeOutCubic,
-                        switchOutCurve: Curves.easeIn,
-                        transitionBuilder: (child, animation) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: SlideTransition(
-                              position: Tween<Offset>(
-                                begin: const Offset(0, 0.35),
-                                end: Offset.zero,
-                              ).animate(animation),
-                              child: child,
-                            ),
-                          );
-                        },
-                        child: _ready
-                            ? _GetStartedButton(
-                                key: const ValueKey<String>('cta'),
-                                label: l10n.getStarted,
-                                onPressed: () => context
-                                    .pushNamed(SignInScreen.routeName),
-                              )
-                            : _LaunchProgress(
-                                key: const ValueKey<String>('progress'),
-                                progress: _load,
-                                pulse: _pulseCurve,
-                                label: l10n.loading,
-                              ),
+                      const Spacer(flex: 6),
+                      // Slim loading cue — replaces the old progress bar + CTA.
+                      SizedBox(
+                        height: 24,
+                        child: Center(
+                          child: FadeTransition(
+                            opacity: _textFade,
+                            child: _ShimmerLine(animation: _shimmer),
+                          ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: AppSpacing.xl),
-                  ],
+                      const SizedBox(height: AppSpacing.xl),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -251,7 +259,6 @@ class _SplashScreenState extends State<SplashScreen>
                 child: Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
-                    // Breathing violet halo — the "ring" around the dark logo.
                     IgnorePointer(
                       child: DecoratedBox(
                         decoration: BoxDecoration(
@@ -266,8 +273,6 @@ class _SplashScreenState extends State<SplashScreen>
                         ),
                       ),
                     ),
-                    // Feather the logo's square edges so they melt into the
-                    // shadow pool behind it.
                     ShaderMask(
                       blendMode: BlendMode.dstIn,
                       shaderCallback: (Rect rect) => const RadialGradient(
@@ -299,111 +304,53 @@ class _SplashScreenState extends State<SplashScreen>
   }
 }
 
-/// The launch progress bar with its status label. A glowing fill sweeps left to
-/// right; the label breathes to signal a live system.
-class _LaunchProgress extends StatelessWidget {
-  const _LaunchProgress({
-    required this.progress,
-    required this.pulse,
-    required this.label,
-    super.key,
-  });
+/// A slim, indeterminate loading sweep: a faint static track with a violet
+/// highlight that travels across it on a repeating controller.
+class _ShimmerLine extends StatelessWidget {
+  const _ShimmerLine({required this.animation});
 
-  final Animation<double> progress;
-  final Animation<double> pulse;
-  final String label;
+  final Animation<double> animation; // 0..1, repeating
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-          child: SizedBox(
-            height: 4,
-            child: Stack(
-              children: <Widget>[
-                const Positioned.fill(
-                  child: ColoredBox(color: Color(0x33FFFFFF)),
-                ),
-                AnimatedBuilder(
-                  animation: progress,
-                  builder: (context, _) {
-                    return FractionallySizedBox(
-                      alignment: AlignmentDirectional.centerStart,
-                      widthFactor: progress.value.clamp(0.0, 1.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius:
-                              BorderRadius.circular(AppSpacing.radiusSm),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.8),
-                              blurRadius: 10,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
+    return SizedBox(
+      width: 140,
+      height: 2,
+      child: Stack(
+        children: <Widget>[
+          // Faint static track.
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        FadeTransition(
-          opacity: Tween<double>(begin: 0.45, end: 0.9).animate(pulse),
-          child: Text(
-            label.toUpperCase(),
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: AppColors.textSecondary,
-                  letterSpacing: 2.4,
-                  fontWeight: FontWeight.w600,
-                ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// The primary CTA, wrapped in a soft violet glow so it reads as the lit,
-/// arrived endpoint of the launch sequence.
-class _GetStartedButton extends StatelessWidget {
-  const _GetStartedButton({
-    required this.label,
-    required this.onPressed,
-    super.key,
-  });
-
-  final String label;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.45),
-              blurRadius: 28,
-              spreadRadius: -4,
-              offset: const Offset(0, 8),
+          // Travelling highlight.
+          Positioned.fill(
+            child: AnimatedBuilder(
+              animation: animation,
+              builder: (context, _) {
+                final double dx = animation.value * 3 - 1.5; // -1.5 → 1.5
+                return ShaderMask(
+                  blendMode: BlendMode.srcIn,
+                  shaderCallback: (Rect rect) => LinearGradient(
+                    begin: Alignment(dx - 0.5, 0),
+                    end: Alignment(dx + 0.5, 0),
+                    colors: <Color>[
+                      AppColors.primary.withValues(alpha: 0.0),
+                      AppColors.primary,
+                      AppColors.primary.withValues(alpha: 0.0),
+                    ],
+                    stops: const <double>[0.0, 0.5, 1.0],
+                  ).createShader(rect),
+                  child: const ColoredBox(color: Colors.white),
+                );
+              },
             ),
-          ],
-        ),
-        child: SizedBox(
-          width: double.infinity,
-          child: FilledButton(
-            onPressed: onPressed,
-            child: Text(label),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -411,8 +358,7 @@ class _GetStartedButton extends StatelessWidget {
 
 /// Full-bleed background: a diagonal violet identity that settles into black,
 /// an ambient top-corner bloom, and a large, softly-faded pool of pure shadow
-/// centered on the logo. The pool's fade runs all the way to the edges, so the
-/// logo's black backdrop dissolves with no visible disc — just one smooth field.
+/// centered on the logo.
 class _SplashBackground extends StatelessWidget {
   const _SplashBackground();
 
@@ -421,22 +367,20 @@ class _SplashBackground extends StatelessWidget {
     return const Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        // Base diagonal gradient: violet identity settling into near-black.
         DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: <Color>[
-                Color(0xFF2A1257), // deep violet
-                Color(0xFF15102C), // indigo
-                Color(0xFF09080F), // near-black
+                Color(0xFF2A1257),
+                Color(0xFF15102C),
+                Color(0xFF09080F),
               ],
               stops: <double>[0.0, 0.5, 1.0],
             ),
           ),
         ),
-        // Ambient violet bloom from the top corner for life.
         DecoratedBox(
           decoration: BoxDecoration(
             gradient: RadialGradient(
@@ -446,9 +390,6 @@ class _SplashBackground extends StatelessWidget {
             ),
           ),
         ),
-        // Pure-black pool centered on the logo. Opaque past the logo's corners,
-        // then a long, gradual fade to transparent that reaches the screen
-        // edges — no perceptible circle, just a smooth darkening toward center.
         DecoratedBox(
           decoration: BoxDecoration(
             gradient: RadialGradient(

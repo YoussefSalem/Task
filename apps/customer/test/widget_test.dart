@@ -1,7 +1,5 @@
 import 'package:customer/app/customer_app.dart';
 import 'package:customer/app/flavor.dart';
-import 'package:customer/features/splash/splash_screen.dart';
-import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,39 +12,27 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  Widget wrapSplash(Locale locale) => ProviderScope(
-        child: MaterialApp(
-          locale: locale,
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          home: const SplashScreen(),
-        ),
-      );
-
   Widget fullApp() =>
       const ProviderScope(child: CustomerApp(flavor: Flavor.dev));
 
-  testWidgets('Splash shows wordmark and English CTA', (tester) async {
-    await tester.pumpWidget(wrapSplash(const Locale('en')));
-    await tester.pumpAndSettle();
+  testWidgets('Splash shows the Task wordmark and no Get Started CTA',
+      (tester) async {
+    await tester.pumpWidget(fullApp());
+    await tester.pump(); // first frame
 
     expect(find.text('Task'), findsOneWidget);
-    expect(find.text('Get started'), findsOneWidget);
+    expect(find.text('Get started'), findsNothing);
   });
 
-  testWidgets('Splash localizes the CTA into Arabic', (tester) async {
-    await tester.pumpWidget(wrapSplash(const Locale('ar')));
-    await tester.pumpAndSettle();
-
-    expect(find.text('ابدأ الآن'), findsOneWidget);
-  });
-
-  testWidgets('Get started navigates to the sign-in screen', (tester) async {
+  testWidgets('Splash auto-routes unauthenticated users to sign-in',
+      (tester) async {
     await tester.pumpWidget(fullApp());
-    await tester.pumpAndSettle();
+    await tester.pump(); // resolve providers + first frame
 
-    await tester.tap(find.text('Get started'));
-    await tester.pumpAndSettle();
+    // Advance past the minimum dwell and the exit fade.
+    await tester.pump(const Duration(milliseconds: 1300));
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pump(); // let go_router build the destination
 
     expect(find.text('Sign in'), findsOneWidget);
     expect(find.text('Phone number'), findsOneWidget);
