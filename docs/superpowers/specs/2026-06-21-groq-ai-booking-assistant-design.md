@@ -6,10 +6,23 @@
 ## Goal
 
 Turn the existing stubbed `AiChatScreen` (Task Assistant) into a real,
-Groq-backed conversational assistant that helps a customer assemble a
-fixed-price `JobRequestDraft` through natural chat and, on explicit user
-confirmation, publishes it as a `JobRequest` via the existing marketplace
-seam. No hourly pricing; currency is EGP whole integers.
+Groq-backed conversational assistant whose job is to **gather all relevant
+details about the customer's issue** and write a **concise problem summary
+for technicians**. The AI never sets or asks for a price — the **customer
+sets the fixed price and stays in control of the quote**. When the details
+are complete the AI produces the summary; the customer then enters the price
+and, on explicit confirmation, the `JobRequest` is published to the
+marketplace seam so technicians can read the summary and decide whether to
+respond. No hourly pricing; currency is EGP whole integers.
+
+## Division of responsibility
+
+- **AI gathers:** category, a concise `title` (the technician-facing problem
+  summary), a fuller `description`, `urgency`, and `propertyType`.
+- **AI never touches:** price. It must not propose, ask for, or mention a
+  number for the price.
+- **Customer controls:** the `fixedPrice`, entered in the confirmation step,
+  and the final decision to publish.
 
 ## Decisions (from brainstorming)
 
@@ -47,29 +60,37 @@ All new code under `apps/customer/lib/features/assistant/`.
   injected `http.Client` and the API key.
 - Builds the request: a system prompt enumerating the 8 `JobCategory` ids
   (`plumbing, electrical, ac, cleaning, carpentry, painting, satellite,
-  smart_home`), the EGP whole-integer pricing rule, the `Urgency` values,
-  and the required JSON response schema:
+  smart_home`), the `Urgency` and `PropertyType` values, an explicit
+  instruction that **the assistant must never ask about, suggest, or state a
+  price** (the customer sets it later), guidance to ask focused follow-up
+  questions until it can write a clear technician-facing summary, and the
+  required JSON response schema:
   ```json
   { "reply": "string to show the user",
-    "draft": { "category": "<id|null>", "title": "string",
-               "description": "string", "fixed_price": 0,
-               "urgency": "flexible|soon|urgent|emergency" },
+    "draft": { "category": "<id|null>",
+               "title": "concise technician-facing summary",
+               "description": "fuller problem detail",
+               "urgency": "flexible|soon|urgent|emergency",
+               "property_type": "apartment|villa|office|other" },
     "ready": false }
   ```
-  Plus the mapped chat history as `messages`.
+  Plus the mapped chat history as `messages`. The `draft` carries **no
+  price field** at all.
 - Parses the JSON reply into `AssistantTurn`, mapping `category` id →
-  `JobCategory.fromId` (null/unknown → null draft category) and `urgency`
-  string → `Urgency`. `ready` is only honored when the resulting draft is
-  `isValid`.
+  `JobCategory.fromId` (null/unknown → null draft category), `urgency`
+  string → `Urgency`, and `property_type` → `PropertyType`. The draft's
+  `fixedPrice` stays at its default `0` here — it is the customer's to set.
+  `ready` is honored when the gathered draft has a category and a non-empty
+  title/description (price is intentionally *not* required for `ready`).
 - On any network or parse error, returns an `AssistantTurn` with a friendly
   error `reply`, `draft: null`, `ready: false` (never throws to the UI).
 
 ### `mock_assistant_service.dart`
 - `class MockAssistantService implements AssistantService` — keyword
   heuristic (leak/drip→plumbing, trip/power→electrical, AC/cooling→ac,
-  clean→cleaning, etc.) that fills a draft and asks for a price if missing,
-  marking `ready` once it has category + title + price. Used with no key
-  and in unit tests.
+  clean→cleaning, etc.) that infers a category and writes a title +
+  description from the user's text, marking `ready` once it has category +
+  title (never asks about price). Used with no key and in unit tests.
 
 ### `assistant_providers.dart`
 - `final assistantServiceProvider = Provider<AssistantService>((ref) { ... })`
@@ -77,11 +98,14 @@ All new code under `apps/customer/lib/features/assistant/`.
   `MockAssistantService`.
 - `class BookingChatController extends Notifier<ChatState>` where
   `ChatState { List<ChatMessage> messages; JobRequestDraft? pendingDraft;
-  bool typing; }`. Methods: `send(String)`, `confirmPending()`,
-  `reset()`. `send` appends the user message, sets `typing`, calls the
-  service, appends the reply, and stores `pendingDraft` when `ready`.
-  `confirmPending` calls `jobMarketplaceRepositoryProvider.publish` and
-  clears the pending draft.
+  bool typing; }`. Methods: `send(String)`, `setPrice(int)`,
+  `publishPending()`, `reset()`. `send` appends the user message, sets
+  `typing`, calls the service, appends the reply, and stores the gathered
+  `pendingDraft` (price still 0) when `ready`. `setPrice` updates
+  `pendingDraft` via `copyWith(fixedPrice:)` as the customer types.
+  `publishPending` requires `pendingDraft.isValid` (i.e. the customer-set
+  price > 0), calls `jobMarketplaceRepositoryProvider.publish`, and clears
+  the pending draft.
 - `final bookingChatProvider =
   NotifierProvider<BookingChatController, ChatState>(...)`.
 
@@ -92,24 +116,29 @@ All new code under `apps/customer/lib/features/assistant/`.
 - Keep the existing bubble, typing indicator, suggestion chips, and
   composer widgets unchanged.
 - Add a **confirmation-card bubble**: when `pendingDraft != null`, render a
-  card showing `categoryIcon`/`categoryTint`, the title, and
-  `'${draft.fixedPrice} EGP'`, with a **Confirm & publish** button →
-  `controller.confirmPending()` → `context.go(JobTrackingScreen.routePath)`.
+  card showing `categoryIcon`/`categoryTint`, the AI-written title +
+  description (the technician-facing summary), and a **price `TextField`
+  the customer fills** ("What will you pay for this job? (EGP)") wired to
+  `controller.setPrice`. The **Confirm & publish** button is enabled only
+  when the entered price > 0 → `controller.publishPending()` →
+  `context.go(JobTrackingScreen.routePath)`.
 
 ## Data flow
 
 ```
 user types → BookingChatController.send
-  → AssistantService.respond(history)        (Groq or mock)
+  → AssistantService.respond(history)        (Groq or mock; price never asked)
   → append reply bubble
-  → if ready && draft.isValid: set pendingDraft → render confirm card
-user taps Confirm & publish
-  → jobMarketplaceRepositoryProvider.publish(draft)
+  → if ready (category + title/description gathered):
+       set pendingDraft (price = 0) → render summary + price-entry card
+customer enters price → controller.setPrice
+customer taps Confirm & publish (enabled when price > 0)
+  → jobMarketplaceRepositoryProvider.publish(draft with customer price)
   → reset draft → navigate to JobTrackingScreen
 ```
 
-The user can keep chatting to revise; each new `ready` turn replaces the
-pending draft.
+The customer can keep chatting to add detail; each new `ready` turn updates
+the gathered summary while preserving any price already entered.
 
 ## Error handling
 
@@ -134,13 +163,15 @@ pending draft.
 
 - `groq_assistant_service_test.dart` — inject a fake `http.Client` returning
   a canned JSON body; assert the parsed `AssistantTurn` (reply, mapped
-  category/urgency, `ready` gated on `isValid`); assert a 500/garbage body
-  yields a safe error turn.
-- `mock_assistant_service_test.dart` — a known phrase + price yields a valid
-  ready draft.
+  category/urgency/property_type, `ready` gated on category + title, draft
+  `fixedPrice == 0`); assert a 500/garbage body yields a safe error turn.
+- `mock_assistant_service_test.dart` — a known phrase yields a ready draft
+  with a category + title and `fixedPrice == 0` (price never set by the AI).
 - `booking_chat_controller_test.dart` — with a fake `AssistantService` and a
-  `MockJobMarketplaceRepository`, `send` then `confirmPending` publishes one
-  job to `watchMyJobs`.
+  `MockJobMarketplaceRepository`: `send` produces a pending draft with price
+  0; `publishPending` before `setPrice` is a no-op (invalid); after
+  `setPrice(400)`, `publishPending` publishes one job at 400 EGP to
+  `watchMyJobs`.
 
 ## Out of scope (later slices)
 
