@@ -3,7 +3,7 @@ import 'package:customer/features/assistant/ai_chat_screen.dart';
 import 'package:customer/features/auth/otp_verify_screen.dart';
 import 'package:customer/features/auth/sign_in_screen.dart';
 import 'package:customer/features/booking/asap_dispatch_screen.dart';
-import 'package:customer/features/booking/booking_configure_screen.dart';
+import 'package:customer/features/marketplace/job_create_stub_screen.dart';
 import 'package:customer/features/booking/quote_bids_screen.dart';
 import 'package:customer/features/bookings/bookings_screen.dart';
 import 'package:customer/features/home/home_screen.dart';
@@ -12,7 +12,6 @@ import 'package:customer/features/job/job_tracking_screen.dart';
 import 'package:customer/features/payment/payment_screen.dart';
 import 'package:customer/features/profile/profile_screen.dart';
 import 'package:customer/features/review/rating_screen.dart';
-import 'package:customer/features/services/service_detail_screen.dart';
 import 'package:customer/features/splash/splash_screen.dart';
 import 'package:customer/features/wallet/wallet_screen.dart';
 import 'package:flutter/material.dart';
@@ -95,15 +94,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       // Booking journey (full-screen, above the shell).
       GoRoute(
-        path: '/service/:id',
+        path: JobCreateStubScreen.routePath,
+        name: JobCreateStubScreen.routeName,
         parentNavigatorKey: _rootKey,
-        builder: (context, state) =>
-            ServiceDetailScreen(serviceId: state.pathParameters['id']!),
-      ),
-      GoRoute(
-        path: BookingConfigureScreen.routePath,
-        parentNavigatorKey: _rootKey,
-        builder: (context, state) => const BookingConfigureScreen(),
+        builder: (context, state) => const JobCreateStubScreen(),
       ),
       GoRoute(
         path: AddressScreen.routePath,
