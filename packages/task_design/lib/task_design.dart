@@ -12,3 +12,4 @@ export 'src/widgets/ambient_background.dart';
 export 'src/widgets/glow_button.dart';
 export 'src/widgets/section_header.dart';
 export 'src/widgets/status_pill.dart';
+export 'src/theme/category_visuals.dart';
