@@ -29,6 +29,9 @@ dependencies:
   intl: any
   shared_preferences: ^2.3.2
 
+  # AI assistant (Groq, OpenAI-compatible)
+  http: ^1.2.0
+
   # Firebase bootstrap (App Check is mandatory on all DB/API calls — PRD §1.1)
   firebase_core: ^3.6.0
   firebase_app_check: ^0.3.1
