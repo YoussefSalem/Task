@@ -28,3 +28,6 @@ serviceAccountKey.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Local Groq secret (do not commit)
+groq.env.json
