@@ -11,6 +11,14 @@ final authControllerProvider = Provider<AuthController>(
   (ref) => AuthController(ready: ref.watch(firebaseReadyProvider)),
 );
 
+/// The current signed-in user, or null. Emits null whenever Firebase is
+/// unavailable (mock mode) so mock sessions deterministically land on sign-in.
+final authStateProvider = StreamProvider<User?>((ref) {
+  final bool ready = ref.watch(firebaseReadyProvider);
+  if (!ready) return Stream<User?>.value(null);
+  return FirebaseAuth.instance.authStateChanges();
+});
+
 enum AuthStep { codeSent, signedIn, failed }
 
 @immutable
