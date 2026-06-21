@@ -35,6 +35,6 @@ void main() {
     await tester.pump(); // let go_router build the destination
 
     expect(find.text('Sign in'), findsOneWidget);
-    expect(find.text('Phone number'), findsOneWidget);
+    expect(find.text('Phone Number'), findsOneWidget);
   });
 }

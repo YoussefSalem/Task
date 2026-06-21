@@ -119,7 +119,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         height: 1.4,
                       )),
                   const SizedBox(height: AppSpacing.xxl),
-                  Text('Phone number',
+                  Text('Phone Number',
                       style: text.labelLarge?.copyWith(
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.2,
