@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
 
-import '../services/service_catalog.dart';
+import 'package:task_domain/task_domain.dart';
+
+import '../marketplace/job_create_stub_screen.dart';
+import '../marketplace/marketplace_providers.dart';
 import '../services/technician_catalog.dart';
 
 /// Home dashboard: location header, promo banner, category grid, and the
@@ -13,13 +16,10 @@ class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   // Reference order for the 3-column grid.
-  static const List<String> _gridOrder = <String>[
-    'plumbing',
-    'electrical',
-    'ac',
-    'carpentry',
-    'painting',
-    'cleaning',
+  static const List<JobCategory> _gridOrder = <JobCategory>[
+    JobCategory.plumbing, JobCategory.electrical, JobCategory.ac,
+    JobCategory.carpentry, JobCategory.painting, JobCategory.cleaning,
+    JobCategory.satelliteInstallation, JobCategory.smartHome,
   ];
 
   @override
@@ -57,13 +57,16 @@ class HomeScreen extends ConsumerWidget {
                 onAction: () => _snack(context, 'All categories arrive soon.'),
               ),
               const SizedBox(height: AppSpacing.lg),
-              _categoryGrid(context),
+              _categoryGrid(context, ref),
               const SizedBox(height: AppSpacing.xl),
               const SectionHeader(title: 'Top Rated Technicians'),
               const SizedBox(height: AppSpacing.lg),
               ...kTechnicians.map((Technician t) => _TechnicianCard(
                     tech: t,
-                    onTap: () => context.push('/service/${t.serviceId}'),
+                    onTap: () {
+                      ref.read(jobDraftProvider.notifier).startCategory(t.category);
+                      context.push(JobCreateStubScreen.routePath);
+                    },
                   )),
             ],
           ),
@@ -72,11 +75,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _categoryGrid(BuildContext context) {
-    final List<ServiceCategory> cats = _gridOrder
-        .map((String id) =>
-            kCategories.firstWhere((ServiceCategory c) => c.id == id))
-        .toList();
+  Widget _categoryGrid(BuildContext context, WidgetRef ref) {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -84,11 +83,15 @@ class HomeScreen extends ConsumerWidget {
       mainAxisSpacing: AppSpacing.md,
       crossAxisSpacing: AppSpacing.md,
       childAspectRatio: 0.92,
-      children: cats.map((ServiceCategory c) {
-        final Service rep = servicesForCategory(c.id).first;
+      children: _gridOrder.map((JobCategory c) {
         return _CategoryTile(
-          category: c,
-          onTap: () => context.push('/service/${rep.id}'),
+          label: c.displayLabel,
+          icon: categoryIcon(c),
+          tint: categoryTint(c),
+          onTap: () {
+            ref.read(jobDraftProvider.notifier).startCategory(c);
+            context.push(JobCreateStubScreen.routePath);
+          },
         );
       }).toList(),
     );
@@ -269,8 +272,15 @@ class _PromoBanner extends StatelessWidget {
 }
 
 class _CategoryTile extends StatelessWidget {
-  const _CategoryTile({required this.category, required this.onTap});
-  final ServiceCategory category;
+  const _CategoryTile({
+    required this.label,
+    required this.icon,
+    required this.tint,
+    required this.onTap,
+  });
+  final String label;
+  final IconData icon;
+  final Color tint;
   final VoidCallback onTap;
 
   @override
@@ -289,13 +299,13 @@ class _CategoryTile extends StatelessWidget {
               height: 48,
               width: 48,
               decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.16),
+                color: tint.withValues(alpha: 0.16),
                 borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
               ),
-              child: Icon(category.icon, color: AppColors.primary, size: 24),
+              child: Icon(icon, color: tint, size: 24),
             ),
             const SizedBox(height: AppSpacing.sm),
-            Text(category.label,
+            Text(label,
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

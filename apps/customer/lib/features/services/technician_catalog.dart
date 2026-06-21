@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_design/task_design.dart';
+import 'package:task_domain/task_domain.dart';
 
 /// A bookable professional shown on the home dashboard. Prototype data — the
 /// live roster will come from Firestore once dispatch lands.
@@ -31,6 +32,13 @@ class Technician {
 
   String get initials =>
       name.split(' ').map((String s) => s[0]).take(2).join();
+
+  JobCategory get category => switch (serviceId) {
+        'plumb_leak' => JobCategory.plumbing,
+        'elec_fault' => JobCategory.electrical,
+        'ac_service' => JobCategory.ac,
+        _ => JobCategory.plumbing,
+      };
 }
 
 /// Trust tiers shown as a chip on each technician card.
