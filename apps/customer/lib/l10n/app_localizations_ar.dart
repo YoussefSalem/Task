@@ -32,4 +32,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get signInComingSoon =>
       'تسجيل الدخول عبر الهاتف سيتوفر في التحديث القادم.';
+
+  @override
+  String get loading => 'جارٍ التحميل…';
 }

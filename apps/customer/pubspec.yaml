@@ -32,6 +32,7 @@ dependencies:
   # Firebase bootstrap (App Check is mandatory on all DB/API calls — PRD §1.1)
   firebase_core: ^3.6.0
   firebase_app_check: ^0.3.1
+  firebase_auth: ^5.3.0
 
 dev_dependencies:
   flutter_test:

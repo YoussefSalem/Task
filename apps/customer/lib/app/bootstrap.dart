@@ -1,23 +1,25 @@
 import 'package:customer/app/customer_app.dart';
+import 'package:customer/app/firebase_init.dart';
 import 'package:customer/app/flavor.dart';
+import 'package:customer/features/auth/auth_controller.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Single composition root for every flavor entrypoint.
 ///
-/// Firebase is intentionally NOT initialised here yet: it requires a real
-/// project's `firebase_options.dart` produced by `flutterfire configure`, which
-/// is wired in the Auth phase. The foundation runs without it so the design
-/// system, routing, and RTL can be verified first.
+/// Firebase is initialised against the demo-task emulator in dev. If that fails
+/// (emulator not running, no config), [initFirebase] returns false and the auth
+/// layer transparently falls back to a local mock so the app still runs.
 Future<void> bootstrap(Flavor flavor) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // TODO(auth-phase): initialise Firebase + App Check here once
-  // `flutterfire configure` has generated firebase_options.dart for this flavor.
+  final bool firebaseReady = await initFirebase(flavor);
 
   runApp(
     ProviderScope(
-      observers: const <ProviderObserver>[],
+      overrides: <Override>[
+        firebaseReadyProvider.overrideWithValue(firebaseReady),
+      ],
       child: CustomerApp(flavor: flavor),
     ),
   );

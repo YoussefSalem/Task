@@ -145,6 +145,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Phone sign-in arrives with the next update.'**
   String get signInComingSoon;
+
+  /// Status label shown under the splash progress bar while the app prepares
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get loading;
 }
 
 class _AppLocalizationsDelegate

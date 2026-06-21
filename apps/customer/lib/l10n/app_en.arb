@@ -31,5 +31,9 @@
   "signInComingSoon": "Phone sign-in arrives with the next update.",
   "@signInComingSoon": {
     "description": "Feedback shown when Continue is tapped before auth is wired"
+  },
+  "loading": "Loading…",
+  "@loading": {
+    "description": "Status label shown under the splash progress bar while the app prepares"
   }
 }

@@ -7,5 +7,6 @@
   "signInSubtitle": "أدخل رقم هاتفك للمتابعة.",
   "phoneNumberLabel": "رقم الهاتف",
   "continueAction": "متابعة",
-  "signInComingSoon": "تسجيل الدخول عبر الهاتف سيتوفر في التحديث القادم."
+  "signInComingSoon": "تسجيل الدخول عبر الهاتف سيتوفر في التحديث القادم.",
+  "loading": "جارٍ التحميل…"
 }

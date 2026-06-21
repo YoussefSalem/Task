@@ -31,4 +31,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signInComingSoon => 'Phone sign-in arrives with the next update.';
+
+  @override
+  String get loading => 'Loading…';
 }
