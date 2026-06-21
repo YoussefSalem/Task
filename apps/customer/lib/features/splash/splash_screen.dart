@@ -222,10 +222,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       SizedBox(
                         height: 24,
                         child: Center(
-                          child: FadeTransition(
-                            opacity: _textFade,
-                            child: _ShimmerLine(animation: _shimmer),
-                          ),
+                          child: reduceMotion
+                              ? const SizedBox.shrink()
+                              : FadeTransition(
+                                  opacity: _textFade,
+                                  child: _ShimmerLine(animation: _shimmer),
+                                ),
                         ),
                       ),
                       const SizedBox(height: AppSpacing.xl),
