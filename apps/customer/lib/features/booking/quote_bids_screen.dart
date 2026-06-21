@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
+import 'package:task_domain/task_domain.dart';
 
-import '../services/service_catalog.dart';
-import 'booking_state.dart';
+import '../marketplace/marketplace_providers.dart';
 
 /// Quote engine: offers arrive sealed (price hidden from rival pros), capped at
 /// five. We show a brief collecting state, then reveal the offers to compare.
@@ -41,10 +41,47 @@ class _QuoteBidsScreenState extends ConsumerState<QuoteBidsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BookingDraft draft = ref.watch(bookingProvider);
-    final Service? service = draft.service;
+    final List<JobRequest> jobs =
+        ref.watch(myJobsProvider).valueOrNull ?? const <JobRequest>[];
+    final JobRequest? job =
+        jobs.where((JobRequest j) => j.offers.isNotEmpty).isEmpty
+            ? null
+            : jobs.where((JobRequest j) => j.offers.isNotEmpty).first;
+    final List<Offer> offers = job?.offers ?? const <Offer>[];
     final TextTheme text = Theme.of(context).textTheme;
 
+    // Track a locally selected offer id for the CTA visibility.
+    return _QuoteBidsBody(
+      collecting: _collecting,
+      job: job,
+      offers: offers,
+      text: text,
+    );
+  }
+}
+
+class _QuoteBidsBody extends ConsumerStatefulWidget {
+  const _QuoteBidsBody({
+    required this.collecting,
+    required this.job,
+    required this.offers,
+    required this.text,
+  });
+
+  final bool collecting;
+  final JobRequest? job;
+  final List<Offer> offers;
+  final TextTheme text;
+
+  @override
+  ConsumerState<_QuoteBidsBody> createState() => _QuoteBidsBodyState();
+}
+
+class _QuoteBidsBodyState extends ConsumerState<_QuoteBidsBody> {
+  String? _selectedOfferId;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -56,11 +93,11 @@ class _QuoteBidsScreenState extends ConsumerState<QuoteBidsScreen> {
           const AmbientBackground(intensity: 0.1),
           SafeArea(
             top: false,
-            child: _collecting
-                ? _collectingState(text, service)
-                : _bidsState(draft, text),
+            child: widget.collecting
+                ? _collectingState(widget.text, widget.job)
+                : _bidsState(widget.offers, widget.text),
           ),
-          if (!_collecting && draft.selectedBidId != null)
+          if (!widget.collecting && _selectedOfferId != null)
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -84,7 +121,7 @@ class _QuoteBidsScreenState extends ConsumerState<QuoteBidsScreen> {
     );
   }
 
-  Widget _collectingState(TextTheme text, Service? service) {
+  Widget _collectingState(TextTheme text, JobRequest? job) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -101,7 +138,7 @@ class _QuoteBidsScreenState extends ConsumerState<QuoteBidsScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
             child: Text(
-              'Up to 5 pros bid privately for your ${service?.name.toLowerCase() ?? 'job'}. No one sees the others’ price.',
+              "Up to 5 pros bid privately for your ${job?.title.toLowerCase() ?? 'job'}. No one sees the others' price.",
               textAlign: TextAlign.center,
               style: text.bodyMedium?.copyWith(
                 color: AppColors.textSecondary.withValues(alpha: 0.65),
@@ -114,9 +151,12 @@ class _QuoteBidsScreenState extends ConsumerState<QuoteBidsScreen> {
     );
   }
 
-  Widget _bidsState(BookingDraft draft, TextTheme text) {
-    final int cheapest =
-        kBids.map((Bid b) => b.price).reduce((int a, int b) => a < b ? a : b);
+  Widget _bidsState(List<Offer> offers, TextTheme text) {
+    final int cheapest = offers.isEmpty
+        ? 0
+        : offers
+            .map((Offer o) => o.currentPrice)
+            .reduce((int a, int b) => a < b ? a : b);
     return ListView(
       padding: const EdgeInsets.fromLTRB(
           AppSpacing.xl, AppSpacing.sm, AppSpacing.xl, 110),
@@ -124,7 +164,7 @@ class _QuoteBidsScreenState extends ConsumerState<QuoteBidsScreen> {
         Row(
           children: <Widget>[
             Expanded(
-              child: Text('${kBids.length} offers received',
+              child: Text('${offers.length} offers received',
                   style: text.titleMedium
                       ?.copyWith(fontWeight: FontWeight.w700)),
             ),
@@ -133,18 +173,25 @@ class _QuoteBidsScreenState extends ConsumerState<QuoteBidsScreen> {
           ],
         ),
         const SizedBox(height: AppSpacing.lg),
-        ...kBids.map((Bid b) => _bidCard(
-              b,
-              selected: draft.selectedBidId == b.id,
-              best: b.price == cheapest,
-              onTap: () => ref.read(bookingProvider.notifier).selectBid(b.id),
+        ...offers.map((Offer o) => _bidCard(
+              o,
+              selected: _selectedOfferId == o.id,
+              best: o.currentPrice == cheapest,
+              onTap: () {
+                setState(() => _selectedOfferId = o.id);
+                if (widget.job != null) {
+                  ref
+                      .read(jobMarketplaceRepositoryProvider)
+                      .acceptOffer(widget.job!.id, o.id);
+                }
+              },
               text: text,
             )),
       ],
     );
   }
 
-  Widget _bidCard(Bid b,
+  Widget _bidCard(Offer o,
       {required bool selected,
       required bool best,
       required VoidCallback onTap,
@@ -177,7 +224,11 @@ class _QuoteBidsScreenState extends ConsumerState<QuoteBidsScreen> {
                       radius: 22,
                       backgroundColor: AppColors.primary.withValues(alpha: 0.3),
                       child: Text(
-                        b.proName.split(' ').map((String s) => s[0]).take(2).join(),
+                        o.technicianName
+                            .split(' ')
+                            .map((String s) => s[0])
+                            .take(2)
+                            .join(),
                         style: const TextStyle(
                             color: Colors.white, fontWeight: FontWeight.w700),
                       ),
@@ -187,7 +238,7 @@ class _QuoteBidsScreenState extends ConsumerState<QuoteBidsScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(b.proName,
+                          Text(o.technicianName,
                               style: text.titleSmall
                                   ?.copyWith(fontWeight: FontWeight.w700)),
                           Row(
@@ -195,7 +246,7 @@ class _QuoteBidsScreenState extends ConsumerState<QuoteBidsScreen> {
                               const Icon(Icons.star_rounded,
                                   size: 14, color: AppColors.warning),
                               const SizedBox(width: 3),
-                              Text('${b.rating} · ${b.jobsDone} jobs',
+                              Text('${o.rating} · ${o.jobsDone} jobs',
                                   style: text.bodySmall?.copyWith(
                                     color: AppColors.textSecondary
                                         .withValues(alpha: 0.7),
@@ -208,7 +259,7 @@ class _QuoteBidsScreenState extends ConsumerState<QuoteBidsScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Text('${b.price} EGP',
+                        Text('${o.currentPrice} EGP',
                             style: text.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.w700)),
                         if (best)
@@ -227,20 +278,13 @@ class _QuoteBidsScreenState extends ConsumerState<QuoteBidsScreen> {
                         size: 15,
                         color: AppColors.textSecondary.withValues(alpha: 0.7)),
                     const SizedBox(width: 4),
-                    Text(b.etaLabel,
+                    Text(o.etaLabel,
                         style: text.bodySmall?.copyWith(
                           color:
                               AppColors.textSecondary.withValues(alpha: 0.7),
                         )),
                   ],
                 ),
-                const SizedBox(height: 6),
-                Text('“${b.note}”',
-                    style: text.bodySmall?.copyWith(
-                      color: AppColors.textSecondary.withValues(alpha: 0.75),
-                      fontStyle: FontStyle.italic,
-                      height: 1.3,
-                    )),
               ],
             ),
           ),

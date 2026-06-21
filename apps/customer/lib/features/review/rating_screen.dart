@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
+import 'package:task_domain/task_domain.dart';
 
-import '../booking/booking_state.dart';
-import '../services/service_catalog.dart';
+import '../marketplace/marketplace_providers.dart';
 
 /// Post-job rating. Stars, quick compliment chips, an optional note, then back
 /// home. Submitting resets the draft so the next booking starts clean.
@@ -38,7 +38,7 @@ class _RatingScreenState extends ConsumerState<RatingScreen> {
   }
 
   void _submit() {
-    ref.read(bookingProvider.notifier).reset();
+    ref.read(jobDraftProvider.notifier).reset();
     ScaffoldMessenger.of(context)
       ..clearSnackBars()
       ..showSnackBar(const SnackBar(content: Text('Thanks for the feedback!')));
@@ -47,10 +47,12 @@ class _RatingScreenState extends ConsumerState<RatingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BookingDraft draft = ref.watch(bookingProvider);
-    final Service? service = draft.service;
+    final JobRequest? job =
+        ref.watch(myJobsProvider).valueOrNull?.isEmpty == false
+            ? ref.watch(myJobsProvider).valueOrNull!.first
+            : null;
     final TextTheme text = Theme.of(context).textTheme;
-    final String pro = draft.selectedBid?.proName ?? 'Khaled Mansour';
+    const String pro = 'Khaled Mansour';
 
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +61,7 @@ class _RatingScreenState extends ConsumerState<RatingScreen> {
         actions: <Widget>[
           TextButton(
             onPressed: () {
-              ref.read(bookingProvider.notifier).reset();
+              ref.read(jobDraftProvider.notifier).reset();
               context.go('/home');
             },
             child: const Text('Skip'),
@@ -89,7 +91,8 @@ class _RatingScreenState extends ConsumerState<RatingScreen> {
                   ),
                 ),
                 const SizedBox(height: AppSpacing.lg),
-                Text('How was your ${service?.name.toLowerCase() ?? 'service'}?',
+                Text(
+                    'How was your ${job?.title.toLowerCase() ?? job?.category.displayLabel.toLowerCase() ?? 'service'}?',
                     textAlign: TextAlign.center,
                     style:
                         text.headlineSmall?.copyWith(fontWeight: FontWeight.w700)),

@@ -5,8 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
 
-import '../services/service_catalog.dart';
-import 'booking_state.dart';
+import '../marketplace/marketplace_providers.dart';
 
 /// ASAP dispatch: a live radar sweeps while we cascade outward through dispatch
 /// tiers (3 → 6 → … km, per the design spec), then a pro is assigned and the
@@ -64,8 +63,8 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
 
   @override
   Widget build(BuildContext context) {
-    final BookingDraft draft = ref.watch(bookingProvider);
-    final Service? service = draft.service;
+    final String jobLabel =
+        ref.watch(jobDraftProvider).category?.displayLabel ?? 'your job';
     final TextTheme text = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -91,7 +90,7 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
                     width: 240,
                     child: _found
                         ? const _FoundBadge()
-                        : _Radar(controller: _radar, service: service),
+                        : _Radar(controller: _radar, jobLabel: jobLabel),
                   ),
                   const Spacer(flex: 1),
                   Text(
@@ -195,9 +194,9 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
 }
 
 class _Radar extends StatelessWidget {
-  const _Radar({required this.controller, required this.service});
+  const _Radar({required this.controller, required this.jobLabel});
   final AnimationController controller;
-  final Service? service;
+  final String jobLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +221,7 @@ class _Radar extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Icon(service?.icon ?? Icons.bolt_rounded,
+              child: const Icon(Icons.bolt_rounded,
                   color: Colors.white, size: 34),
             ),
           ],

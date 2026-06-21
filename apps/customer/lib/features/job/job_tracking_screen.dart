@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
+import 'package:task_domain/task_domain.dart';
 
 import '../booking/booking_state.dart';
-import '../services/service_catalog.dart';
+import '../marketplace/marketplace_providers.dart';
 
 /// Live job tracking. A stylized map shows the pro approaching; the stage
 /// timeline advances en route → in progress → complete. On completion the
@@ -62,8 +63,10 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
 
   @override
   Widget build(BuildContext context) {
-    final BookingDraft draft = ref.watch(bookingProvider);
-    final Service? service = draft.service;
+    final JobRequest? job =
+        ref.watch(myJobsProvider).valueOrNull?.isEmpty == false
+            ? ref.watch(myJobsProvider).valueOrNull!.first
+            : null;
     final TextTheme text = Theme.of(context).textTheme;
     final bool done = _stage == JobStage.completed;
 
@@ -91,15 +94,14 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: _sheet(draft, service, text, done),
+            child: _sheet(job, text, done),
           ),
         ],
       ),
     );
   }
 
-  Widget _sheet(
-      BookingDraft draft, Service? service, TextTheme text, bool done) {
+  Widget _sheet(JobRequest? job, TextTheme text, bool done) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.lg, AppSpacing.xl,
@@ -139,7 +141,7 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
-          _proRow(draft, service, text, done),
+          _proRow(job, text),
           const SizedBox(height: AppSpacing.lg),
           _timeline(text),
           const SizedBox(height: AppSpacing.lg),
@@ -166,9 +168,8 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
     );
   }
 
-  Widget _proRow(
-      BookingDraft draft, Service? service, TextTheme text, bool done) {
-    final String pro = draft.selectedBid?.proName ?? 'Khaled Mansour';
+  Widget _proRow(JobRequest? job, TextTheme text) {
+    const String pro = 'Khaled Mansour';
     return Row(
       children: <Widget>[
         CircleAvatar(
@@ -188,7 +189,7 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
               Text(pro,
                   style:
                       text.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-              Text(service?.name ?? 'Home service',
+              Text(job?.title ?? 'Home service',
                   style: text.bodySmall?.copyWith(
                     color: AppColors.textSecondary.withValues(alpha: 0.65),
                   )),

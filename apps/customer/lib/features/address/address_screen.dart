@@ -7,14 +7,20 @@ import '../booking/booking_state.dart';
 
 /// Pick the service address from the saved book. Selecting one writes it to the
 /// draft and returns. "Add new" is a stubbed affordance for the prototype.
-class AddressScreen extends ConsumerWidget {
+class AddressScreen extends ConsumerStatefulWidget {
   const AddressScreen({super.key});
 
   static const String routePath = '/book/address';
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final BookingDraft draft = ref.watch(bookingProvider);
+  ConsumerState<AddressScreen> createState() => _AddressScreenState();
+}
+
+class _AddressScreenState extends ConsumerState<AddressScreen> {
+  String _selectedAddressId = kSavedAddresses.first.id;
+
+  @override
+  Widget build(BuildContext context) {
     final TextTheme text = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -36,7 +42,7 @@ class AddressScreen extends ConsumerWidget {
                 const SectionHeader(title: 'Saved addresses'),
                 const SizedBox(height: AppSpacing.md),
                 ...kSavedAddresses.map((SavedAddress a) {
-                  final bool selected = a.id == draft.addressId;
+                  final bool selected = a.id == _selectedAddressId;
                   return Padding(
                     padding: const EdgeInsets.only(bottom: AppSpacing.md),
                     child: Material(
@@ -48,7 +54,7 @@ class AddressScreen extends ConsumerWidget {
                         borderRadius:
                             BorderRadius.circular(AppSpacing.radiusLg),
                         onTap: () {
-                          ref.read(bookingProvider.notifier).setAddress(a.id);
+                          setState(() => _selectedAddressId = a.id);
                           context.pop();
                         },
                         child: Container(

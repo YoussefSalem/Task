@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
+import 'package:task_domain/task_domain.dart' hide PaymentMethod;
 
 import '../booking/booking_state.dart';
-import '../services/service_catalog.dart';
+import '../marketplace/marketplace_providers.dart';
 
 /// Payment & review. `settle == true` after a finished job (pay the pro); else
 /// it authorizes a scheduled booking upfront. The summary and method picker are
@@ -23,43 +24,18 @@ class PaymentScreen extends ConsumerStatefulWidget {
 
 class _PaymentScreenState extends ConsumerState<PaymentScreen> {
   bool _processing = false;
+  PaymentMethod _selectedPayment = PaymentMethod.cash;
 
   Future<void> _confirm() async {
     setState(() => _processing = true);
     await Future<void>.delayed(const Duration(milliseconds: 1100));
     if (!mounted) return;
 
-    final BookingDraft draft = ref.read(bookingProvider);
-    final Service? service = draft.service;
     if (widget.settle) {
-      // Job done — record it, then collect a rating.
-      if (service != null) {
-        ref.read(bookingsProvider.notifier).add(
-              BookingRecord(
-                id: 'TK-${4820 + DateTime.now().second}',
-                serviceId: service.id,
-                whenLabel: 'Just now',
-                total: draft.total,
-                status: 'Completed',
-                completed: true,
-              ),
-            );
-      }
+      ref.read(jobDraftProvider.notifier).reset();
       context.pushReplacement('/job/live/rate');
     } else {
-      // Scheduled booking authorized — confirm and go home.
-      if (service != null) {
-        ref.read(bookingsProvider.notifier).add(
-              BookingRecord(
-                id: 'TK-${4820 + DateTime.now().second}',
-                serviceId: service.id,
-                whenLabel: 'Scheduled',
-                total: draft.total,
-                status: 'Upcoming',
-                completed: false,
-              ),
-            );
-      }
+      ref.read(jobDraftProvider.notifier).reset();
       await _showConfirmed();
     }
   }
@@ -106,7 +82,6 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
               GlowButton(
                 label: 'Done',
                 onPressed: () {
-                  ref.read(bookingProvider.notifier).reset();
                   Navigator.of(context).pop();
                   context.go('/home');
                 },
@@ -120,12 +95,8 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final BookingDraft draft = ref.watch(bookingProvider);
-    final Service? service = draft.service;
+    final JobRequestDraft draft = ref.watch(jobDraftProvider);
     final TextTheme text = Theme.of(context).textTheme;
-    if (service == null) {
-      return const Scaffold(body: Center(child: Text('No booking')));
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -142,7 +113,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
               padding: const EdgeInsets.fromLTRB(
                   AppSpacing.xl, AppSpacing.sm, AppSpacing.xl, 150),
               children: <Widget>[
-                _summary(draft, service, text),
+                _summary(draft, text),
                 const SizedBox(height: AppSpacing.xl),
                 Text('Payment method',
                     style:
@@ -150,9 +121,8 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                 const SizedBox(height: AppSpacing.md),
                 ...PaymentMethod.values.map((PaymentMethod m) => _methodTile(
                       m,
-                      selected: draft.payment == m,
-                      onTap: () =>
-                          ref.read(bookingProvider.notifier).setPayment(m),
+                      selected: _selectedPayment == m,
+                      onTap: () => setState(() => _selectedPayment = m),
                       text: text,
                     )),
               ],
@@ -167,7 +137,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     );
   }
 
-  Widget _summary(BookingDraft draft, Service service, TextTheme text) {
+  Widget _summary(JobRequestDraft draft, TextTheme text) {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
@@ -177,12 +147,8 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
       ),
       child: Column(
         children: <Widget>[
-          _row(text, 'Service', service.name),
-          _row(text, 'Pro', draft.selectedBid?.proName ?? 'Nearest available'),
-          _row(text, 'Address', draft.address.label),
-          if (draft.scheduledFor != null)
-            _row(text, 'When',
-                '${draft.scheduledFor!.day}/${draft.scheduledFor!.month} · ${draft.scheduledFor!.hour}:${draft.scheduledFor!.minute.toString().padLeft(2, '0')}'),
+          _row(text, 'Service', draft.category?.displayLabel ?? ''),
+          _row(text, 'Title', draft.title),
           const Divider(height: AppSpacing.xl, color: Color(0x18FFFFFF)),
           Row(
             children: <Widget>[
@@ -191,7 +157,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                     style: text.titleMedium
                         ?.copyWith(fontWeight: FontWeight.w700)),
               ),
-              Text('${draft.total} EGP',
+              Text('${draft.fixedPrice} EGP',
                   style: text.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700, color: AppColors.primary)),
             ],
@@ -283,12 +249,12 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     );
   }
 
-  Widget _payBar(BookingDraft draft, TextTheme text) {
+  Widget _payBar(JobRequestDraft draft, TextTheme text) {
     final String action = widget.settle
-        ? 'Pay ${draft.total} EGP'
-        : (draft.payment == PaymentMethod.cash
+        ? 'Pay ${draft.fixedPrice} EGP'
+        : (_selectedPayment == PaymentMethod.cash
             ? 'Confirm booking'
-            : 'Authorize ${draft.total} EGP');
+            : 'Authorize ${draft.fixedPrice} EGP');
     return Container(
       padding: EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.lg, AppSpacing.xl,
           AppSpacing.lg + MediaQuery.of(context).padding.bottom),
