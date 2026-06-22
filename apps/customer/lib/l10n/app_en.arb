@@ -35,5 +35,253 @@
   "loading": "Loading…",
   "@loading": {
     "description": "Status label shown under the splash progress bar while the app prepares"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Bottom nav item"
+  },
+  "myJobs": "My Jobs",
+  "@myJobs": {
+    "description": "Bottom nav item"
+  },
+  "messages": "Messages",
+  "@messages": {
+    "description": "Bottom nav item"
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Bottom nav item"
+  },
+  "services": "Services",
+  "@services": {
+    "description": "Section header on home screen"
+  },
+  "browseAll": "Browse all",
+  "@browseAll": {
+    "description": "Action link on service sections"
+  },
+  "allServices": "All Services",
+  "@allServices": {
+    "description": "Screen title"
+  },
+  "topRatedNearYou": "Top-rated near you",
+  "@topRatedNearYou": {
+    "description": "Section header"
+  },
+  "activeAndUpcoming": "Active & upcoming",
+  "@activeAndUpcoming": {
+    "description": "Tab/section label for bookings"
+  },
+  "bookingHistory": "Booking history",
+  "@bookingHistory": {
+    "description": "Tab/section label for past bookings"
+  },
+  "bookingConfirmed": "Booking confirmed",
+  "@bookingConfirmed": {
+    "description": "Success message"
+  },
+  "askTheAiAssistant": "Ask the AI assistant",
+  "@askTheAiAssistant": {
+    "description": "Floating button label"
+  },
+  "chat": "Chat",
+  "@chat": {
+    "description": "Action button or tab"
+  },
+  "call": "Call",
+  "@call": {
+    "description": "Action button"
+  },
+  "addPhotosOrVideo": "Add photos or video",
+  "@addPhotosOrVideo": {
+    "description": "Button label"
+  },
+  "addAShortDescription": "Add a short description and a price above 0.",
+  "@addAShortDescription": {
+    "description": "Form validation message"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Button to dismiss or cancel an action"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Button to save changes"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Button to delete an item"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Button to edit an item"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Navigation button"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "Navigation button"
+  },
+  "submit": "Submit",
+  "@submit": {
+    "description": "Form submission button"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Button to close dialog or modal"
+  },
+  "search": "Search",
+  "@search": {
+    "description": "Search input placeholder or button"
+  },
+  "noResults": "No results found",
+  "@noResults": {
+    "description": "Empty state message"
+  },
+  "tryAgain": "Try again",
+  "@tryAgain": {
+    "description": "Button in error state"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Screen title or menu item"
+  },
+  "appearance": "Appearance",
+  "@appearance": {
+    "description": "Settings section"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "Settings action"
+  },
+  "version": "Version",
+  "@version": {
+    "description": "Settings label"
+  },
+  "aboutUs": "About us",
+  "@aboutUs": {
+    "description": "Settings menu item"
+  },
+  "help": "Help",
+  "@help": {
+    "description": "Settings menu item"
+  },
+  "privacyPolicy": "Privacy Policy",
+  "@privacyPolicy": {
+    "description": "Settings menu item"
+  },
+  "termsOfService": "Terms of Service",
+  "@termsOfService": {
+    "description": "Settings menu item"
+  },
+  "plumbing": "Plumbing",
+  "@plumbing": {
+    "description": "Service category"
+  },
+  "electrical": "Electrical",
+  "@electrical": {
+    "description": "Service category"
+  },
+  "cleaning": "Cleaning",
+  "@cleaning": {
+    "description": "Service category"
+  },
+  "carpentry": "Carpentry",
+  "@carpentry": {
+    "description": "Service category"
+  },
+  "painting": "Painting",
+  "@painting": {
+    "description": "Service category"
+  },
+  "ac": "AC",
+  "@ac": {
+    "description": "Service category (Air Conditioning)"
+  },
+  "price": "Price",
+  "@price": {
+    "description": "Label for price field"
+  },
+  "location": "Location",
+  "@location": {
+    "description": "Label for location field"
+  },
+  "description": "Description",
+  "@description": {
+    "description": "Label for description field"
+  },
+  "selectLocation": "Select location",
+  "@selectLocation": {
+    "description": "Button or prompt"
+  },
+  "selectDate": "Select date",
+  "@selectDate": {
+    "description": "Button or prompt"
+  },
+  "selectTime": "Select time",
+  "@selectTime": {
+    "description": "Button or prompt"
+  },
+  "payment": "Payment",
+  "@payment": {
+    "description": "Screen title or section"
+  },
+  "paymentMethod": "Payment method",
+  "@paymentMethod": {
+    "description": "Label"
+  },
+  "card": "Card",
+  "@card": {
+    "description": "Payment option"
+  },
+  "cash": "Cash",
+  "@cash": {
+    "description": "Payment option"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Price summary label"
+  },
+  "subtotal": "Subtotal",
+  "@subtotal": {
+    "description": "Price summary label"
+  },
+  "rating": "Rating",
+  "@rating": {
+    "description": "Label for rating/review"
+  },
+  "review": "Review",
+  "@review": {
+    "description": "Label for leaving a review"
+  },
+  "rateYourExperience": "Rate your experience",
+  "@rateYourExperience": {
+    "description": "Prompt to leave a rating"
+  },
+  "shareYourFeedback": "Share your feedback",
+  "@shareYourFeedback": {
+    "description": "Prompt to write a review"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Error message header"
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Success message header"
+  },
+  "warning": "Warning",
+  "@warning": {
+    "description": "Warning message header"
+  },
+  "connectionError": "Connection error",
+  "@connectionError": {
+    "description": "Error message"
+  },
+  "somethingWentWrong": "Something went wrong",
+  "@somethingWentWrong": {
+    "description": "Generic error message"
   }
 }
