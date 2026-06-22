@@ -1753,6 +1753,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Discount'**
   String get discount;
+
+  /// No description provided for @postAJob.
+  ///
+  /// In en, this message translates to:
+  /// **'Post a job'**
+  String get postAJob;
+
+  /// No description provided for @masonAndDecorationStones.
+  ///
+  /// In en, this message translates to:
+  /// **'Mason & Decoration Stones'**
+  String get masonAndDecorationStones;
+
+  /// No description provided for @optional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get optional;
+
+  /// No description provided for @add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
+
+  /// No description provided for @yourBudget.
+  ///
+  /// In en, this message translates to:
+  /// **'Your budget'**
+  String get yourBudget;
+
+  /// No description provided for @resize.
+  ///
+  /// In en, this message translates to:
+  /// **'Resize'**
+  String get resize;
+
+  /// No description provided for @referAndEarn.
+  ///
+  /// In en, this message translates to:
+  /// **'Refer & Earn 50 EGP'**
+  String get referAndEarn;
+
+  /// No description provided for @shareYourCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your code with friends - you both get 50 EGP credit on your next booking'**
+  String get shareYourCode;
+
+  /// No description provided for @newTag.
+  ///
+  /// In en, this message translates to:
+  /// **'NEW'**
+  String get newTag;
+
+  /// No description provided for @leakRepair.
+  ///
+  /// In en, this message translates to:
+  /// **'Leak Repair'**
+  String get leakRepair;
+
+  /// No description provided for @booked.
+  ///
+  /// In en, this message translates to:
+  /// **'booked'**
+  String get booked;
+
+  /// No description provided for @myAcIsLeakingWater.
+  ///
+  /// In en, this message translates to:
+  /// **'...My AC is leaking water'**
+  String get myAcIsLeakingWater;
+
+  /// No description provided for @offersReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers received'**
+  String get offersReceived;
+
+  /// No description provided for @goHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Go home'**
+  String get goHome;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @stay.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay'**
+  String get stay;
+
+  /// No description provided for @serviceAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Service address'**
+  String get serviceAddress;
+
+  /// No description provided for @pleaseSelectYourBirthday.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your birthday.'**
+  String get pleaseSelectYourBirthday;
 }
 
 class _AppLocalizationsDelegate

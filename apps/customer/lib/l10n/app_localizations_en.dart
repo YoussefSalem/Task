@@ -860,4 +860,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get discount => 'Discount';
+
+  @override
+  String get postAJob => 'Post a job';
+
+  @override
+  String get masonAndDecorationStones => 'Mason & Decoration Stones';
+
+  @override
+  String get optional => 'Optional';
+
+  @override
+  String get add => 'Add';
+
+  @override
+  String get yourBudget => 'Your budget';
+
+  @override
+  String get resize => 'Resize';
+
+  @override
+  String get referAndEarn => 'Refer & Earn 50 EGP';
+
+  @override
+  String get shareYourCode =>
+      'Share your code with friends - you both get 50 EGP credit on your next booking';
+
+  @override
+  String get newTag => 'NEW';
+
+  @override
+  String get leakRepair => 'Leak Repair';
+
+  @override
+  String get booked => 'booked';
+
+  @override
+  String get myAcIsLeakingWater => '...My AC is leaking water';
+
+  @override
+  String get offersReceived => 'Offers received';
+
+  @override
+  String get goHome => 'Go home';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get stay => 'Stay';
+
+  @override
+  String get serviceAddress => 'Service address';
+
+  @override
+  String get pleaseSelectYourBirthday => 'Please select your birthday.';
 }

@@ -147,7 +147,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get electrical => 'الكهرباء';
 
   @override
-  String get cleaning => 'التنظيف';
+  String get cleaning => 'تنظيف';
 
   @override
   String get carpentry => 'النجارة';
@@ -857,4 +857,59 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get discount => 'خصم';
+
+  @override
+  String get postAJob => 'انشر شغلة';
+
+  @override
+  String get masonAndDecorationStones => 'النجارة والحجر الزينة';
+
+  @override
+  String get optional => 'اختياري';
+
+  @override
+  String get add => 'ضيف';
+
+  @override
+  String get yourBudget => 'ميزانيتك';
+
+  @override
+  String get resize => 'غيّر الحجم';
+
+  @override
+  String get referAndEarn => 'اكسب 50 جنيه من الإحالات';
+
+  @override
+  String get shareYourCode =>
+      'شير الكود بتاعك مع أصحابك - كل واحد فيكم يأخذ 50 جنيه على الحجز الجاي';
+
+  @override
+  String get newTag => 'جديد';
+
+  @override
+  String get leakRepair => 'إصلاح التسرب';
+
+  @override
+  String get booked => 'محجوز';
+
+  @override
+  String get myAcIsLeakingWater => '...المكيف بتاعي بيسرب مايه';
+
+  @override
+  String get offersReceived => 'عروض وصلت';
+
+  @override
+  String get goHome => 'روح البيت';
+
+  @override
+  String get skip => 'اتخطى';
+
+  @override
+  String get stay => 'فضل هنا';
+
+  @override
+  String get serviceAddress => 'عنوان الخدمة';
+
+  @override
+  String get pleaseSelectYourBirthday => 'من فضلك اختار تاريخ ميلادك.';
 }
