@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -76,14 +77,14 @@ class HomeScreen extends ConsumerWidget {
               _PopularServices(onTap: startCategory),
               const SizedBox(height: AppSpacing.xxl),
               SectionHeader(
-                title: 'Services',
-                actionLabel: 'Browse all',
+                title: AppLocalizations.of(context).services,
+                actionLabel: AppLocalizations.of(context).browseAll,
                 onAction: () => context.push(AllServicesScreen.routePath),
               ),
               const SizedBox(height: AppSpacing.lg),
               _CategoryGrid(order: _gridOrder, onTap: startCategory),
               const SizedBox(height: AppSpacing.xxl),
-              const SectionHeader(title: 'Top-rated near you'),
+              SectionHeader(title: AppLocalizations.of(context).topRatedNearYou),
               const SizedBox(height: AppSpacing.lg),
               _TopProsCarousel(
                 onTap: (Technician t) => startCategory(t.category),

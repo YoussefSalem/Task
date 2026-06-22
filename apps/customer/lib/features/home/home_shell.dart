@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
@@ -111,11 +112,11 @@ class _FloatingNavBar extends StatelessWidget {
                   ),
                   child: Row(
                     children: <Widget>[
-                      _navItem(context, 0, Icons.home_outlined, Icons.home_rounded, 'Home'),
-                      _navItem(context, 1, Icons.handyman_outlined, Icons.handyman_rounded, 'My Jobs'),
+                      _navItem(context, 0, Icons.home_outlined, Icons.home_rounded, AppLocalizations.of(context).home),
+                      _navItem(context, 1, Icons.handyman_outlined, Icons.handyman_rounded, AppLocalizations.of(context).myJobs),
                       const Spacer(), // gap for the raised AI button
-                      _navItem(context, 2, Icons.chat_bubble_outline_rounded, Icons.chat_bubble_rounded, 'Messages'),
-                      _navItem(context, 3, Icons.person_outline_rounded, Icons.person_rounded, 'Profile'),
+                      _navItem(context, 2, Icons.chat_bubble_outline_rounded, Icons.chat_bubble_rounded, AppLocalizations.of(context).messages),
+                      _navItem(context, 3, Icons.person_outline_rounded, Icons.person_rounded, AppLocalizations.of(context).profile),
                     ],
                   ),
                 );
