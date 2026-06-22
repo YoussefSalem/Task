@@ -81,7 +81,7 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
       ScaffoldMessenger.of(context)
         ..clearSnackBars()
         ..showSnackBar(
-            const SnackBar(content: Text('Could not access media.')));
+            SnackBar(content: Text(AppLocalizations.of(context).couldNotAccessMedia)));
     }
   }
 
@@ -153,7 +153,7 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
       ScaffoldMessenger.of(context)
         ..clearSnackBars()
         ..showSnackBar(const SnackBar(
-          content: Text('Add a short description and a price above 0.'),
+          content: Text(AppLocalizations.of(context).addAShortDescription),
           behavior: SnackBarBehavior.floating,
         ));
       return;
@@ -208,7 +208,7 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
                   }),
                   onPressed: () => context.pop(),
                 ),
-                title: Text('Post a job',
+                title: Text(AppLocalizations.of(context).postAJob,
                     style: text.titleMedium
                         ?.copyWith(fontWeight: FontWeight.w700)),
                 centerTitle: true,
@@ -235,7 +235,7 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
                       delay: 0.1,
                       child: _FormSection(
                         icon: Icons.edit_note_rounded,
-                        label: 'Describe the problem',
+                        label: AppLocalizations.of(context).describeTheProblem,
                         child: TextField(
                           controller: _title,
                           maxLines: 3,
@@ -289,7 +289,7 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
                       delay: 0.2,
                       child: _FormSection(
                         icon: Icons.attach_file_rounded,
-                        label: 'Add photos or video',
+                        label: AppLocalizations.of(context).addPhotosOrVideo,
                         optional: true,
                         child: _MediaGrid(
                           media: _media,
@@ -307,7 +307,7 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
                       delay: 0.3,
                       child: _FormSection(
                         icon: Icons.payments_rounded,
-                        label: 'Your budget',
+                        label: AppLocalizations.of(context).yourBudget,
                         child: _PriceInput(
                             controller: _price, text: text, tint: tint),
                       ),
@@ -423,7 +423,7 @@ class _CategoryBadge extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Category',
+                Text(AppLocalizations.of(context).category,
                     style: text.labelSmall?.copyWith(
                       color: tint.withValues(alpha: 0.7),
                       fontWeight: FontWeight.w600,
@@ -486,7 +486,7 @@ class _FormSection extends StatelessWidget {
                         : const Color(0xFFEDE9FE),
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: Text('Optional',
+                  child: Text(AppLocalizations.of(context).optional,
                       style: text.labelSmall?.copyWith(
                         color: isDark
                             ? AppColors.textSecondary.withValues(alpha: 0.5)

@@ -40,9 +40,9 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
       (v == null || v.trim().isEmpty) ? 'Required' : null;
 
   String? _emailValidator(String? v) {
-    if (v == null || v.trim().isEmpty) return 'Required';
+    if (v == null || v.trim().isEmpty) return AppLocalizations.of(context).error;
     final valid = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v.trim());
-    return valid ? null : 'Enter a valid email';
+    return valid ? null : AppLocalizations.of(context).enterValidEmail;
   }
 
   Future<void> _pickBirthday() async {
@@ -52,7 +52,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
       initialDate: _birthday ?? DateTime(now.year - 25),
       firstDate: DateTime(now.year - 100),
       lastDate: DateTime(now.year - 16),
-      helpText: 'Select your birthday',
+      helpText: AppLocalizations.of(context).selectDate,
       builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
           colorScheme: Theme.of(context).colorScheme.copyWith(
@@ -70,7 +70,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
     if (_birthday == null) {
       ScaffoldMessenger.of(context)
         ..clearSnackBars()
-        ..showSnackBar(const SnackBar(content: Text('Please select your birthday.')));
+        ..showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).pleaseSelectYourBirthday)));
       return;
     }
     FocusScope.of(context).unfocus();
@@ -209,7 +209,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('Birthday',
+        Text(AppLocalizations.of(context).birthday,
             style: text.labelLarge?.copyWith(
               fontWeight: FontWeight.w700,
               letterSpacing: 0.2,

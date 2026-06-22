@@ -128,7 +128,7 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   const SizedBox(height: AppSpacing.lg),
-                  Text('Verify your number',
+                  Text(AppLocalizations.of(context).verifyOtp,
                       style: text.headlineMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.5,
@@ -159,7 +159,7 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                           )
                         : TextButton(
                             onPressed: _resend,
-                            child: const Text('Resend code'),
+                            child: Text(AppLocalizations.of(context).resendCode),
                           ),
                   ),
                   const Spacer(),
