@@ -1,4 +1,3 @@
-import 'package:customer/l10n/app_localizations.dart';
 // apps/customer/lib/features/marketplace/mock_job_marketplace_repository.dart
 import 'dart:async';
 

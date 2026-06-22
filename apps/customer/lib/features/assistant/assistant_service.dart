@@ -1,4 +1,3 @@
-import 'package:customer/l10n/app_localizations.dart';
 import 'package:task_domain/task_domain.dart';
 
 /// One line in the assistant conversation.

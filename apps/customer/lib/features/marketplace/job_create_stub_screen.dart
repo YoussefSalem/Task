@@ -153,7 +153,7 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
       ScaffoldMessenger.of(context)
         ..clearSnackBars()
         ..showSnackBar(const SnackBar(
-          content: Text(AppLocalizations.of(context).addAShortDescription),
+          content: const Text('Add a short description and a price above 0.'),
           behavior: SnackBarBehavior.floating,
         ));
       return;

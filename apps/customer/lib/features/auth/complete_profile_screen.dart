@@ -40,9 +40,9 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
       (v == null || v.trim().isEmpty) ? 'Required' : null;
 
   String? _emailValidator(String? v) {
-    if (v == null || v.trim().isEmpty) return AppLocalizations.of(context).error;
+    if (v == null || v.trim().isEmpty) return 'Required';
     final valid = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v.trim());
-    return valid ? null : AppLocalizations.of(context).enterValidEmail;
+    return valid ? null : 'Enter a valid email';
   }
 
   Future<void> _pickBirthday() async {
