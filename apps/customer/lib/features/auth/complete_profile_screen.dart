@@ -1,3 +1,4 @@
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:customer/features/home/home_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

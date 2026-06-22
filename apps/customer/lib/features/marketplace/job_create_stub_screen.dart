@@ -1,3 +1,4 @@
+import 'package:customer/l10n/app_localizations.dart';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';

@@ -1,3 +1,4 @@
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:customer/features/auth/auth_controller.dart';
 import 'package:customer/features/auth/complete_profile_screen.dart';
 import 'package:flutter/material.dart';
