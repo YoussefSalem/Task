@@ -638,4 +638,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get timeZone => 'Time zone';
+
+  @override
+  String get welcomeToTask => 'Welcome to Task';
+
+  @override
+  String get egyptOnDemandServices =>
+      'Egypt\'s on-demand home services — describe it, set your price, done.';
+
+  @override
+  String get verifiedPros => 'Verified pros';
+
+  @override
+  String get youSetThePrice => 'You set the price';
+
+  @override
+  String get sendCode => 'Send code';
+
+  @override
+  String get or => 'OR';
+
+  @override
+  String get termsAndPrivacy => 'Terms of Service • Privacy Policy';
 }

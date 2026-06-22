@@ -207,5 +207,14 @@
   "dataAndPrivacy": "البيانات والخصوصية",
   "downloadMyData": "نزّل بياناتي",
   "languageAndRegion": "اللغة والمنطقة",
-  "timeZone": "المنطقة الزمنية"
+  "timeZone": "المنطقة الزمنية",
+  "welcomeToTask": "أهلا بك في Task",
+  "egyptOnDemandServices": "خدمات مصر عند الطلب — اكتب المشكلة، حط السعر، خلص.",
+  "verifiedPros": "فنيين موثوقين",
+  "youSetThePrice": "أنت اللي تحط السعر",
+  "fastArrival": "وصول سريع",
+  "sendCode": "ابعت الكود",
+  "or": "أو",
+  "enterValidPhoneNumber": "ادخل رقم تليفون صحيح.",
+  "termsAndPrivacy": "شروط الاستخدام • سياسة الخصوصية"
 }

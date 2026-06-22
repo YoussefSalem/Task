@@ -4,6 +4,7 @@ import 'package:customer/features/auth/auth_controller.dart';
 import 'package:customer/features/auth/otp_verify_screen.dart';
 import 'package:customer/features/localization/language_switcher.dart';
 import 'package:customer/features/home/home_shell.dart';
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,7 +50,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   Future<void> _sendOtp() async {
     FocusScope.of(context).unfocus();
     if (_phone.text.replaceAll(RegExp(r'\D'), '').length < 9) {
-      _toast('Enter a valid phone number.');
+      _toast(AppLocalizations.of(context).enterValidPhoneNumber);
       return;
     }
     setState(() => _sending = true);
@@ -59,13 +60,13 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     if (out.step == AuthStep.signedIn) {
       context.goNamed(HomeShell.homeRouteName);
     } else if (out.step == AuthStep.codeSent) {
-      if (out.mock) _toast('Emulator offline — using demo code (any 6 digits).');
+      if (out.mock) _toast(AppLocalizations.of(context).emulatorOffline);
       unawaited(context.pushNamed(
         OtpVerifyScreen.routeName,
         queryParameters: <String, String>{'phone': _e164},
       ));
     } else {
-      _toast(out.message ?? 'Could not send the code.');
+      _toast(out.message ?? AppLocalizations.of(context).couldNotSendCode);
     }
   }
 
@@ -184,14 +185,13 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             ],
           ),
           const SizedBox(height: AppSpacing.xl),
-          Text('Welcome to Task',
+          Text(AppLocalizations.of(context).welcomeToTask,
               style: text.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w800,
                 letterSpacing: -0.5,
               )),
           const SizedBox(height: 6),
-          Text("Egypt's on-demand home services — describe it, set your "
-              'price, done.',
+          Text(AppLocalizations.of(context).egyptOnDemandServices,
               style: text.bodyLarge?.copyWith(
                 color: Theme.of(context).brightness == Brightness.dark
                     ? AppColors.textSecondary.withValues(alpha: 0.7)
@@ -199,13 +199,13 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 height: 1.4,
               )),
           const SizedBox(height: AppSpacing.lg),
-          const Wrap(
+          Wrap(
             spacing: AppSpacing.sm,
             runSpacing: AppSpacing.sm,
             children: <Widget>[
-              _TrustChip(icon: Icons.verified_rounded, label: 'Verified pros'),
-              _TrustChip(icon: Icons.sell_rounded, label: 'You set the price'),
-              _TrustChip(icon: Icons.bolt_rounded, label: 'Fast arrival'),
+              _TrustChip(icon: Icons.verified_rounded, label: AppLocalizations.of(context).verifiedPros),
+              _TrustChip(icon: Icons.sell_rounded, label: AppLocalizations.of(context).youSetThePrice),
+              _TrustChip(icon: Icons.bolt_rounded, label: AppLocalizations.of(context).fastArrival),
             ],
           ),
         ],
@@ -238,7 +238,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Text('Phone number',
+            Text(AppLocalizations.of(context).phoneNumberLabel,
                 style: text.labelLarge?.copyWith(
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.2,
@@ -247,7 +247,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             _phoneRow(text),
             const SizedBox(height: AppSpacing.xl),
             GlowButton(
-              label: 'Send code',
+              label: AppLocalizations.of(context).sendCode,
               icon: Icons.arrow_forward_rounded,
               loading: _sending,
               onPressed: _sendOtp,
@@ -256,14 +256,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             _orDivider(text),
             const SizedBox(height: AppSpacing.xl),
             _socialButton(
-              label: 'Continue with Google',
+              label: AppLocalizations.of(context).continueWithGoogle,
               iconWidget: const _GoogleMark(),
               busy: _socialBusy == 'google',
               onTap: () => _social('google'),
             ),
             const SizedBox(height: AppSpacing.md),
             _socialButton(
-              label: 'Continue with Apple',
+              label: AppLocalizations.of(context).continueWithApple,
               iconWidget: Icon(
                 Icons.apple,
                 color: Theme.of(context).brightness == Brightness.dark
@@ -353,7 +353,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         Expanded(child: Divider(color: divColor)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-          child: Text('OR',
+          child: Text(AppLocalizations.of(context).or,
               style: text.labelMedium?.copyWith(
                 color: labelColor,
                 letterSpacing: 1.5,
@@ -421,14 +421,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       children: <Widget>[
         GestureDetector(
             onTap: () => _toast('Privacy Policy opens in a later phase.'),
-            child: Text('Privacy Policy', style: style)),
+            child: Text(AppLocalizations.of(context).privacyPolicy, style: style)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Icon(Icons.circle, size: 4, color: muted),
         ),
         GestureDetector(
             onTap: () => _toast('Terms of Service opens in a later phase.'),
-            child: Text('Terms of Service', style: style)),
+            child: Text(AppLocalizations.of(context).termsOfService, style: style)),
       ],
     );
   }

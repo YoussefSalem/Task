@@ -1333,6 +1333,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Time zone'**
   String get timeZone;
+
+  /// No description provided for @welcomeToTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Task'**
+  String get welcomeToTask;
+
+  /// No description provided for @egyptOnDemandServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Egypt\'s on-demand home services — describe it, set your price, done.'**
+  String get egyptOnDemandServices;
+
+  /// No description provided for @verifiedPros.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified pros'**
+  String get verifiedPros;
+
+  /// No description provided for @youSetThePrice.
+  ///
+  /// In en, this message translates to:
+  /// **'You set the price'**
+  String get youSetThePrice;
+
+  /// No description provided for @sendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Send code'**
+  String get sendCode;
+
+  /// No description provided for @or.
+  ///
+  /// In en, this message translates to:
+  /// **'OR'**
+  String get or;
+
+  /// No description provided for @termsAndPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service • Privacy Policy'**
+  String get termsAndPrivacy;
 }
 
 class _AppLocalizationsDelegate

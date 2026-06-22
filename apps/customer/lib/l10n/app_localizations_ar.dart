@@ -635,4 +635,26 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get timeZone => 'المنطقة الزمنية';
+
+  @override
+  String get welcomeToTask => 'أهلا بك في Task';
+
+  @override
+  String get egyptOnDemandServices =>
+      'خدمات مصر عند الطلب — اكتب المشكلة، حط السعر، خلص.';
+
+  @override
+  String get verifiedPros => 'فنيين موثوقين';
+
+  @override
+  String get youSetThePrice => 'أنت اللي تحط السعر';
+
+  @override
+  String get sendCode => 'ابعت الكود';
+
+  @override
+  String get or => 'أو';
+
+  @override
+  String get termsAndPrivacy => 'شروط الاستخدام • سياسة الخصوصية';
 }

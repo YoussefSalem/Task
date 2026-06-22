@@ -207,5 +207,14 @@
   "dataAndPrivacy": "Data & Privacy",
   "downloadMyData": "Download my data",
   "languageAndRegion": "Language & region",
-  "timeZone": "Time zone"
+  "timeZone": "Time zone",
+  "welcomeToTask": "Welcome to Task",
+  "egyptOnDemandServices": "Egypt's on-demand home services — describe it, set your price, done.",
+  "verifiedPros": "Verified pros",
+  "youSetThePrice": "You set the price",
+  "fastArrival": "Fast arrival",
+  "sendCode": "Send code",
+  "or": "OR",
+  "enterValidPhoneNumber": "Enter a valid phone number.",
+  "termsAndPrivacy": "Terms of Service • Privacy Policy"
 }
