@@ -1,3 +1,4 @@
+import 'package:customer/l10n/app_localizations.dart';
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui_web' as ui_web;

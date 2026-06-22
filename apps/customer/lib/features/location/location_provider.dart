@@ -1,3 +1,4 @@
+import 'package:customer/l10n/app_localizations.dart';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';

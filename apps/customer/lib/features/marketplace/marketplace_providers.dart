@@ -1,3 +1,4 @@
+import 'package:customer/l10n/app_localizations.dart';
 // apps/customer/lib/features/marketplace/marketplace_providers.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_domain/task_domain.dart';
