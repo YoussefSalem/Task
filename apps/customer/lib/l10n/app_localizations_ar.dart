@@ -63,7 +63,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get activeAndUpcoming => 'اللي جارية والجاية';
 
   @override
-  String get bookingHistory => 'السجل';
+  String get bookingHistory => 'سجل الحجوزات';
 
   @override
   String get bookingConfirmed => 'تمام التمام 🎉';
@@ -657,4 +657,93 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get termsAndPrivacy => 'شروط الاستخدام • سياسة الخصوصية';
+
+  @override
+  String get yourBookings => 'حجزاتك';
+
+  @override
+  String get noMessagesYet => 'ما فيش رسايل دلوقتي';
+
+  @override
+  String get whenTechniciansRespond =>
+      'لما الفنيين يردوا على طلباتك، الرسايل تظهر هنا';
+
+  @override
+  String get savedAddresses => 'العناوين المحفوظة';
+
+  @override
+  String get paymentMethods => 'طرق الدفع';
+
+  @override
+  String get helpAndSupport => 'المساعدة والدعم';
+
+  @override
+  String get privacyAndSecurity => 'الخصوصية والأمان';
+
+  @override
+  String get signOut => 'خروج';
+
+  @override
+  String get taskCredit => 'رصيد Task';
+
+  @override
+  String get system => 'النظام';
+
+  @override
+  String get work => 'الشغل';
+
+  @override
+  String get cashCard => 'فلوس، بطاقة';
+
+  @override
+  String get leakingKitchenSink => 'حوض مطبخ بيسرب';
+
+  @override
+  String get plumber => 'سباك';
+
+  @override
+  String get biddingActive => 'العرض نشيط';
+
+  @override
+  String get acMaintenance => 'صيانة مكيف';
+
+  @override
+  String get inProgress => 'جاري التنفيذ';
+
+  @override
+  String get replaceTrippingBreaker => 'استبدال قاطع الكهرباء';
+
+  @override
+  String get completed => 'اتخلص';
+
+  @override
+  String get serviceAt => 'الخدمة في';
+
+  @override
+  String electricianArrivingIn(Object minutes) {
+    return 'الكهربائي بيوصل في $minutes دقيقة';
+  }
+
+  @override
+  String get whatNeedsFixing => '؟إيه اللي محتاج إصلاح';
+
+  @override
+  String get describeItInYourWords =>
+      'اكتب بكلامك — هجيبلك الفني اللي يناسبك. أنت اللي تحط السعر';
+
+  @override
+  String get kitchenSinkIsBlocked => '...حوض المطبخ مسدود';
+
+  @override
+  String get ramadanDeepClean => 'تنظيف عميق رمضان';
+
+  @override
+  String get professionalWholeHomeCleaning =>
+      'حزم تنظيف منزلي احترافية - احجز دلوقتي ادفع بعدين';
+
+  @override
+  String get popularInYourArea => 'مشهور في منطقتك';
+
+  @override
+  String get history => 'السجل';
 }

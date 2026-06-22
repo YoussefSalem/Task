@@ -1375,6 +1375,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Terms of Service • Privacy Policy'**
   String get termsAndPrivacy;
+
+  /// No description provided for @yourBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'Your bookings'**
+  String get yourBookings;
+
+  /// No description provided for @noMessagesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get noMessagesYet;
+
+  /// No description provided for @whenTechniciansRespond.
+  ///
+  /// In en, this message translates to:
+  /// **'When technicians respond to your requests, conversations appear here'**
+  String get whenTechniciansRespond;
+
+  /// No description provided for @savedAddresses.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved addresses'**
+  String get savedAddresses;
+
+  /// No description provided for @paymentMethods.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment methods'**
+  String get paymentMethods;
+
+  /// No description provided for @helpAndSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & support'**
+  String get helpAndSupport;
+
+  /// No description provided for @privacyAndSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & security'**
+  String get privacyAndSecurity;
+
+  /// No description provided for @signOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get signOut;
+
+  /// No description provided for @taskCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'Task credit'**
+  String get taskCredit;
+
+  /// No description provided for @system.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get system;
+
+  /// No description provided for @work.
+  ///
+  /// In en, this message translates to:
+  /// **'Work'**
+  String get work;
+
+  /// No description provided for @cashCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash, Card'**
+  String get cashCard;
+
+  /// No description provided for @leakingKitchenSink.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaking kitchen sink'**
+  String get leakingKitchenSink;
+
+  /// No description provided for @plumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Plumber'**
+  String get plumber;
+
+  /// No description provided for @biddingActive.
+  ///
+  /// In en, this message translates to:
+  /// **'biddingActive'**
+  String get biddingActive;
+
+  /// No description provided for @acMaintenance.
+  ///
+  /// In en, this message translates to:
+  /// **'AC Maintenance'**
+  String get acMaintenance;
+
+  /// No description provided for @inProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'inProgress'**
+  String get inProgress;
+
+  /// No description provided for @replaceTrippingBreaker.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace tripping breaker'**
+  String get replaceTrippingBreaker;
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'completed'**
+  String get completed;
+
+  /// No description provided for @serviceAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Service at'**
+  String get serviceAt;
+
+  /// No description provided for @electricianArrivingIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Electrician arriving in {minutes} min'**
+  String electricianArrivingIn(Object minutes);
+
+  /// No description provided for @whatNeedsFixing.
+  ///
+  /// In en, this message translates to:
+  /// **'?What needs fixing'**
+  String get whatNeedsFixing;
+
+  /// No description provided for @describeItInYourWords.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe it in your words — I\'ll line up the right pro. You decide the price'**
+  String get describeItInYourWords;
+
+  /// No description provided for @kitchenSinkIsBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'...Kitchen sink is blocked'**
+  String get kitchenSinkIsBlocked;
+
+  /// No description provided for @ramadanDeepClean.
+  ///
+  /// In en, this message translates to:
+  /// **'Ramadan Deep Clean'**
+  String get ramadanDeepClean;
+
+  /// No description provided for @professionalWholeHomeCleaning.
+  ///
+  /// In en, this message translates to:
+  /// **'Professional whole-home cleaning packages - book now, pay after'**
+  String get professionalWholeHomeCleaning;
+
+  /// No description provided for @popularInYourArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular in your area'**
+  String get popularInYourArea;
+
+  /// No description provided for @history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history;
 }
 
 class _AppLocalizationsDelegate

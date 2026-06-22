@@ -1,3 +1,4 @@
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -40,18 +41,18 @@ class BookingsScreen extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(
                     AppSpacing.xl, AppSpacing.lg, AppSpacing.xl, 112),
                 children: <Widget>[
-                  Text('Your bookings',
+                  Text(AppLocalizations.of(context).yourBookings,
                       style: text.headlineSmall
                           ?.copyWith(fontWeight: FontWeight.w700)),
                   const SizedBox(height: AppSpacing.xl),
                   if (active.isNotEmpty) ...<Widget>[
-                    const SectionHeader(title: 'Active & upcoming'),
+                    SectionHeader(title: AppLocalizations.of(context).activeAndUpcoming),
                     const SizedBox(height: AppSpacing.md),
                     ...active.map((JobRequest j) => _card(context, j, text,
                         onTap: () => context.push('/job/live'))),
                     const SizedBox(height: AppSpacing.xl),
                   ],
-                  const SectionHeader(title: 'History'),
+                  SectionHeader(title: AppLocalizations.of(context).history),
                   const SizedBox(height: AppSpacing.md),
                   if (past.isEmpty)
                     _empty(text)

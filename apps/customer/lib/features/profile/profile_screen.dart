@@ -1,3 +1,4 @@
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -30,7 +31,7 @@ class ProfileScreen extends ConsumerWidget {
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: Text('Profile',
+                    child: Text(AppLocalizations.of(context).profile,
                         style: text.headlineSmall
                             ?.copyWith(fontWeight: FontWeight.w700)),
                   ),
@@ -49,7 +50,7 @@ class ProfileScreen extends ConsumerWidget {
               OutlinedButton.icon(
                 onPressed: () => context.go('/'),
                 icon: const Icon(Icons.logout_rounded),
-                label: const Text('Sign out'),
+                label: Text(AppLocalizations.of(context).signOut),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(52),
                   foregroundColor: AppColors.error,
@@ -117,7 +118,7 @@ class ProfileScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Task credit',
+                Text(AppLocalizations.of(context).taskCredit,
                     style: text.bodyMedium?.copyWith(
                       color: Colors.white.withValues(alpha: 0.85),
                     )),
@@ -147,12 +148,13 @@ class ProfileScreen extends ConsumerWidget {
     final Color dividerColor =
         isDark ? const Color(0x14FFFFFF) : const Color(0x14000000);
 
+    final AppLocalizations loc = AppLocalizations.of(context);
     final List<(IconData, String, String)> items = <(IconData, String, String)>[
-      (Icons.location_on_rounded, 'Saved addresses', 'Home, Work'),
-      (Icons.credit_card_rounded, 'Payment methods', 'Cash, Card'),
-      (Icons.history_rounded, 'Booking history', ''),
-      (Icons.headset_mic_rounded, 'Help & support', ''),
-      (Icons.shield_rounded, 'Privacy & security', ''),
+      (Icons.location_on_rounded, loc.savedAddresses, '${loc.home}, ${loc.work}'),
+      (Icons.credit_card_rounded, loc.paymentMethods, loc.cashCard),
+      (Icons.history_rounded, loc.bookingHistory, ''),
+      (Icons.headset_mic_rounded, loc.helpAndSupport, ''),
+      (Icons.shield_rounded, loc.privacyAndSecurity, ''),
     ];
     return Container(
       decoration: BoxDecoration(
@@ -198,21 +200,22 @@ class _AppearanceSection extends ConsumerWidget {
 
   final TextTheme text;
 
-  static const List<(ThemeMode, IconData, String)> _options = <(
-    ThemeMode,
-    IconData,
-    String
-  )>[
-    (ThemeMode.system, Icons.brightness_auto_rounded, 'System'),
-    (ThemeMode.light, Icons.light_mode_rounded, 'Light'),
-    (ThemeMode.dark, Icons.dark_mode_rounded, 'Dark'),
-  ];
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeMode current = ref.watch(themeModeProvider);
     final ColorScheme cs = Theme.of(context).colorScheme;
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations loc = AppLocalizations.of(context);
+
+    final List<(ThemeMode, IconData, String)> options = <(
+      ThemeMode,
+      IconData,
+      String
+    )>[
+      (ThemeMode.system, Icons.brightness_auto_rounded, loc.system),
+      (ThemeMode.light, Icons.light_mode_rounded, loc.light),
+      (ThemeMode.dark, Icons.dark_mode_rounded, loc.dark),
+    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,7 +223,7 @@ class _AppearanceSection extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: AppSpacing.sm),
           child: Text(
-            'Appearance',
+            AppLocalizations.of(context).appearance,
             style: text.labelMedium?.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w700,
@@ -244,7 +247,7 @@ class _AppearanceSection extends ConsumerWidget {
           child: Row(
             children: <Widget>[
               for (final (ThemeMode mode, IconData icon, String label)
-                  in _options)
+                  in options)
                 Expanded(
                   child: _AppearanceChip(
                     icon: icon,

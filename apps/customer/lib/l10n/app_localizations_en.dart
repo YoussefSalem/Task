@@ -660,4 +660,93 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get termsAndPrivacy => 'Terms of Service • Privacy Policy';
+
+  @override
+  String get yourBookings => 'Your bookings';
+
+  @override
+  String get noMessagesYet => 'No messages yet';
+
+  @override
+  String get whenTechniciansRespond =>
+      'When technicians respond to your requests, conversations appear here';
+
+  @override
+  String get savedAddresses => 'Saved addresses';
+
+  @override
+  String get paymentMethods => 'Payment methods';
+
+  @override
+  String get helpAndSupport => 'Help & support';
+
+  @override
+  String get privacyAndSecurity => 'Privacy & security';
+
+  @override
+  String get signOut => 'Sign out';
+
+  @override
+  String get taskCredit => 'Task credit';
+
+  @override
+  String get system => 'System';
+
+  @override
+  String get work => 'Work';
+
+  @override
+  String get cashCard => 'Cash, Card';
+
+  @override
+  String get leakingKitchenSink => 'Leaking kitchen sink';
+
+  @override
+  String get plumber => 'Plumber';
+
+  @override
+  String get biddingActive => 'biddingActive';
+
+  @override
+  String get acMaintenance => 'AC Maintenance';
+
+  @override
+  String get inProgress => 'inProgress';
+
+  @override
+  String get replaceTrippingBreaker => 'Replace tripping breaker';
+
+  @override
+  String get completed => 'completed';
+
+  @override
+  String get serviceAt => 'Service at';
+
+  @override
+  String electricianArrivingIn(Object minutes) {
+    return 'Electrician arriving in $minutes min';
+  }
+
+  @override
+  String get whatNeedsFixing => '?What needs fixing';
+
+  @override
+  String get describeItInYourWords =>
+      'Describe it in your words — I\'ll line up the right pro. You decide the price';
+
+  @override
+  String get kitchenSinkIsBlocked => '...Kitchen sink is blocked';
+
+  @override
+  String get ramadanDeepClean => 'Ramadan Deep Clean';
+
+  @override
+  String get professionalWholeHomeCleaning =>
+      'Professional whole-home cleaning packages - book now, pay after';
+
+  @override
+  String get popularInYourArea => 'Popular in your area';
+
+  @override
+  String get history => 'History';
 }

@@ -1,3 +1,4 @@
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:task_design/task_design.dart';
 
@@ -19,7 +20,7 @@ class MessagesScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SizedBox(height: AppSpacing.lg),
-                Text('Messages',
+                Text(AppLocalizations.of(context).messages,
                     style: text.headlineMedium?.copyWith(
                       fontWeight: FontWeight.w800,
                       letterSpacing: -0.5,
@@ -34,13 +35,13 @@ class MessagesScreen extends StatelessWidget {
                               ? AppColors.textSecondary.withValues(alpha: 0.3)
                               : AppColors.textSecondaryLight.withValues(alpha: 0.5)),
                       const SizedBox(height: AppSpacing.lg),
-                      Text('No messages yet',
+                      Text(AppLocalizations.of(context).noMessagesYet,
                           style: text.titleMedium?.copyWith(
                             fontWeight: FontWeight.w700,
                           )),
                       const SizedBox(height: AppSpacing.sm),
                       Text(
-                        'When technicians respond to your\nrequests, conversations appear here.',
+                        AppLocalizations.of(context).whenTechniciansRespond,
                         textAlign: TextAlign.center,
                         style: text.bodyMedium?.copyWith(
                           color: Theme.of(context).brightness == Brightness.dark
