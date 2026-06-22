@@ -1,5 +1,5 @@
 import 'package:customer/features/auth/auth_controller.dart';
-import 'package:customer/features/home/home_shell.dart';
+import 'package:customer/features/auth/complete_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -85,7 +85,7 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
     if (!mounted) return;
     setState(() => _verifying = false);
     if (out.step == AuthStep.signedIn) {
-      context.goNamed(HomeShell.homeRouteName);
+      context.goNamed(CompleteProfileScreen.routeName);
     } else {
       _toast(out.message ?? 'That code is incorrect.');
       for (final TextEditingController c in _controllers) {
@@ -135,7 +135,9 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                   const SizedBox(height: AppSpacing.sm),
                   Text('We sent a 6-digit code to ${widget.phone}.',
                       style: text.titleMedium?.copyWith(
-                        color: AppColors.textSecondary.withValues(alpha: 0.7),
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? AppColors.textSecondary.withValues(alpha: 0.7)
+                            : AppColors.textSecondaryLight,
                         height: 1.4,
                       )),
                   const SizedBox(height: AppSpacing.xxl),
@@ -149,8 +151,9 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                         ? Text(
                             'Resend code in 0:${_secondsLeft.toString().padLeft(2, '0')}',
                             style: text.bodyMedium?.copyWith(
-                              color:
-                                  AppColors.textSecondary.withValues(alpha: 0.6),
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? AppColors.textSecondary.withValues(alpha: 0.6)
+                                  : AppColors.textSecondaryLight,
                             ),
                           )
                         : TextButton(

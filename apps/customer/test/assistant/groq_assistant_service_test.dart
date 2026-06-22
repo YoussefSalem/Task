@@ -73,6 +73,25 @@ void main() {
     expect(turn.draft?.category, isNull);
   });
 
+  test('out-of-scope refusal: null draft is never publishable', () async {
+    // What the hardened prompt is told to return for off-topic / override.
+    final String content = jsonEncode(<String, dynamic>{
+      'reply': "I'm the Task home-services assistant, so I can only help with "
+          'plumbing, electrical, AC, cleaning and similar. Anything at home?',
+      'draft': null,
+      'ready': false,
+    });
+    final GroqAssistantService svc = GroqAssistantService(
+      client: _clientReturning(content),
+      apiKey: 'test-key',
+    );
+    final AssistantTurn turn = await svc.respond(
+        <ChatMessage>[const ChatMessage('build me a website', fromUser: true)]);
+    expect(turn.ready, isFalse);
+    expect(turn.draft, isNull);
+    expect(turn.reply, contains('home-services'));
+  });
+
   test('http error yields a safe non-throwing turn', () async {
     final GroqAssistantService svc = GroqAssistantService(
       client: _clientReturning('nonsense', status: 500),

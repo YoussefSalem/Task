@@ -5,11 +5,14 @@ import 'package:customer/features/auth/sign_in_screen.dart';
 import 'package:customer/features/home/home_shell.dart';
 import 'package:customer/features/localization/language_switcher.dart';
 import 'package:customer/l10n/app_localizations.dart';
+import 'dart:math' as math;
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
+import 'package:task_domain/task_domain.dart';
 
 /// Uber-style entry: a brief, polished loading/transition screen. A violet→black
 /// field flows to every edge; the glass Task logo sits in a pool of shadow ringed
@@ -31,8 +34,8 @@ class SplashScreen extends ConsumerStatefulWidget {
 class _SplashScreenState extends ConsumerState<SplashScreen>
     with TickerProviderStateMixin {
   // Brief, deliberate dwell so the brand entrance never flashes by.
-  static const Duration _minDwell = Duration(milliseconds: 1200);
-  static const Duration _reducedDwell = Duration(milliseconds: 400);
+  static const Duration _minDwell = Duration(milliseconds: 2000);
+  static const Duration _reducedDwell = Duration(milliseconds: 600);
 
   // Entrance: logo settles in, then the wordmark + tagline rise.
   late final AnimationController _intro = AnimationController(
@@ -48,6 +51,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   late final AnimationController _shimmer = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1400),
+  );
+  // Slow, continuous orbit of the service glyphs around the mark.
+  late final AnimationController _orbit = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 20),
   );
   // Quick fade-through on exit, so the hand-off feels continuous.
   late final AnimationController _exit = AnimationController(
@@ -95,6 +103,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       _intro.forward();
       _pulse.repeat(reverse: true);
       _shimmer.repeat();
+      _orbit.repeat();
     }
     _dwellTimer = Timer(reduceMotion ? _reducedDwell : _minDwell, () {
       _dwellDone = true;
@@ -121,6 +130,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _intro.dispose();
     _pulse.dispose();
     _shimmer.dispose();
+    _orbit.dispose();
     _exit.dispose();
     super.dispose();
   }
@@ -163,8 +173,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     padding: const EdgeInsets.all(AppSpacing.sm),
                     child: Theme(
                       data: Theme.of(context).copyWith(
-                        iconTheme: const IconThemeData(
-                            color: AppColors.textSecondary),
+                        iconTheme: IconThemeData(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.textSecondary
+                              : AppColors.textSecondaryLight,
+                        ),
                       ),
                       child: const LanguageSwitcher(),
                     ),
@@ -178,7 +191,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   child: Column(
                     children: <Widget>[
                       const Spacer(flex: 5),
-                      _buildLogo(),
+                      _buildBrand(reduceMotion),
                       const SizedBox(height: AppSpacing.lg),
                       FadeTransition(
                         opacity: _textFade,
@@ -186,33 +199,37 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                           position: _textSlide,
                           child: Column(
                             children: <Widget>[
-                              Text(
-                                'Task',
-                                style: AppTypography.wordmark(
-                                  color: AppColors.textPrimary,
-                                ).copyWith(
-                                  shadows: <Shadow>[
-                                    Shadow(
-                                      color: AppColors.primary
-                                          .withValues(alpha: 0.55),
-                                      blurRadius: 28,
+                              Builder(builder: (context) {
+                                final bool isDark = Theme.of(context).brightness == Brightness.dark;
+                                return Column(
+                                  children: <Widget>[
+                                    Text(
+                                      'Task',
+                                      style: AppTypography.wordmark(
+                                        color: isDark ? AppColors.textPrimary : AppColors.textPrimaryLight,
+                                      ).copyWith(
+                                        shadows: <Shadow>[
+                                          Shadow(
+                                            color: AppColors.primary.withValues(alpha: isDark ? 0.55 : 0.25),
+                                            blurRadius: 28,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: AppSpacing.md),
+                                    Text(
+                                      l10n.tagline,
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                        color: isDark
+                                            ? AppColors.textSecondary.withValues(alpha: 0.8)
+                                            : AppColors.textSecondaryLight,
+                                        letterSpacing: 0.2,
+                                      ),
                                     ),
                                   ],
-                                ),
-                              ),
-                              const SizedBox(height: AppSpacing.md),
-                              Text(
-                                l10n.tagline,
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(
-                                      color: AppColors.textSecondary
-                                          .withValues(alpha: 0.8),
-                                      letterSpacing: 0.2,
-                                    ),
-                              ),
+                                );
+                              }),
                             ],
                           ),
                         ),
@@ -242,66 +259,222 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     );
   }
 
-  Widget _buildLogo() {
+  // Signature: the service constellation. The category trades orbit the mark,
+  // each settling into place on a staggered intro — "every home service, one
+  // app." Under reduced motion the glyphs are simply placed, no orbit.
+  static const List<JobCategory> _orbitCats = <JobCategory>[
+    JobCategory.plumbing,
+    JobCategory.electrical,
+    JobCategory.ac,
+    JobCategory.painting,
+    JobCategory.cleaning,
+    JobCategory.carpentry,
+  ];
+
+  Widget _buildBrand(bool reduceMotion) {
+    const double field = 300;
+    const double ringRadius = 124;
     return AnimatedBuilder(
-      animation: Listenable.merge(<Listenable>[_intro, _pulseCurve]),
+      animation: Listenable.merge(
+          <Listenable>[_intro, _pulseCurve, _orbit]),
       builder: (context, _) {
-        final breathe = _pulseCurve.value; // 0 → 1
-        final scale = _logoScale.value * (1 + 0.03 * breathe);
-        final glowAlpha = 0.26 + 0.16 * breathe;
+        final bool isDark = Theme.of(context).brightness == Brightness.dark;
         return Transform.translate(
           offset: _parallax,
-          child: Opacity(
-            opacity: _logoFade.value,
-            child: Transform.scale(
-              scale: scale,
-              child: SizedBox(
-                width: 300,
-                height: 300,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    IgnorePointer(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: RadialGradient(
-                            colors: <Color>[
-                              AppColors.primary.withValues(alpha: glowAlpha),
-                              const Color(0x00000000),
-                            ],
-                            stops: const <double>[0.32, 0.72],
-                          ),
-                        ),
+          child: SizedBox(
+            width: field,
+            height: field,
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                // Faint orbit guide ring.
+                Opacity(
+                  opacity: _logoFade.value * 0.5,
+                  child: Container(
+                    width: ringRadius * 2,
+                    height: ringRadius * 2,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isDark
+                            ? Colors.white.withValues(alpha: 0.07)
+                            : Colors.black.withValues(alpha: 0.07),
                       ),
                     ),
-                    ShaderMask(
+                  ),
+                ),
+                // Orbiting service glyphs.
+                for (int i = 0; i < _orbitCats.length; i++)
+                  _orbitGlyph(i, ringRadius, reduceMotion, isDark),
+                // Center mark.
+                _logoCore(),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _orbitGlyph(int i, double radius, bool reduceMotion, bool isDark) {
+    final JobCategory cat = _orbitCats[i];
+    final Color tint = categoryTint(cat);
+
+    // Staggered settle-in: each glyph enters slightly after the previous.
+    final double start = 0.2 + i * 0.09;
+    final double raw = ((_intro.value - start) / 0.4).clamp(0.0, 1.0);
+    final double t = Curves.easeOutBack.transform(raw);
+
+    final double base = (math.pi * 2 / _orbitCats.length) * i - math.pi / 2;
+    final double spin = reduceMotion ? 0 : _orbit.value * math.pi * 2;
+    final double angle = base + spin;
+
+    // Glyphs drift in from the center as they settle.
+    final double r = radius * t;
+    final Offset pos = Offset(math.cos(angle) * r, math.sin(angle) * r);
+
+    return Transform.translate(
+      offset: pos,
+      child: Opacity(
+        opacity: raw,
+        child: Transform.scale(
+          scale: 0.6 + 0.4 * t,
+          child: Container(
+            height: 44,
+            width: 44,
+            decoration: BoxDecoration(
+              color: isDark
+                  ? const Color(0xFF15102C).withValues(alpha: 0.85)
+                  : AppColors.primaryContainer,
+              shape: BoxShape.circle,
+              border: Border.all(color: tint.withValues(alpha: isDark ? 0.5 : 0.6)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: tint.withValues(alpha: 0.35),
+                  blurRadius: 14,
+                  spreadRadius: -4,
+                ),
+              ],
+            ),
+            child: Icon(categoryIcon(cat), color: tint, size: 22),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _logoCore() {
+    final double breathe = _pulseCurve.value; // 0 → 1
+    final double scale = _logoScale.value * (1 + 0.03 * breathe);
+    final double glowAlpha = 0.26 + 0.16 * breathe;
+    return Opacity(
+      opacity: _logoFade.value,
+      child: Transform.scale(
+        scale: scale,
+        child: SizedBox(
+          width: 188,
+          height: 188,
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: <Color>[
+                        AppColors.primary.withValues(alpha: glowAlpha),
+                        const Color(0x00000000),
+                      ],
+                      stops: const <double>[0.32, 0.72],
+                    ),
+                  ),
+                ),
+              ),
+              Builder(builder: (context) {
+                final bool isDark = Theme.of(context).brightness == Brightness.dark;
+                if (isDark) {
+                  return ShaderMask(
+                    blendMode: BlendMode.dstIn,
+                    shaderCallback: (Rect rect) => const LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: <Color>[
+                        Color(0x00FFFFFF),
+                        Colors.white,
+                        Colors.white,
+                        Color(0x00FFFFFF),
+                      ],
+                      stops: <double>[0.0, 0.20, 0.80, 1.0],
+                    ).createShader(rect),
+                    child: ShaderMask(
                       blendMode: BlendMode.dstIn,
-                      shaderCallback: (Rect rect) => const RadialGradient(
-                        radius: 0.72,
+                      shaderCallback: (Rect rect) => const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
                         colors: <Color>[
+                          Color(0x00FFFFFF),
                           Colors.white,
                           Colors.white,
                           Color(0x00FFFFFF),
                         ],
-                        stops: <double>[0.0, 0.56, 1.0],
+                        stops: <double>[0.0, 0.20, 0.80, 1.0],
                       ).createShader(rect),
                       child: Image.asset(
                         'assets/images/task_logo.jpg',
-                        width: 232,
-                        height: 232,
+                        width: 150,
+                        height: 150,
                         fit: BoxFit.contain,
                         filterQuality: FilterQuality.high,
                         semanticLabel: 'Task',
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
+                  );
+                }
+                // Light mode: two nested ShaderMasks (horizontal + vertical)
+                // fade all four sides uniformly so the JPG background
+                // dissolves into the page on every edge, not just corners.
+                return ShaderMask(
+                  blendMode: BlendMode.dstIn,
+                  shaderCallback: (Rect rect) => const LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: <Color>[
+                      Color(0x00FFFFFF),
+                      Colors.white,
+                      Colors.white,
+                      Color(0x00FFFFFF),
+                    ],
+                    stops: <double>[0.0, 0.20, 0.80, 1.0],
+                  ).createShader(rect),
+                  child: ShaderMask(
+                    blendMode: BlendMode.dstIn,
+                    shaderCallback: (Rect rect) => const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: <Color>[
+                        Color(0x00FFFFFF),
+                        Colors.white,
+                        Colors.white,
+                        Color(0x00FFFFFF),
+                      ],
+                      stops: <double>[0.0, 0.20, 0.80, 1.0],
+                    ).createShader(rect),
+                    child: Image.asset(
+                      'assets/images/task_logo_light.jpg',
+                      width: 150,
+                      height: 150,
+                      fit: BoxFit.contain,
+                      filterQuality: FilterQuality.high,
+                      semanticLabel: 'Task',
+                    ),
+                  ),
+                );
+              }),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
@@ -322,12 +495,17 @@ class _ShimmerLine extends StatelessWidget {
         children: <Widget>[
           // Faint static track.
           Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
+            child: Builder(builder: (context) {
+              final bool isDark = Theme.of(context).brightness == Brightness.dark;
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.12)
+                      : Colors.black.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              );
+            }),
           ),
           // Travelling highlight.
           Positioned.fill(
@@ -358,51 +536,72 @@ class _ShimmerLine extends StatelessWidget {
   }
 }
 
-/// Full-bleed background: a diagonal violet identity that settles into black,
-/// an ambient top-corner bloom, and a large, softly-faded pool of pure shadow
-/// centered on the logo.
+/// Full-bleed background: adapts to light/dark.
+/// Dark: diagonal violet→black identity with bloom and shadow pool.
+/// Light: clean white→lavender gradient so the brand mark stays vivid.
 class _SplashBackground extends StatelessWidget {
   const _SplashBackground();
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    if (isDark) {
+      return const Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[
+                  Color(0xFF2A1257),
+                  Color(0xFF15102C),
+                  Color(0xFF09080F),
+                ],
+                stops: <double>[0.0, 0.5, 1.0],
+              ),
+            ),
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment(-0.85, -1.0),
+                radius: 1.25,
+                colors: <Color>[Color(0x557C3AED), Color(0x00000000)],
+              ),
+            ),
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment(0, -0.18),
+                radius: 1.5,
+                colors: <Color>[
+                  Color(0xFF000000),
+                  Color(0xFF000000),
+                  Color(0x00000000),
+                ],
+                stops: <double>[0.0, 0.32, 1.0],
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    // Light mode: white base with a soft lavender bloom at the top-left corner.
     return const Stack(
       fit: StackFit.expand,
       children: <Widget>[
         DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: <Color>[
-                Color(0xFF2A1257),
-                Color(0xFF15102C),
-                Color(0xFF09080F),
-              ],
-              stops: <double>[0.0, 0.5, 1.0],
-            ),
-          ),
+          decoration: BoxDecoration(color: AppColors.backgroundLight),
         ),
         DecoratedBox(
           decoration: BoxDecoration(
             gradient: RadialGradient(
               center: Alignment(-0.85, -1.0),
-              radius: 1.25,
-              colors: <Color>[Color(0x557C3AED), Color(0x00000000)],
-            ),
-          ),
-        ),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: RadialGradient(
-              center: Alignment(0, -0.18),
-              radius: 1.5,
-              colors: <Color>[
-                Color(0xFF000000),
-                Color(0xFF000000),
-                Color(0x00000000),
-              ],
-              stops: <double>[0.0, 0.32, 1.0],
+              radius: 1.4,
+              colors: <Color>[Color(0x447C3AED), Color(0x00000000)],
             ),
           ),
         ),

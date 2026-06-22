@@ -1,0 +1,822 @@
+{
+  "C:\\Users\\youss\\Documents\\Task App\\.claude\\launch.json": {
+    "mtime": 1781995312.6439984,
+    "ast_hash": "bf98c77997670751f7829b9bd854a6d9",
+    "semantic_hash": "bf98c77997670751f7829b9bd854a6d9"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\.claude\\settings.local.json": {
+    "mtime": 1782030129.5244484,
+    "ast_hash": "7f2e6d2fd5ef8fd4363bcbf862f00d24",
+    "semantic_hash": "7f2e6d2fd5ef8fd4363bcbf862f00d24"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\lib\\main.dart": {
+    "mtime": 1781994479.0727744,
+    "ast_hash": "c80ebc9b987c18b3288549dd71929040",
+    "semantic_hash": "c80ebc9b987c18b3288549dd71929040"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\test\\widget_test.dart": {
+    "mtime": 1781994479.123299,
+    "ast_hash": "377f77403df4cae708c43afdc5ad1510",
+    "semantic_hash": "377f77403df4cae708c43afdc5ad1510"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\manifest.json": {
+    "mtime": 1781994289.2992065,
+    "ast_hash": "fb8b26ab2941d31dccf5fa0cdd564fec",
+    "semantic_hash": "fb8b26ab2941d31dccf5fa0cdd564fec"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\build.gradle.kts": {
+    "mtime": 1781994264.9029033,
+    "ast_hash": "d3c26f0ff1b006023e5b1e386dbfd610",
+    "semantic_hash": "d3c26f0ff1b006023e5b1e386dbfd610"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\java\\io\\flutter\\plugins\\GeneratedPluginRegistrant.java": {
+    "mtime": 1781996302.0008793,
+    "ast_hash": "026f5934d71e820a7866854a3e684096",
+    "semantic_hash": "026f5934d71e820a7866854a3e684096"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\kotlin\\com\\task\\customer\\MainActivity.kt": {
+    "mtime": 1781994264.9271646,
+    "ast_hash": "108bac2092d81130da7176699b14624d",
+    "semantic_hash": "108bac2092d81130da7176699b14624d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\build.gradle.kts": {
+    "mtime": 1781994264.9462745,
+    "ast_hash": "803fe22651fbe96ed401eb0b66a492d1",
+    "semantic_hash": "803fe22651fbe96ed401eb0b66a492d1"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\gradlew": {
+    "mtime": 1781994265.9351015,
+    "ast_hash": "7f1cd7eb3f75a1dc85cd37753972a6e2",
+    "semantic_hash": "7f1cd7eb3f75a1dc85cd37753972a6e2"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\settings.gradle.kts": {
+    "mtime": 1781994265.243539,
+    "ast_hash": "087a01c04d081ae02a8e5db89f4bf3f3",
+    "semantic_hash": "087a01c04d081ae02a8e5db89f4bf3f3"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Flutter\\ephemeral\\Packages\\FlutterGeneratedPluginSwiftPackage\\Package.swift": {
+    "mtime": 1782030370.7990713,
+    "ast_hash": "63bc00d19466662a75b7492ac07d5a97",
+    "semantic_hash": "63bc00d19466662a75b7492ac07d5a97"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Flutter\\ephemeral\\Packages\\FlutterGeneratedPluginSwiftPackage\\Sources\\FlutterGeneratedPluginSwiftPackage\\FlutterGeneratedPluginSwiftPackage.swift": {
+    "mtime": 1781994268.1212149,
+    "ast_hash": "e6366d8685ad56268730656aa0a6e00c",
+    "semantic_hash": "e6366d8685ad56268730656aa0a6e00c"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Flutter\\ephemeral\\flutter_lldb_helper.py": {
+    "mtime": 1781994267.9556227,
+    "ast_hash": "98fc75412162af387e2e3461e4e58094",
+    "semantic_hash": "98fc75412162af387e2e3461e4e58094"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Flutter\\flutter_export_environment.sh": {
+    "mtime": 1781994267.964628,
+    "ast_hash": "4ea7e828a753bbb36bd92fa172ed7e3b",
+    "semantic_hash": "4ea7e828a753bbb36bd92fa172ed7e3b"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\RunnerTests\\RunnerTests.swift": {
+    "mtime": 1781994265.710322,
+    "ast_hash": "24e5d095048eb86c30423f4e04b6e57b",
+    "semantic_hash": "24e5d095048eb86c30423f4e04b6e57b"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\AppDelegate.swift": {
+    "mtime": 1781993252.1769056,
+    "ast_hash": "9e1de9c329a3fe4931876063de95132b",
+    "semantic_hash": "9e1de9c329a3fe4931876063de95132b"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Contents.json": {
+    "mtime": 1781993252.1779037,
+    "ast_hash": "31a08e429403e265cabfb31b3d65f049",
+    "semantic_hash": "31a08e429403e265cabfb31b3d65f049"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\Contents.json": {
+    "mtime": 1781993252.187426,
+    "ast_hash": "b9e927ac17345f2d5f052fe68a3487f9",
+    "semantic_hash": "b9e927ac17345f2d5f052fe68a3487f9"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\GeneratedPluginRegistrant.h": {
+    "mtime": 1781994268.0992138,
+    "ast_hash": "decb9041b5e91a07e66f4664e5dac408",
+    "semantic_hash": "decb9041b5e91a07e66f4664e5dac408"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\GeneratedPluginRegistrant.m": {
+    "mtime": 1781996302.0078938,
+    "ast_hash": "354246593a864e92b4fd9ba7e37bdd9d",
+    "semantic_hash": "354246593a864e92b4fd9ba7e37bdd9d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Runner-Bridging-Header.h": {
+    "mtime": 1781993252.192428,
+    "ast_hash": "7ad7b5cea096132de13ba526b2b9efbe",
+    "semantic_hash": "7ad7b5cea096132de13ba526b2b9efbe"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\SceneDelegate.swift": {
+    "mtime": 1781993252.1934278,
+    "ast_hash": "0c3e86af131f6a9e547c80b5ed058914",
+    "semantic_hash": "0c3e86af131f6a9e547c80b5ed058914"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\app\\bootstrap.dart": {
+    "mtime": 1781994395.3808975,
+    "ast_hash": "92ade4684a3b4760304101b28a2f0d58",
+    "semantic_hash": "92ade4684a3b4760304101b28a2f0d58"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\app\\customer_app.dart": {
+    "mtime": 1781996224.6709783,
+    "ast_hash": "23ea70e031ffe66708b7f26a57b6c907",
+    "semantic_hash": "23ea70e031ffe66708b7f26a57b6c907"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\app\\flavor.dart": {
+    "mtime": 1781994390.132068,
+    "ast_hash": "7df9735e0d22cf8c5897a215b165fe5a",
+    "semantic_hash": "7df9735e0d22cf8c5897a215b165fe5a"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\app\\router.dart": {
+    "mtime": 1781998527.4715266,
+    "ast_hash": "22b7d1cc393f24609ec17642bff77f2f",
+    "semantic_hash": "22b7d1cc393f24609ec17642bff77f2f"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\features\\auth\\sign_in_screen.dart": {
+    "mtime": 1781999794.1625547,
+    "ast_hash": "9575b1a0518ace75ba530e00c0e23ace",
+    "semantic_hash": "9575b1a0518ace75ba530e00c0e23ace"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\features\\localization\\language_switcher.dart": {
+    "mtime": 1781996182.9590993,
+    "ast_hash": "23175de3a3e9970ea178e5ac6ad0a1fb",
+    "semantic_hash": "23175de3a3e9970ea178e5ac6ad0a1fb"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\features\\localization\\locale_controller.dart": {
+    "mtime": 1781996177.6457992,
+    "ast_hash": "f2c15a264c87825c94e4dc94ef26a964",
+    "semantic_hash": "f2c15a264c87825c94e4dc94ef26a964"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\features\\splash\\splash_screen.dart": {
+    "mtime": 1782000650.6694095,
+    "ast_hash": "6866932b8f76b417a9bdf3b9678b6224",
+    "semantic_hash": "6866932b8f76b417a9bdf3b9678b6224"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\l10n\\app_localizations.dart": {
+    "mtime": 1782030371.869764,
+    "ast_hash": "ccee36059ae6f998caa25d9dc915e5d8",
+    "semantic_hash": "ccee36059ae6f998caa25d9dc915e5d8"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\l10n\\app_localizations_ar.dart": {
+    "mtime": 1782030371.8624792,
+    "ast_hash": "625c1dd58dc4df49be4a7cf0cf269e36",
+    "semantic_hash": "625c1dd58dc4df49be4a7cf0cf269e36"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\l10n\\app_localizations_en.dart": {
+    "mtime": 1782030371.2040317,
+    "ast_hash": "d3a38eaf2abcd140ac2908b1e0d99aa3",
+    "semantic_hash": "d3a38eaf2abcd140ac2908b1e0d99aa3"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\main.dart": {
+    "mtime": 1781994429.2061126,
+    "ast_hash": "b55c8272698c29bf8628e573b9bc17d5",
+    "semantic_hash": "b55c8272698c29bf8628e573b9bc17d5"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\main_dev.dart": {
+    "mtime": 1781994417.16478,
+    "ast_hash": "4d8cd1f0a429098fca79b91e740299e5",
+    "semantic_hash": "4d8cd1f0a429098fca79b91e740299e5"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\main_prod.dart": {
+    "mtime": 1781994419.5388465,
+    "ast_hash": "5489e3032aec3f991fd39dd8767a3ca2",
+    "semantic_hash": "5489e3032aec3f991fd39dd8767a3ca2"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\main_staging.dart": {
+    "mtime": 1781994418.5776732,
+    "ast_hash": "bf28507e1f904a6037a3118112afa5b7",
+    "semantic_hash": "bf28507e1f904a6037a3118112afa5b7"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\test\\widget_test.dart": {
+    "mtime": 1781998584.0344503,
+    "ast_hash": "f7aaf0dae98789599ae25afc7be66157",
+    "semantic_hash": "f7aaf0dae98789599ae25afc7be66157"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\manifest.json": {
+    "mtime": 1781994265.9051054,
+    "ast_hash": "f11aacd3bce9a0326d8d0e2d70cfbd53",
+    "semantic_hash": "f11aacd3bce9a0326d8d0e2d70cfbd53"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\build.gradle.kts": {
+    "mtime": 1781994285.2567792,
+    "ast_hash": "720ac5174c39262b86f99ddff7b99ac5",
+    "semantic_hash": "720ac5174c39262b86f99ddff7b99ac5"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\java\\io\\flutter\\plugins\\GeneratedPluginRegistrant.java": {
+    "mtime": 1781994495.440276,
+    "ast_hash": "ac8be7d431fd1479a54488d87f95fbe0",
+    "semantic_hash": "ac8be7d431fd1479a54488d87f95fbe0"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\kotlin\\com\\task\\technician\\MainActivity.kt": {
+    "mtime": 1781994285.2637808,
+    "ast_hash": "b1b6f436daf10576adbc8e5a66da7197",
+    "semantic_hash": "b1b6f436daf10576adbc8e5a66da7197"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\build.gradle.kts": {
+    "mtime": 1781994285.2647803,
+    "ast_hash": "803fe22651fbe96ed401eb0b66a492d1",
+    "semantic_hash": "803fe22651fbe96ed401eb0b66a492d1"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\gradlew": {
+    "mtime": 1781994285.4594235,
+    "ast_hash": "7f1cd7eb3f75a1dc85cd37753972a6e2",
+    "semantic_hash": "7f1cd7eb3f75a1dc85cd37753972a6e2"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\settings.gradle.kts": {
+    "mtime": 1781994285.3139467,
+    "ast_hash": "087a01c04d081ae02a8e5db89f4bf3f3",
+    "semantic_hash": "087a01c04d081ae02a8e5db89f4bf3f3"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Flutter\\ephemeral\\Packages\\FlutterGeneratedPluginSwiftPackage\\Package.swift": {
+    "mtime": 1781996303.2532296,
+    "ast_hash": "63bc00d19466662a75b7492ac07d5a97",
+    "semantic_hash": "63bc00d19466662a75b7492ac07d5a97"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Flutter\\ephemeral\\Packages\\FlutterGeneratedPluginSwiftPackage\\Sources\\FlutterGeneratedPluginSwiftPackage\\FlutterGeneratedPluginSwiftPackage.swift": {
+    "mtime": 1781994286.2965481,
+    "ast_hash": "e6366d8685ad56268730656aa0a6e00c",
+    "semantic_hash": "e6366d8685ad56268730656aa0a6e00c"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Flutter\\ephemeral\\flutter_lldb_helper.py": {
+    "mtime": 1781994286.202637,
+    "ast_hash": "98fc75412162af387e2e3461e4e58094",
+    "semantic_hash": "98fc75412162af387e2e3461e4e58094"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Flutter\\flutter_export_environment.sh": {
+    "mtime": 1781994286.215216,
+    "ast_hash": "1aaa4bfbe1b2303319743ed5d236e74f",
+    "semantic_hash": "1aaa4bfbe1b2303319743ed5d236e74f"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\RunnerTests\\RunnerTests.swift": {
+    "mtime": 1781994285.4314177,
+    "ast_hash": "24e5d095048eb86c30423f4e04b6e57b",
+    "semantic_hash": "24e5d095048eb86c30423f4e04b6e57b"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\AppDelegate.swift": {
+    "mtime": 1781993252.1769056,
+    "ast_hash": "9e1de9c329a3fe4931876063de95132b",
+    "semantic_hash": "9e1de9c329a3fe4931876063de95132b"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Contents.json": {
+    "mtime": 1781993252.1779037,
+    "ast_hash": "31a08e429403e265cabfb31b3d65f049",
+    "semantic_hash": "31a08e429403e265cabfb31b3d65f049"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\Contents.json": {
+    "mtime": 1781993252.187426,
+    "ast_hash": "b9e927ac17345f2d5f052fe68a3487f9",
+    "semantic_hash": "b9e927ac17345f2d5f052fe68a3487f9"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\GeneratedPluginRegistrant.h": {
+    "mtime": 1781994286.283862,
+    "ast_hash": "decb9041b5e91a07e66f4664e5dac408",
+    "semantic_hash": "decb9041b5e91a07e66f4664e5dac408"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\GeneratedPluginRegistrant.m": {
+    "mtime": 1781994495.4439144,
+    "ast_hash": "2835b1b77b2dd88746cdb16896de5a20",
+    "semantic_hash": "2835b1b77b2dd88746cdb16896de5a20"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Runner-Bridging-Header.h": {
+    "mtime": 1781993252.192428,
+    "ast_hash": "7ad7b5cea096132de13ba526b2b9efbe",
+    "semantic_hash": "7ad7b5cea096132de13ba526b2b9efbe"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\SceneDelegate.swift": {
+    "mtime": 1781993252.1934278,
+    "ast_hash": "0c3e86af131f6a9e547c80b5ed058914",
+    "semantic_hash": "0c3e86af131f6a9e547c80b5ed058914"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\lib\\main.dart": {
+    "mtime": 1781994478.9707236,
+    "ast_hash": "bed2af53d9ad3433494d69d6a132f31d",
+    "semantic_hash": "bed2af53d9ad3433494d69d6a132f31d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\test\\widget_test.dart": {
+    "mtime": 1781994479.0227592,
+    "ast_hash": "d7f6b71f07dbd3a66978df8e5bd32728",
+    "semantic_hash": "d7f6b71f07dbd3a66978df8e5bd32728"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\backend\\firestore.indexes.json": {
+    "mtime": 1781994787.7189403,
+    "ast_hash": "6c1369bcee45fa3baebaaf77f2dc3ae3",
+    "semantic_hash": "6c1369bcee45fa3baebaaf77f2dc3ae3"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\backend\\functions\\package.json": {
+    "mtime": 1781994797.6709194,
+    "ast_hash": "66405a11ad3c6c1034a310b7733e213f",
+    "semantic_hash": "66405a11ad3c6c1034a310b7733e213f"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\backend\\functions\\src\\index.ts": {
+    "mtime": 1781994804.7161176,
+    "ast_hash": "216551fdd8a59b9e67cf56b8e97fa57a",
+    "semantic_hash": "216551fdd8a59b9e67cf56b8e97fa57a"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\backend\\functions\\tsconfig.json": {
+    "mtime": 1781994800.0953043,
+    "ast_hash": "c85284b380347fae3b4afbbede7b3d08",
+    "semantic_hash": "c85284b380347fae3b4afbbede7b3d08"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\firebase.json": {
+    "mtime": 1781994775.481575,
+    "ast_hash": "01d0f5edf4a5b87bf4a0e1b44066a43b",
+    "semantic_hash": "01d0f5edf4a5b87bf4a0e1b44066a43b"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_core\\lib\\src\\constants\\business_rules.dart": {
+    "mtime": 1781993923.987311,
+    "ast_hash": "e6ba46b68ab0c10c3a02de716221c0a0",
+    "semantic_hash": "e6ba46b68ab0c10c3a02de716221c0a0"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_core\\lib\\src\\failures\\failure.dart": {
+    "mtime": 1781993904.03996,
+    "ast_hash": "34d0911f0b9ea96be8e85db66a694318",
+    "semantic_hash": "34d0911f0b9ea96be8e85db66a694318"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_core\\lib\\src\\result\\result.dart": {
+    "mtime": 1781993912.9487321,
+    "ast_hash": "a598a6cc13459a8b3a51b526bc15977a",
+    "semantic_hash": "a598a6cc13459a8b3a51b526bc15977a"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_core\\lib\\task_core.dart": {
+    "mtime": 1781993894.596481,
+    "ast_hash": "4e4c2c69819dd2db2aefd621e11b7c5a",
+    "semantic_hash": "4e4c2c69819dd2db2aefd621e11b7c5a"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_data\\lib\\src\\mappers\\enum_codecs.dart": {
+    "mtime": 1781994049.5444362,
+    "ast_hash": "113d288f4ce3ec71e6c8a6d006b8f352",
+    "semantic_hash": "113d288f4ce3ec71e6c8a6d006b8f352"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_data\\lib\\task_data.dart": {
+    "mtime": 1781994032.784109,
+    "ast_hash": "2cabc4cbcc097ec1459546c985fb6ed1",
+    "semantic_hash": "2cabc4cbcc097ec1459546c985fb6ed1"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\lib\\src\\theme\\app_colors.dart": {
+    "mtime": 1781993996.3271554,
+    "ast_hash": "68bf16a99553111ac494fb8e46d12334",
+    "semantic_hash": "68bf16a99553111ac494fb8e46d12334"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\lib\\src\\theme\\app_spacing.dart": {
+    "mtime": 1781994000.7332444,
+    "ast_hash": "fefeba492da6ae510f63b8bc9eb3f955",
+    "semantic_hash": "fefeba492da6ae510f63b8bc9eb3f955"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\lib\\src\\theme\\app_theme.dart": {
+    "mtime": 1781999803.2764015,
+    "ast_hash": "b4f774e050b918e2e4bf1f0f05bc3361",
+    "semantic_hash": "b4f774e050b918e2e4bf1f0f05bc3361"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\lib\\src\\theme\\app_typography.dart": {
+    "mtime": 1781996165.864488,
+    "ast_hash": "7474ecbf98887c88b057e86ac6c001d0",
+    "semantic_hash": "7474ecbf98887c88b057e86ac6c001d0"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\lib\\task_design.dart": {
+    "mtime": 1781996167.584624,
+    "ast_hash": "19e8596a08c02b015f63537fb2bb7ae5",
+    "semantic_hash": "19e8596a08c02b015f63537fb2bb7ae5"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_domain\\lib\\src\\entities\\enums.dart": {
+    "mtime": 1781994186.586545,
+    "ast_hash": "c5804792a59106a9ebfb5dcd48a88e17",
+    "semantic_hash": "c5804792a59106a9ebfb5dcd48a88e17"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_domain\\lib\\src\\repositories\\auth_repository.dart": {
+    "mtime": 1781993949.214617,
+    "ast_hash": "8cca6ada29c925cc0130aedb4da0eadb",
+    "semantic_hash": "8cca6ada29c925cc0130aedb4da0eadb"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_domain\\lib\\task_domain.dart": {
+    "mtime": 1781993937.5299113,
+    "ast_hash": "9eb29a6a4c5639570a963990a6fc25b8",
+    "semantic_hash": "9eb29a6a4c5639570a963990a6fc25b8"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\README.md": {
+    "mtime": 1781994976.307599,
+    "ast_hash": "547e343372574781aae9f9d5b38162b5",
+    "semantic_hash": "547e343372574781aae9f9d5b38162b5"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\analysis_options.yaml": {
+    "mtime": 1781993865.9950943,
+    "ast_hash": "447e008dd408d0766fdea5ac68c60a27",
+    "semantic_hash": "447e008dd408d0766fdea5ac68c60a27"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\README.md": {
+    "mtime": 1781994289.276185,
+    "ast_hash": "51f4be9566ecdacf953074033158b63f",
+    "semantic_hash": "51f4be9566ecdacf953074033158b63f"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\analysis_options.yaml": {
+    "mtime": 1781994352.5661209,
+    "ast_hash": "10c9905e302b8015025c15eceff3083d",
+    "semantic_hash": "10c9905e302b8015025c15eceff3083d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\pubspec.yaml": {
+    "mtime": 1781994537.1412158,
+    "ast_hash": "55d1d3113421bc7fc34fc3442dcb6bc6",
+    "semantic_hash": "55d1d3113421bc7fc34fc3442dcb6bc6"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\index.html": {
+    "mtime": 1781994289.2968643,
+    "ast_hash": "1e1b7f4a5992a3af162c0f131456efa8",
+    "semantic_hash": "1e1b7f4a5992a3af162c0f131456efa8"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\README.md": {
+    "mtime": 1781994265.787863,
+    "ast_hash": "9df6c1b5b76bc3c73e6c1fe92e51c25d",
+    "semantic_hash": "9df6c1b5b76bc3c73e6c1fe92e51c25d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\analysis_options.yaml": {
+    "mtime": 1781994352.564117,
+    "ast_hash": "10c9905e302b8015025c15eceff3083d",
+    "semantic_hash": "10c9905e302b8015025c15eceff3083d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\README.md": {
+    "mtime": 1781993252.189429,
+    "ast_hash": "f7ee1b402881509d197f34963e569927",
+    "semantic_hash": "f7ee1b402881509d197f34963e569927"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\l10n.yaml": {
+    "mtime": 1781996374.9078636,
+    "ast_hash": "9eebc61edfd9a8e6ef92dfda7cf87f36",
+    "semantic_hash": "9eebc61edfd9a8e6ef92dfda7cf87f36"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\pubspec.yaml": {
+    "mtime": 1781996262.6662667,
+    "ast_hash": "42bab13ef0a7d120ce5c0eecac4ec003",
+    "semantic_hash": "42bab13ef0a7d120ce5c0eecac4ec003"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\index.html": {
+    "mtime": 1781994265.887107,
+    "ast_hash": "a081f6da18a5c85dd465d216ffdbf01a",
+    "semantic_hash": "a081f6da18a5c85dd465d216ffdbf01a"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\README.md": {
+    "mtime": 1781994285.438413,
+    "ast_hash": "bf455dcf0efb4dcca46f49cd09fe4e3c",
+    "semantic_hash": "bf455dcf0efb4dcca46f49cd09fe4e3c"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\analysis_options.yaml": {
+    "mtime": 1781994352.5651178,
+    "ast_hash": "10c9905e302b8015025c15eceff3083d",
+    "semantic_hash": "10c9905e302b8015025c15eceff3083d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\README.md": {
+    "mtime": 1781993252.189429,
+    "ast_hash": "f7ee1b402881509d197f34963e569927",
+    "semantic_hash": "f7ee1b402881509d197f34963e569927"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\pubspec.yaml": {
+    "mtime": 1781994535.8871524,
+    "ast_hash": "a20a212b0c8df179a195d108049e7f4b",
+    "semantic_hash": "a20a212b0c8df179a195d108049e7f4b"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\docs\\superpowers\\specs\\2026-06-21-task-customer-v1-design.md": {
+    "mtime": 1781993114.886916,
+    "ast_hash": "64d7a5be7f89fcef61a507378d30ba0a",
+    "semantic_hash": "64d7a5be7f89fcef61a507378d30ba0a"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\melos.yaml": {
+    "mtime": 1781993863.023754,
+    "ast_hash": "cc9f950999797c20e5892ea3b39ce4c0",
+    "semantic_hash": "cc9f950999797c20e5892ea3b39ce4c0"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_core\\analysis_options.yaml": {
+    "mtime": 1781993892.2895527,
+    "ast_hash": "10c9905e302b8015025c15eceff3083d",
+    "semantic_hash": "10c9905e302b8015025c15eceff3083d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_core\\pubspec.yaml": {
+    "mtime": 1781993891.2972357,
+    "ast_hash": "0c3fcc45880604052ffe41cbd76fa7f9",
+    "semantic_hash": "0c3fcc45880604052ffe41cbd76fa7f9"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_data\\analysis_options.yaml": {
+    "mtime": 1781994030.350827,
+    "ast_hash": "10c9905e302b8015025c15eceff3083d",
+    "semantic_hash": "10c9905e302b8015025c15eceff3083d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_data\\pubspec.yaml": {
+    "mtime": 1781994029.3783593,
+    "ast_hash": "e3d3ba09fc27a500d7a1190547dd87d8",
+    "semantic_hash": "e3d3ba09fc27a500d7a1190547dd87d8"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\analysis_options.yaml": {
+    "mtime": 1781993989.7288687,
+    "ast_hash": "10c9905e302b8015025c15eceff3083d",
+    "semantic_hash": "10c9905e302b8015025c15eceff3083d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\pubspec.yaml": {
+    "mtime": 1781993988.7942631,
+    "ast_hash": "1c84d57510eeb2ad33285f80246df540",
+    "semantic_hash": "1c84d57510eeb2ad33285f80246df540"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_domain\\analysis_options.yaml": {
+    "mtime": 1781993935.6226976,
+    "ast_hash": "10c9905e302b8015025c15eceff3083d",
+    "semantic_hash": "10c9905e302b8015025c15eceff3083d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_domain\\pubspec.yaml": {
+    "mtime": 1781993934.6827462,
+    "ast_hash": "a61cfda6c57af8cb4283f0ac8bf96032",
+    "semantic_hash": "a61cfda6c57af8cb4283f0ac8bf96032"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\pubspec.yaml": {
+    "mtime": 1781994342.1974535,
+    "ast_hash": "597f1aa8d86aa21b352e2b6eeb7d7320",
+    "semantic_hash": "597f1aa8d86aa21b352e2b6eeb7d7320"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\favicon.png": {
+    "mtime": 1781993252.2254257,
+    "ast_hash": "5dcef449791fa27946b3d35ad8803796",
+    "semantic_hash": "5dcef449791fa27946b3d35ad8803796"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\icons\\Icon-192.png": {
+    "mtime": 1781993252.2264235,
+    "ast_hash": "ac9a721a12bbc803b44f645561ecb1e1",
+    "semantic_hash": "ac9a721a12bbc803b44f645561ecb1e1"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\icons\\Icon-512.png": {
+    "mtime": 1781993252.2264235,
+    "ast_hash": "96e752610906ba2a93c65f8abe1645f1",
+    "semantic_hash": "96e752610906ba2a93c65f8abe1645f1"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\icons\\Icon-maskable-192.png": {
+    "mtime": 1781993521.4489336,
+    "ast_hash": "c457ef57daa1d16f64b27b786ec2ea3c",
+    "semantic_hash": "c457ef57daa1d16f64b27b786ec2ea3c"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\icons\\Icon-maskable-512.png": {
+    "mtime": 1781993521.4425676,
+    "ast_hash": "301a7604d45b3e739efc881eb04896ea",
+    "semantic_hash": "301a7604d45b3e739efc881eb04896ea"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png": {
+    "mtime": 1781993252.1528935,
+    "ast_hash": "13e9c72ec37fac220397aa819fa1ef2d",
+    "semantic_hash": "13e9c72ec37fac220397aa819fa1ef2d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png": {
+    "mtime": 1781993252.1548998,
+    "ast_hash": "6270344430679711b81476e29878caa7",
+    "semantic_hash": "6270344430679711b81476e29878caa7"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png": {
+    "mtime": 1781993252.1558933,
+    "ast_hash": "a0a8db5985280b3679d99a820ae2db79",
+    "semantic_hash": "a0a8db5985280b3679d99a820ae2db79"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png": {
+    "mtime": 1781993252.156893,
+    "ast_hash": "afe1b655b9f32da22f9a4301bb8e6ba8",
+    "semantic_hash": "afe1b655b9f32da22f9a4301bb8e6ba8"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png": {
+    "mtime": 1781993252.1588943,
+    "ast_hash": "57838d52c318faff743130c3fcfae0c6",
+    "semantic_hash": "57838d52c318faff743130c3fcfae0c6"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\assets\\images\\task_logo.jpg": {
+    "mtime": 1781996139.394197,
+    "ast_hash": "fb6e8318daf1d2f87f1303bfe25e23ab",
+    "semantic_hash": "fb6e8318daf1d2f87f1303bfe25e23ab"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\assets\\images\\task_logo_light.jpg": {
+    "mtime": 1781996139.4543066,
+    "ast_hash": "7afc87de7f31a06be3cfbdaab2e3a98b",
+    "semantic_hash": "7afc87de7f31a06be3cfbdaab2e3a98b"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-1024x1024@1x.png": {
+    "mtime": 1781993520.724605,
+    "ast_hash": "c785f8932297af4acd5f5ccb7630f01c",
+    "semantic_hash": "c785f8932297af4acd5f5ccb7630f01c"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-20x20@1x.png": {
+    "mtime": 1781993520.7336051,
+    "ast_hash": "a2f8558fb1d42514111fbbb19fb67314",
+    "semantic_hash": "a2f8558fb1d42514111fbbb19fb67314"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-20x20@2x.png": {
+    "mtime": 1781993520.7046044,
+    "ast_hash": "2247a840b6ee72b8a069208af170e5b1",
+    "semantic_hash": "2247a840b6ee72b8a069208af170e5b1"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-20x20@3x.png": {
+    "mtime": 1781993520.7466128,
+    "ast_hash": "1b3b1538136316263c7092951e923e9d",
+    "semantic_hash": "1b3b1538136316263c7092951e923e9d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-29x29@1x.png": {
+    "mtime": 1781993520.7634947,
+    "ast_hash": "be8887071dd7ec39cb754d236aa9584f",
+    "semantic_hash": "be8887071dd7ec39cb754d236aa9584f"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-29x29@2x.png": {
+    "mtime": 1781993520.6537418,
+    "ast_hash": "043119ef4faa026ff82bd03f241e5338",
+    "semantic_hash": "043119ef4faa026ff82bd03f241e5338"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-29x29@3x.png": {
+    "mtime": 1781993520.7426045,
+    "ast_hash": "2b1452c4c1bda6177b4fbbb832df217f",
+    "semantic_hash": "2b1452c4c1bda6177b4fbbb832df217f"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-40x40@1x.png": {
+    "mtime": 1781993520.6650882,
+    "ast_hash": "2247a840b6ee72b8a069208af170e5b1",
+    "semantic_hash": "2247a840b6ee72b8a069208af170e5b1"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-40x40@2x.png": {
+    "mtime": 1781993520.7586055,
+    "ast_hash": "8245359312aea1b0d2412f79a07b0ca5",
+    "semantic_hash": "8245359312aea1b0d2412f79a07b0ca5"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-40x40@3x.png": {
+    "mtime": 1781993520.6790867,
+    "ast_hash": "5b3c0902200ce596e9848f22e1f0fe0e",
+    "semantic_hash": "5b3c0902200ce596e9848f22e1f0fe0e"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-60x60@2x.png": {
+    "mtime": 1781993520.7136047,
+    "ast_hash": "5b3c0902200ce596e9848f22e1f0fe0e",
+    "semantic_hash": "5b3c0902200ce596e9848f22e1f0fe0e"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-60x60@3x.png": {
+    "mtime": 1781993520.640743,
+    "ast_hash": "e419d22a37bc40ba185aca1acb6d4ac6",
+    "semantic_hash": "e419d22a37bc40ba185aca1acb6d4ac6"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-76x76@1x.png": {
+    "mtime": 1781993520.6920888,
+    "ast_hash": "36c0d7a7132bdde18898ffdfcfcdc4d2",
+    "semantic_hash": "36c0d7a7132bdde18898ffdfcfcdc4d2"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-76x76@2x.png": {
+    "mtime": 1781993520.8451698,
+    "ast_hash": "643842917530acf4c5159ae851b0baf2",
+    "semantic_hash": "643842917530acf4c5159ae851b0baf2"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-83.5x83.5@2x.png": {
+    "mtime": 1781993520.752609,
+    "ast_hash": "665cb5e3c5729da6d639d26eff47a503",
+    "semantic_hash": "665cb5e3c5729da6d639d26eff47a503"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\LaunchImage.png": {
+    "mtime": 1781993520.633742,
+    "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
+    "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\LaunchImage@2x.png": {
+    "mtime": 1781993520.6157436,
+    "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
+    "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\LaunchImage@3x.png": {
+    "mtime": 1781993520.6037424,
+    "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
+    "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\favicon.png": {
+    "mtime": 1781993252.2254257,
+    "ast_hash": "5dcef449791fa27946b3d35ad8803796",
+    "semantic_hash": "5dcef449791fa27946b3d35ad8803796"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\icons\\Icon-192.png": {
+    "mtime": 1781993252.2264235,
+    "ast_hash": "ac9a721a12bbc803b44f645561ecb1e1",
+    "semantic_hash": "ac9a721a12bbc803b44f645561ecb1e1"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\icons\\Icon-512.png": {
+    "mtime": 1781993252.2264235,
+    "ast_hash": "96e752610906ba2a93c65f8abe1645f1",
+    "semantic_hash": "96e752610906ba2a93c65f8abe1645f1"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\icons\\Icon-maskable-192.png": {
+    "mtime": 1781993521.4489336,
+    "ast_hash": "c457ef57daa1d16f64b27b786ec2ea3c",
+    "semantic_hash": "c457ef57daa1d16f64b27b786ec2ea3c"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\icons\\Icon-maskable-512.png": {
+    "mtime": 1781993521.4425676,
+    "ast_hash": "301a7604d45b3e739efc881eb04896ea",
+    "semantic_hash": "301a7604d45b3e739efc881eb04896ea"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png": {
+    "mtime": 1781993252.1528935,
+    "ast_hash": "13e9c72ec37fac220397aa819fa1ef2d",
+    "semantic_hash": "13e9c72ec37fac220397aa819fa1ef2d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png": {
+    "mtime": 1781993252.1548998,
+    "ast_hash": "6270344430679711b81476e29878caa7",
+    "semantic_hash": "6270344430679711b81476e29878caa7"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png": {
+    "mtime": 1781993252.1558933,
+    "ast_hash": "a0a8db5985280b3679d99a820ae2db79",
+    "semantic_hash": "a0a8db5985280b3679d99a820ae2db79"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png": {
+    "mtime": 1781993252.156893,
+    "ast_hash": "afe1b655b9f32da22f9a4301bb8e6ba8",
+    "semantic_hash": "afe1b655b9f32da22f9a4301bb8e6ba8"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png": {
+    "mtime": 1781993252.1588943,
+    "ast_hash": "57838d52c318faff743130c3fcfae0c6",
+    "semantic_hash": "57838d52c318faff743130c3fcfae0c6"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-1024x1024@1x.png": {
+    "mtime": 1781993520.724605,
+    "ast_hash": "c785f8932297af4acd5f5ccb7630f01c",
+    "semantic_hash": "c785f8932297af4acd5f5ccb7630f01c"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-20x20@1x.png": {
+    "mtime": 1781993520.7336051,
+    "ast_hash": "a2f8558fb1d42514111fbbb19fb67314",
+    "semantic_hash": "a2f8558fb1d42514111fbbb19fb67314"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-20x20@2x.png": {
+    "mtime": 1781993520.7046044,
+    "ast_hash": "2247a840b6ee72b8a069208af170e5b1",
+    "semantic_hash": "2247a840b6ee72b8a069208af170e5b1"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-20x20@3x.png": {
+    "mtime": 1781993520.7466128,
+    "ast_hash": "1b3b1538136316263c7092951e923e9d",
+    "semantic_hash": "1b3b1538136316263c7092951e923e9d"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-29x29@1x.png": {
+    "mtime": 1781993520.7634947,
+    "ast_hash": "be8887071dd7ec39cb754d236aa9584f",
+    "semantic_hash": "be8887071dd7ec39cb754d236aa9584f"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-29x29@2x.png": {
+    "mtime": 1781993520.6537418,
+    "ast_hash": "043119ef4faa026ff82bd03f241e5338",
+    "semantic_hash": "043119ef4faa026ff82bd03f241e5338"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-29x29@3x.png": {
+    "mtime": 1781993520.7426045,
+    "ast_hash": "2b1452c4c1bda6177b4fbbb832df217f",
+    "semantic_hash": "2b1452c4c1bda6177b4fbbb832df217f"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-40x40@1x.png": {
+    "mtime": 1781993520.6650882,
+    "ast_hash": "2247a840b6ee72b8a069208af170e5b1",
+    "semantic_hash": "2247a840b6ee72b8a069208af170e5b1"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-40x40@2x.png": {
+    "mtime": 1781993520.7586055,
+    "ast_hash": "8245359312aea1b0d2412f79a07b0ca5",
+    "semantic_hash": "8245359312aea1b0d2412f79a07b0ca5"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-40x40@3x.png": {
+    "mtime": 1781993520.6790867,
+    "ast_hash": "5b3c0902200ce596e9848f22e1f0fe0e",
+    "semantic_hash": "5b3c0902200ce596e9848f22e1f0fe0e"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-60x60@2x.png": {
+    "mtime": 1781993520.7136047,
+    "ast_hash": "5b3c0902200ce596e9848f22e1f0fe0e",
+    "semantic_hash": "5b3c0902200ce596e9848f22e1f0fe0e"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-60x60@3x.png": {
+    "mtime": 1781993520.640743,
+    "ast_hash": "e419d22a37bc40ba185aca1acb6d4ac6",
+    "semantic_hash": "e419d22a37bc40ba185aca1acb6d4ac6"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-76x76@1x.png": {
+    "mtime": 1781993520.6920888,
+    "ast_hash": "36c0d7a7132bdde18898ffdfcfcdc4d2",
+    "semantic_hash": "36c0d7a7132bdde18898ffdfcfcdc4d2"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-76x76@2x.png": {
+    "mtime": 1781993520.8451698,
+    "ast_hash": "643842917530acf4c5159ae851b0baf2",
+    "semantic_hash": "643842917530acf4c5159ae851b0baf2"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-83.5x83.5@2x.png": {
+    "mtime": 1781993520.752609,
+    "ast_hash": "665cb5e3c5729da6d639d26eff47a503",
+    "semantic_hash": "665cb5e3c5729da6d639d26eff47a503"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\LaunchImage.png": {
+    "mtime": 1781993520.633742,
+    "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
+    "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\LaunchImage@2x.png": {
+    "mtime": 1781993520.6157436,
+    "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
+    "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  },
+  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\LaunchImage@3x.png": {
+    "mtime": 1781993520.6037424,
+    "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
+    "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  }
+}

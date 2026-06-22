@@ -89,76 +89,195 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     final TextTheme text = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        actions: const <Widget>[
-          LanguageSwitcher(),
-          SizedBox(width: AppSpacing.xs),
-        ],
-      ),
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          const AmbientBackground(),
+          const _AuthBackground(),
           SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  const SizedBox(height: AppSpacing.lg),
-                  Text('Sign in',
-                      style: text.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.5,
-                      )),
-                  const SizedBox(height: AppSpacing.sm),
-                  Text("Egypt's on-demand home services, a tap away.",
-                      style: text.titleMedium?.copyWith(
-                        color: AppColors.textSecondary.withValues(alpha: 0.7),
-                        height: 1.4,
-                      )),
-                  const SizedBox(height: AppSpacing.xxl),
-                  Text('Phone Number',
-                      style: text.labelLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.2,
-                      )),
-                  const SizedBox(height: AppSpacing.sm),
-                  _phoneRow(text),
-                  const SizedBox(height: AppSpacing.xl),
-                  GlowButton(
-                    label: 'Send OTP',
-                    loading: _sending,
-                    onPressed: _sendOtp,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                      AppSpacing.lg, AppSpacing.xs, AppSpacing.sm, 0),
+                  child: Row(
+                    children: <Widget>[
+                      const Spacer(),
+                      Theme(
+                        data: Theme.of(context).copyWith(
+                          iconTheme: IconThemeData(
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? AppColors.textSecondary
+                                : AppColors.textSecondaryLight,
+                          ),
+                        ),
+                        child: const LanguageSwitcher(),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: AppSpacing.xl),
-                  _orDivider(text),
-                  const SizedBox(height: AppSpacing.xl),
-                  _socialButton(
-                    label: 'Continue with Google',
-                    iconWidget: const _GoogleMark(),
-                    busy: _socialBusy == 'google',
-                    onTap: () => _social('google'),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  _socialButton(
-                    label: 'Continue with Apple',
-                    iconWidget:
-                        const Icon(Icons.apple, color: Colors.white, size: 24),
-                    busy: _socialBusy == 'apple',
-                    onTap: () => _social('apple'),
-                  ),
-                  const SizedBox(height: AppSpacing.xxl),
-                  _createAccount(text),
-                  const SizedBox(height: AppSpacing.xl),
-                  _legalRow(text),
-                  const SizedBox(height: AppSpacing.lg),
-                ],
-              ),
+                ),
+                _brandHero(text),
+                const SizedBox(height: AppSpacing.lg),
+                Expanded(child: _formSheet(text)),
+              ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// Branded top zone: the mark, a welcome line, and trust chips that echo the
+  /// home dashboard's trust strip so the two screens read as one product.
+  Widget _brandHero(TextTheme text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              ShaderMask(
+                blendMode: BlendMode.dstIn,
+                shaderCallback: (Rect rect) => const LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: <Color>[
+                    Color(0x00FFFFFF),
+                    Colors.white,
+                    Colors.white,
+                    Color(0x00FFFFFF),
+                  ],
+                  stops: <double>[0.0, 0.18, 0.82, 1.0],
+                ).createShader(rect),
+                child: ShaderMask(
+                  blendMode: BlendMode.dstIn,
+                  shaderCallback: (Rect rect) => const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: <Color>[
+                      Color(0x00FFFFFF),
+                      Colors.white,
+                      Colors.white,
+                      Color(0x00FFFFFF),
+                    ],
+                    stops: <double>[0.0, 0.18, 0.82, 1.0],
+                  ).createShader(rect),
+                  child: Image.asset(
+                    Theme.of(context).brightness == Brightness.dark
+                        ? 'assets/images/task_logo.jpg'
+                        : 'assets/images/task_logo_light.jpg',
+                    height: 48,
+                    width: 48,
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.high,
+                    semanticLabel: 'Task',
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.sm),
+              Text('Task',
+                  style: AppTypography.wordmark(
+                    color: AppColors.textPrimary,
+                    fontSize: 28,
+                  )),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.xl),
+          Text('Welcome to Task',
+              style: text.headlineMedium?.copyWith(
+                fontWeight: FontWeight.w800,
+                letterSpacing: -0.5,
+              )),
+          const SizedBox(height: 6),
+          Text("Egypt's on-demand home services — describe it, set your "
+              'price, done.',
+              style: text.bodyLarge?.copyWith(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.textSecondary.withValues(alpha: 0.7)
+                    : AppColors.textSecondaryLight,
+                height: 1.4,
+              )),
+          const SizedBox(height: AppSpacing.lg),
+          const Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
+            children: <Widget>[
+              _TrustChip(icon: Icons.verified_rounded, label: 'Verified pros'),
+              _TrustChip(icon: Icons.sell_rounded, label: 'You set the price'),
+              _TrustChip(icon: Icons.bolt_rounded, label: 'Fast arrival'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// The form lifts onto a raised sheet, giving the inputs depth over the
+  /// branded backdrop.
+  Widget _formSheet(TextTheme text) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: isDark
+            ? AppColors.surface.withValues(alpha: 0.42)
+            : AppColors.surfaceLight,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        border: Border(
+          top: BorderSide(
+            color: isDark
+                ? Colors.white.withValues(alpha: 0.08)
+                : const Color(0x14000000),
+          ),
+        ),
+      ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+            AppSpacing.xl, AppSpacing.xl, AppSpacing.xl, AppSpacing.lg),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text('Phone number',
+                style: text.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.2,
+                )),
+            const SizedBox(height: AppSpacing.sm),
+            _phoneRow(text),
+            const SizedBox(height: AppSpacing.xl),
+            GlowButton(
+              label: 'Send code',
+              icon: Icons.arrow_forward_rounded,
+              loading: _sending,
+              onPressed: _sendOtp,
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            _orDivider(text),
+            const SizedBox(height: AppSpacing.xl),
+            _socialButton(
+              label: 'Continue with Google',
+              iconWidget: const _GoogleMark(),
+              busy: _socialBusy == 'google',
+              onTap: () => _social('google'),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            _socialButton(
+              label: 'Continue with Apple',
+              iconWidget: Icon(
+                Icons.apple,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : AppColors.textPrimaryLight,
+                size: 24,
+              ),
+              busy: _socialBusy == 'apple',
+              onTap: () => _social('apple'),
+            ),
+            const SizedBox(height: AppSpacing.xl),
+            _legalRow(text),
+          ],
+        ),
       ),
     );
   }
@@ -169,32 +288,38 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         // Country chip — Egypt only for v1.
         GestureDetector(
           onTap: () => _toast('More countries arrive with international launch.'),
-          child: Container(
-            height: 58,
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-            decoration: BoxDecoration(
-              color: AppColors.surface.withValues(alpha: 0.7),
-              borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-              border: Border.all(color: const Color(0x1AFFFFFF)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text('EG',
-                    style: text.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textSecondary,
-                    )),
-                const SizedBox(width: 6),
-                Text('+20',
-                    style:
-                        text.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-                const SizedBox(width: 2),
-                const Icon(Icons.keyboard_arrow_down_rounded,
-                    size: 20, color: AppColors.textSecondary),
-              ],
-            ),
-          ),
+          child: Builder(builder: (context) {
+            final bool isDark = Theme.of(context).brightness == Brightness.dark;
+            final Color secondary = isDark ? AppColors.textSecondary : AppColors.textSecondaryLight;
+            return Container(
+              height: 58,
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? AppColors.surface.withValues(alpha: 0.7)
+                    : const Color(0xFFE9E5FB),
+                borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+                border: Border.all(
+                  color: isDark ? const Color(0x1AFFFFFF) : const Color(0x28000000),
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text('EG',
+                      style: text.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: secondary,
+                      )),
+                  const SizedBox(width: 6),
+                  Text('+20',
+                      style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                  const SizedBox(width: 2),
+                  Icon(Icons.keyboard_arrow_down_rounded, size: 20, color: secondary),
+                ],
+              ),
+            );
+          }),
         ),
         const SizedBox(width: AppSpacing.md),
         Expanded(
@@ -218,18 +343,23 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   }
 
   Widget _orDivider(TextTheme text) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color divColor = isDark ? const Color(0x22FFFFFF) : const Color(0x22000000);
+    final Color labelColor = isDark
+        ? AppColors.textSecondary.withValues(alpha: 0.6)
+        : AppColors.textSecondaryLight;
     return Row(
       children: <Widget>[
-        const Expanded(child: Divider(color: Color(0x22FFFFFF))),
+        Expanded(child: Divider(color: divColor)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Text('OR',
               style: text.labelMedium?.copyWith(
-                color: AppColors.textSecondary.withValues(alpha: 0.6),
+                color: labelColor,
                 letterSpacing: 1.5,
               )),
         ),
-        const Expanded(child: Divider(color: Color(0x22FFFFFF))),
+        Expanded(child: Divider(color: divColor)),
       ],
     );
   }
@@ -240,8 +370,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     required bool busy,
     required VoidCallback onTap,
   }) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Material(
-      color: AppColors.surface.withValues(alpha: 0.7),
+      color: isDark
+          ? AppColors.surface.withValues(alpha: 0.7)
+          : const Color(0xFFF0EEFF),
       borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
       child: InkWell(
         onTap: busy ? null : onTap,
@@ -251,7 +384,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-            border: Border.all(color: const Color(0x1AFFFFFF)),
+            border: Border.all(
+              color: isDark ? const Color(0x1AFFFFFF) : const Color(0x20000000),
+            ),
           ),
           child: busy
               ? const SizedBox(
@@ -275,39 +410,12 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     );
   }
 
-  Widget _createAccount(TextTheme text) {
-    return Center(
-      child: Text.rich(
-        TextSpan(
-          text: 'New here? ',
-          style: text.bodyMedium?.copyWith(
-            color: AppColors.textSecondary.withValues(alpha: 0.7),
-          ),
-          children: <InlineSpan>[
-            WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: GestureDetector(
-                onTap: () =>
-                    _toast('Accounts are created automatically on first sign-in.'),
-                child: Text('Create an Account',
-                    style: text.bodyMedium?.copyWith(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w700,
-                      decoration: TextDecoration.underline,
-                      decorationColor: AppColors.primary,
-                    )),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _legalRow(TextTheme text) {
-    final TextStyle? style = text.bodySmall?.copyWith(
-      color: AppColors.textSecondary.withValues(alpha: 0.5),
-    );
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color muted = isDark
+        ? AppColors.textSecondary.withValues(alpha: 0.5)
+        : AppColors.textSecondaryLight;
+    final TextStyle? style = text.bodySmall?.copyWith(color: muted);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -316,8 +424,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             child: Text('Privacy Policy', style: style)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-          child: Icon(Icons.circle,
-              size: 4, color: AppColors.textSecondary.withValues(alpha: 0.4)),
+          child: Icon(Icons.circle, size: 4, color: muted),
         ),
         GestureDetector(
             onTap: () => _toast('Terms of Service opens in a later phase.'),
@@ -327,28 +434,148 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   }
 }
 
-/// A compact Google "G" mark on a white tile — recognizable without bundling
-/// the multicolor brand asset.
+/// A small trust signal pill shown under the welcome line.
+class _TrustChip extends StatelessWidget {
+  const _TrustChip({required this.icon, required this.label});
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 7),
+      decoration: BoxDecoration(
+        color: isDark
+            ? AppColors.surface.withValues(alpha: 0.5)
+            : AppColors.primaryContainer,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.08)
+              : AppColors.primary.withValues(alpha: 0.20),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(icon, size: 14, color: AppColors.primary),
+          const SizedBox(width: 6),
+          Text(label,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: isDark
+                        ? AppColors.textSecondary.withValues(alpha: 0.9)
+                        : AppColors.textPrimaryLight,
+                  )),
+        ],
+      ),
+    );
+  }
+}
+
+/// Branded backdrop: adapts to the current brightness.
+class _AuthBackground extends StatelessWidget {
+  const _AuthBackground();
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        ColoredBox(
+          color: isDark ? AppColors.background : AppColors.backgroundLight,
+        ),
+        const DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.center,
+              colors: <Color>[Color(0x4D7C3AED), Color(0x00000000)],
+            ),
+          ),
+        ),
+        const AmbientBackground(intensity: 0.10),
+      ],
+    );
+  }
+}
+
 class _GoogleMark extends StatelessWidget {
   const _GoogleMark();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 24,
-      width: 24,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: const Text('G',
-          style: TextStyle(
-            color: Color(0xFF4285F4),
-            fontWeight: FontWeight.w800,
-            fontSize: 16,
-            height: 1.1,
-          )),
+    return SizedBox(
+      width: 20,
+      height: 20,
+      child: CustomPaint(painter: const _GoogleLogoPainter()),
     );
   }
+}
+
+class _GoogleLogoPainter extends CustomPainter {
+  const _GoogleLogoPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.scale(size.width / 24, size.height / 24);
+
+    // Blue
+    final Path blue = Path()
+      ..moveTo(22.56, 12.25)
+      ..cubicTo(22.56, 11.47, 22.49, 10.72, 22.36, 10)
+      ..lineTo(12, 10)
+      ..lineTo(12, 14.26)
+      ..lineTo(17.92, 14.26)
+      ..cubicTo(17.66, 15.63, 16.88, 16.79, 15.71, 17.57)
+      ..lineTo(15.71, 20.34)
+      ..lineTo(19.28, 20.34)
+      ..cubicTo(21.36, 18.42, 22.56, 15.60, 22.56, 12.25)
+      ..close();
+    canvas.drawPath(blue, Paint()..color = const Color(0xFF4285F4));
+
+    // Green
+    final Path green = Path()
+      ..moveTo(12, 23)
+      ..cubicTo(14.97, 23, 17.46, 22.02, 19.28, 20.34)
+      ..lineTo(15.71, 17.57)
+      ..cubicTo(14.73, 18.23, 13.48, 18.63, 12, 18.63)
+      ..cubicTo(9.14, 18.63, 6.71, 16.70, 5.84, 14.10)
+      ..lineTo(2.18, 14.10)
+      ..lineTo(2.18, 16.94)
+      ..cubicTo(3.99, 20.53, 7.70, 23, 12, 23)
+      ..close();
+    canvas.drawPath(green, Paint()..color = const Color(0xFF34A853));
+
+    // Yellow
+    final Path yellow = Path()
+      ..moveTo(5.84, 14.09)
+      ..cubicTo(5.62, 13.43, 5.49, 12.73, 5.49, 12)
+      ..cubicTo(5.49, 11.27, 5.62, 10.57, 5.84, 9.91)
+      ..lineTo(5.84, 7.07)
+      ..lineTo(2.18, 7.07)
+      ..cubicTo(1.43, 8.55, 1, 10.22, 1, 12)
+      ..cubicTo(1, 13.78, 1.43, 15.45, 2.18, 16.93)
+      ..lineTo(5.03, 14.71)
+      ..lineTo(5.84, 14.09)
+      ..close();
+    canvas.drawPath(yellow, Paint()..color = const Color(0xFFFBBC05));
+
+    // Red
+    final Path red = Path()
+      ..moveTo(12, 5.38)
+      ..cubicTo(13.62, 5.38, 15.06, 5.94, 16.21, 7.02)
+      ..lineTo(19.36, 3.87)
+      ..cubicTo(17.45, 2.09, 14.97, 1, 12, 1)
+      ..cubicTo(7.70, 1, 3.99, 3.47, 2.18, 7.07)
+      ..lineTo(5.84, 9.91)
+      ..cubicTo(6.71, 7.31, 9.14, 5.38, 12, 5.38)
+      ..close();
+    canvas.drawPath(red, Paint()..color = const Color(0xFFEA4335));
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

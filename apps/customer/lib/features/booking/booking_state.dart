@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// How the customer pays (design spec §2 payments).
-enum PaymentMethod { cash, card, wallet, instapay }
+/// How the customer pays — all in-app only. Cash / off-platform payments are
+/// not permitted; this enum intentionally excludes them.
+enum PaymentMethod { card, wallet, instapay }
 
 extension PaymentMethodX on PaymentMethod {
   String get label => switch (this) {
-        PaymentMethod.cash => 'Cash on delivery',
         PaymentMethod.card => 'Card',
         PaymentMethod.wallet => 'Vodafone Cash',
         PaymentMethod.instapay => 'InstaPay',
       };
 
   String get sub => switch (this) {
-        PaymentMethod.cash => 'Pay the pro directly when the job is done',
         PaymentMethod.card => 'Visa, Mastercard, Meeza · via Paymob',
         PaymentMethod.wallet => 'Pay from your mobile wallet',
-        PaymentMethod.instapay => 'Bank transfer, confirmed by our team',
+        PaymentMethod.instapay => 'Instant bank transfer · confirmed by team',
       };
 
   IconData get icon => switch (this) {
-        PaymentMethod.cash => Icons.payments_rounded,
         PaymentMethod.card => Icons.credit_card_rounded,
         PaymentMethod.wallet => Icons.account_balance_wallet_rounded,
         PaymentMethod.instapay => Icons.account_balance_rounded,
@@ -55,6 +54,10 @@ const List<SavedAddress> kSavedAddresses = <SavedAddress>[
     icon: Icons.work_rounded,
   ),
 ];
+
+/// Simulated Task wallet balance in EGP.
+/// In production this would come from a Firestore user-doc stream.
+final walletCreditProvider = StateProvider<int>((ref) => 125);
 
 /// Live stages used by the tracking screen (subset of the job state machine).
 enum JobStage { searching, accepted, enRoute, inProgress, completed }

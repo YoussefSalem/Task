@@ -2,37 +2,30 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
 
-/// Task Assistant — an in-app AI helper for customers. Replies are stubbed for
-/// the prototype (the live model wires in with the comms phase), but the
-/// composer, suggestion chips, typing indicator and message list are all live.
-class AiChatScreen extends ConsumerStatefulWidget {
-  const AiChatScreen({super.key});
+import 'assistant_providers.dart';
+import 'assistant_service.dart';
+import 'posted_success_overlay.dart';
 
+/// Task Assistant — the live, AI-driven booking chat. The assistant gathers the
+/// job details, asks the customer what they'd like to pay, confirms, and then
+/// posts the request to the technician marketplace. All wired through
+/// [bookingChatProvider].
+class AiChatScreen extends ConsumerStatefulWidget {
+  const AiChatScreen({super.key, this.initialMessage});
+
+  final String? initialMessage;
   static const String routePath = '/ai-chat';
 
   @override
   ConsumerState<AiChatScreen> createState() => _AiChatScreenState();
 }
 
-class _Message {
-  _Message(this.text, {required this.fromUser});
-  final String text;
-  final bool fromUser;
-}
-
 class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   final TextEditingController _input = TextEditingController();
   final ScrollController _scroll = ScrollController();
-  final List<_Message> _messages = <_Message>[
-    _Message(
-      "Hi Ahmed! I'm your Task assistant. Tell me what needs fixing and I'll line up the right pro.",
-      fromUser: false,
-    ),
-  ];
-  bool _typing = false;
-  Timer? _replyTimer;
 
   static const List<String> _suggestions = <String>[
     'My AC is leaking water',
@@ -41,34 +34,28 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    final msg = widget.initialMessage;
+    if (msg != null && msg.trim().isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _send(msg));
+    }
+  }
+
+  @override
   void dispose() {
     _input.dispose();
     _scroll.dispose();
-    _replyTimer?.cancel();
     super.dispose();
   }
 
-  void _send(String raw) {
-    final String textValue = raw.trim();
-    if (textValue.isEmpty) return;
-    setState(() {
-      _messages.add(_Message(textValue, fromUser: true));
-      _input.clear();
-      _typing = true;
-    });
+  Future<void> _send(String raw) async {
+    final String value = raw.trim();
+    if (value.isEmpty) return;
+    _input.clear();
     _scrollToEnd();
-    _replyTimer?.cancel();
-    _replyTimer = Timer(const Duration(milliseconds: 1100), () {
-      if (!mounted) return;
-      setState(() {
-        _typing = false;
-        _messages.add(_Message(
-          "Got it. Based on that, I'd book a verified pro for you. Tap a category on Home, or say 'book now' and I'll start an ASAP request.",
-          fromUser: false,
-        ));
-      });
-      _scrollToEnd();
-    });
+    await ref.read(bookingChatProvider.notifier).send(value);
+    _scrollToEnd();
   }
 
   void _scrollToEnd() {
@@ -86,8 +73,14 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   @override
   Widget build(BuildContext context) {
     final TextTheme text = Theme.of(context).textTheme;
+    final ChatState chat = ref.watch(bookingChatProvider);
+    final List<ChatMessage> messages = chat.messages;
+    final bool posted = chat.phase == ChatPhase.posted;
+
     return Scaffold(
-      appBar: AppBar(
+      appBar: posted
+          ? null
+          : AppBar(
         backgroundColor: Colors.transparent,
         titleSpacing: 0,
         title: Row(
@@ -120,6 +113,14 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             ),
           ],
         ),
+        actions: <Widget>[
+          if (chat.phase == ChatPhase.posted || messages.length > 1)
+            IconButton(
+              tooltip: 'New request',
+              icon: const Icon(Icons.refresh_rounded),
+              onPressed: () => ref.read(bookingChatProvider.notifier).reset(),
+            ),
+        ],
       ),
       body: Stack(
         fit: StackFit.expand,
@@ -133,26 +134,37 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                   child: ListView.builder(
                     controller: _scroll,
                     padding: const EdgeInsets.all(AppSpacing.xl),
-                    itemCount: _messages.length + (_typing ? 1 : 0),
+                    itemCount: messages.length + (chat.typing ? 1 : 0),
                     itemBuilder: (BuildContext context, int i) {
-                      if (i == _messages.length) return _typingBubble(text);
-                      return _bubble(_messages[i], text);
+                      if (i == messages.length) return _typingBubble(text);
+                      return _bubble(messages[i], text, i);
                     },
                   ),
                 ),
-                if (_messages.length == 1) _suggestionRow(text),
-                _composer(text),
+                if (messages.length == 1) _suggestionRow(text),
+                _composer(text, chat),
               ],
             ),
           ),
+          if (posted)
+            Positioned.fill(
+              child: PostedSuccessOverlay(onDone: _goHome),
+            ),
         ],
       ),
     );
   }
 
-  Widget _bubble(_Message m, TextTheme text) {
+  void _goHome() {
+    if (!mounted) return;
+    context.go('/home');
+    // Clear the conversation so the assistant starts fresh next time.
+    ref.read(bookingChatProvider.notifier).reset();
+  }
+
+  Widget _bubble(ChatMessage m, TextTheme text, int index) {
     final bool user = m.fromUser;
-    return Align(
+    final Widget bubble = Align(
       alignment: user ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.only(bottom: AppSpacing.md),
@@ -178,33 +190,42 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
             )),
       ),
     );
+    return _AnimatedBubble(
+      key: ValueKey<int>(index),
+      fromUser: user,
+      child: bubble,
+    );
   }
 
   Widget _typingBubble(TextTheme text) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: AppSpacing.md),
-        padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.lg, vertical: AppSpacing.lg),
-        decoration: BoxDecoration(
-          color: AppColors.surface.withValues(alpha: 0.7),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(18),
-            topRight: Radius.circular(18),
-            bottomRight: Radius.circular(18),
-            bottomLeft: Radius.circular(4),
+    return _AnimatedBubble(
+      key: const ValueKey<String>('typing'),
+      fromUser: false,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: AppSpacing.md),
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg, vertical: AppSpacing.lg),
+          decoration: BoxDecoration(
+            color: AppColors.surface.withValues(alpha: 0.7),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(18),
+              topRight: Radius.circular(18),
+              bottomRight: Radius.circular(18),
+              bottomLeft: Radius.circular(4),
+            ),
           ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            for (int i = 0; i < 3; i++)
-              Padding(
-                padding: EdgeInsets.only(right: i < 2 ? 5 : 0),
-                child: const _Dot(),
-              ),
-          ],
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              for (int i = 0; i < 3; i++)
+                Padding(
+                  padding: EdgeInsets.only(right: i < 2 ? 5 : 0),
+                  child: _Dot(index: i),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -243,7 +264,14 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     );
   }
 
-  Widget _composer(TextTheme text) {
+  Widget _composer(TextTheme text, ChatState chat) {
+    final bool posted = chat.phase == ChatPhase.posted;
+    final String hint = switch (chat.phase) {
+      ChatPhase.awaitingPrice => 'Enter your price in EGP…',
+      ChatPhase.awaitingConfirm => 'Reply yes to post, or no to change…',
+      ChatPhase.posted => 'Request posted',
+      ChatPhase.gathering => 'Message the assistant…',
+    };
     return Padding(
       padding: EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.md, AppSpacing.xl,
           AppSpacing.md + MediaQuery.of(context).padding.bottom),
@@ -252,35 +280,21 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
           Expanded(
             child: TextField(
               controller: _input,
+              enabled: !posted && !chat.typing,
               textInputAction: TextInputAction.send,
+              keyboardType: chat.phase == ChatPhase.awaitingPrice
+                  ? TextInputType.number
+                  : TextInputType.text,
               onSubmitted: _send,
               minLines: 1,
               maxLines: 4,
-              decoration: const InputDecoration(
-                hintText: 'Message the assistant…',
-              ),
+              decoration: InputDecoration(hintText: hint),
             ),
           ),
           const SizedBox(width: AppSpacing.sm),
-          GestureDetector(
-            onTap: () => _send(_input.text),
-            child: Container(
-              height: 52,
-              width: 52,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                shape: BoxShape.circle,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.45),
-                    blurRadius: 16,
-                    spreadRadius: -4,
-                  ),
-                ],
-              ),
-              child: const Icon(Icons.arrow_upward_rounded,
-                  color: Colors.white),
-            ),
+          _SendButton(
+            onTap: posted ? null : () => _send(_input.text),
+            posted: posted,
           ),
         ],
       ),
@@ -288,17 +302,138 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Staggered wave dot — each dot gets a phase offset so they animate in turn.
+// ---------------------------------------------------------------------------
 class _Dot extends StatefulWidget {
-  const _Dot();
+  const _Dot({required this.index});
+  final int index; // 0, 1, 2
+
   @override
   State<_Dot> createState() => _DotState();
 }
 
 class _DotState extends State<_Dot> with SingleTickerProviderStateMixin {
+  // Full cycle = 1 200 ms; each dot offset by 200 ms (index/6 of the cycle).
   late final AnimationController _c = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 700),
-  )..repeat(reverse: true);
+    duration: const Duration(milliseconds: 1200),
+    value: widget.index / 6.0, // phase-offset: 0.0, 0.167, 0.333
+  )..repeat();
+
+  // Up → peak → down → rest pattern over the full cycle.
+  late final Animation<double> _y = TweenSequence<double>(<TweenSequenceItem<double>>[
+    TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 0, end: -6)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 30),
+    TweenSequenceItem<double>(
+        tween: Tween<double>(begin: -6, end: 0)
+            .chain(CurveTween(curve: Curves.easeIn)),
+        weight: 30),
+    TweenSequenceItem<double>(
+        tween: ConstantTween<double>(0),
+        weight: 40), // rest
+  ]).animate(_c);
+
+  // Subtle scale pulse accompanying the bounce.
+  late final Animation<double> _scale = TweenSequence<double>(<TweenSequenceItem<double>>[
+    TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 1.0, end: 1.25)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 30),
+    TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 1.25, end: 1.0)
+            .chain(CurveTween(curve: Curves.easeIn)),
+        weight: 30),
+    TweenSequenceItem<double>(
+        tween: ConstantTween<double>(1.0),
+        weight: 40),
+  ]).animate(_c);
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final bool reduce =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    if (reduce) {
+      _c.stop();
+    } else if (!_c.isAnimating) {
+      _c.repeat();
+    }
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _c,
+      builder: (_, __) => Transform.translate(
+        offset: Offset(0, _y.value),
+        child: Transform.scale(
+          scale: _scale.value,
+          child: const DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppColors.textSecondary,
+              shape: BoxShape.circle,
+            ),
+            child: SizedBox(height: 7, width: 7),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Bubble entry animation — slide + fade in on mount, direction matches sender.
+// ---------------------------------------------------------------------------
+class _AnimatedBubble extends StatefulWidget {
+  const _AnimatedBubble({
+    required super.key,
+    required this.fromUser,
+    required this.child,
+  });
+
+  final bool fromUser;
+  final Widget child;
+
+  @override
+  State<_AnimatedBubble> createState() => _AnimatedBubbleState();
+}
+
+class _AnimatedBubbleState extends State<_AnimatedBubble>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 260),
+  );
+
+  late final Animation<double> _opacity =
+      CurvedAnimation(parent: _c, curve: Curves.easeOut);
+
+  late final Animation<Offset> _slide = Tween<Offset>(
+    begin: Offset(widget.fromUser ? 0.12 : -0.12, 0.04),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(parent: _c, curve: Curves.easeOutCubic));
+
+  @override
+  void initState() {
+    super.initState();
+    final bool reduce =
+        WidgetsBinding.instance.platformDispatcher.accessibilityFeatures
+            .disableAnimations;
+    if (reduce) {
+      _c.value = 1.0;
+    } else {
+      _c.forward();
+    }
+  }
 
   @override
   void dispose() {
@@ -309,13 +444,86 @@ class _DotState extends State<_Dot> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return FadeTransition(
-      opacity: Tween<double>(begin: 0.3, end: 1).animate(_c),
-      child: const DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColors.textSecondary,
-          shape: BoxShape.circle,
+      opacity: _opacity,
+      child: SlideTransition(position: _slide, child: widget.child),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Send button — press scale + spring-back feedback.
+// ---------------------------------------------------------------------------
+class _SendButton extends StatefulWidget {
+  const _SendButton({required this.onTap, required this.posted});
+
+  final VoidCallback? onTap;
+  final bool posted;
+
+  @override
+  State<_SendButton> createState() => _SendButtonState();
+}
+
+class _SendButtonState extends State<_SendButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 110),
+    reverseDuration: const Duration(milliseconds: 200),
+  );
+
+  late final Animation<double> _scale =
+      Tween<double>(begin: 1.0, end: 0.86).animate(
+    CurvedAnimation(parent: _c, curve: Curves.easeIn),
+  );
+
+  Future<void> _onTap() async {
+    if (widget.onTap == null) return;
+    final bool reduce =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    if (!reduce) {
+      await _c.forward();
+      unawaited(_c.reverse());
+    }
+    widget.onTap!();
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: _scale,
+      child: GestureDetector(
+        onTap: widget.onTap == null ? null : _onTap,
+        child: Container(
+          height: 52,
+          width: 52,
+          decoration: BoxDecoration(
+            color: widget.posted
+                ? AppColors.textSecondary
+                : AppColors.primary,
+            shape: BoxShape.circle,
+            boxShadow: widget.posted
+                ? null
+                : <BoxShadow>[
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.45),
+                      blurRadius: 16,
+                      spreadRadius: -4,
+                    ),
+                  ],
+          ),
+          child: Icon(
+            widget.posted
+                ? Icons.check_rounded
+                : Icons.arrow_upward_rounded,
+            color: Colors.white,
+          ),
         ),
-        child: SizedBox(height: 7, width: 7),
       ),
     );
   }

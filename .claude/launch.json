@@ -13,7 +13,8 @@
         "--web-port",
         "5000",
         "-t",
-        "lib/main_dev.dart"
+        "lib/main_dev.dart",
+        "--dart-define-from-file=groq.env.json"
       ],
       "cwd": "apps/customer",
       "port": 5000

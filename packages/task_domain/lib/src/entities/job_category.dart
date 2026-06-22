@@ -2,14 +2,32 @@
 /// icons and tints live in the UI layer (`task_design`). The `id` is the stable
 /// string persisted with a job; `displayLabel` is English copy.
 enum JobCategory {
-  plumbing('plumbing', 'Plumbing'),
-  electrical('electrical', 'Electrical'),
-  ac('ac', 'AC & Cooling'),
+  plumbing('plumbing', 'Plumber'),
+  electrical('electrical', 'Electrician'),
+  ac('ac', 'AC Maintenance'),
   cleaning('cleaning', 'Cleaning'),
-  carpentry('carpentry', 'Carpentry'),
-  painting('painting', 'Painting'),
-  satelliteInstallation('satellite', 'Satellite Installation & Repair'),
-  smartHome('smart_home', 'Smart Home Installation & Automation');
+  carpentry('carpentry', 'Carpenter'),
+  painting('painting', 'Painter'),
+  satelliteInstallation('satellite', 'Satellite'),
+  smartHome('smart_home', 'Smart Home'),
+  tilesHandyman('tiles_handyman', 'Tiles Handyman'),
+  masonStones('mason_stones', 'Mason & Decoration Stones'),
+  plaster('plaster', 'Plaster'),
+  smith('smith', 'Smith'),
+  parquet('parquet', 'Parquet'),
+  gypsumWorks('gypsum_works', 'Gypsum Works'),
+  gypsumBoard('gypsum_board', 'Gypsum Board'),
+  marbleGranite('marble_granite', 'Marble & Granite'),
+  alumetal('alumetal', 'Alumetal'),
+  glassCecurit('glass_cecurit', 'Glass & Cecurit'),
+  curtainsUpholstery('curtains_upholstery', 'Curtains & Upholstery'),
+  woodPainter('wood_painter', 'Wood Painter'),
+  movingServices('moving_services', 'Moving Services'),
+  puCornices('pu_cornices', 'PU Cornices'),
+  materialWinch('material_winch', 'Material Winch'),
+  appliancesMaintenance('appliances_maintenance', 'Appliances Maintenance'),
+  swimmingPool('swimming_pool', 'Swimming Pool Maintenance'),
+  pestControl('pest_control', 'Pest Control');
 
   const JobCategory(this.id, this.displayLabel);
 

@@ -61,4 +61,39 @@ void main() {
     expect(jobs.first.fixedPrice, 400);
     expect(container.read(bookingChatProvider).pendingDraft, isNull);
   });
+
+  test('in-chat flow: gather → price → confirm → posts to marketplace',
+      () async {
+    final BookingChatController c =
+        container.read(bookingChatProvider.notifier);
+    final int before = (await repo.watchMyJobs().first).length;
+
+    // 1. Gathering — the ready service hands back a draft, we ask for a price.
+    await c.send('sink leaks');
+    expect(container.read(bookingChatProvider).phase, ChatPhase.awaitingPrice);
+
+    // 2. Customer states a price in chat → moves to confirmation.
+    await c.send('I can pay 350 EGP');
+    ChatState s = container.read(bookingChatProvider);
+    expect(s.phase, ChatPhase.awaitingConfirm);
+    expect(s.pendingDraft!.fixedPrice, 350);
+
+    // 3. Customer confirms → job is published and chat is in posted state.
+    await c.send('yes');
+    s = container.read(bookingChatProvider);
+    expect(s.phase, ChatPhase.posted);
+    expect(s.pendingDraft, isNull);
+
+    final List<JobRequest> jobs = await repo.watchMyJobs().first;
+    expect(jobs.length, before + 1);
+    expect(jobs.first.fixedPrice, 350);
+  });
+
+  test('in-chat flow: unparseable price re-asks without advancing', () async {
+    final BookingChatController c =
+        container.read(bookingChatProvider.notifier);
+    await c.send('sink leaks');
+    await c.send('not sure yet');
+    expect(container.read(bookingChatProvider).phase, ChatPhase.awaitingPrice);
+  });
 }

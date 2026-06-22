@@ -102,14 +102,19 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
   }
 
   Widget _sheet(JobRequest? job, TextTheme text, bool done) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       padding: EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.lg, AppSpacing.xl,
           AppSpacing.lg + MediaQuery.of(context).padding.bottom),
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        border: Border(top: BorderSide(color: Color(0x22FFFFFF))),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.background : AppColors.backgroundLight,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        border: Border(
+          top: BorderSide(
+            color: isDark ? const Color(0x22FFFFFF) : const Color(0x12000000),
+          ),
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -121,7 +126,7 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
               width: 40,
               margin: const EdgeInsets.only(bottom: AppSpacing.lg),
               decoration: BoxDecoration(
-                color: const Color(0x33FFFFFF),
+                color: isDark ? const Color(0x33FFFFFF) : const Color(0x22000000),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -191,7 +196,9 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
                       text.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
               Text(job?.title ?? 'Home service',
                   style: text.bodySmall?.copyWith(
-                    color: AppColors.textSecondary.withValues(alpha: 0.65),
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? AppColors.textSecondary.withValues(alpha: 0.65)
+                        : AppColors.textSecondaryLight,
                   )),
             ],
           ),
@@ -232,7 +239,10 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
       required bool active,
       required bool last,
       required TextTheme text}) {
-    final Color color = done || active ? AppColors.primary : const Color(0x33FFFFFF);
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color color = done || active
+        ? AppColors.primary
+        : (isDark ? const Color(0x33FFFFFF) : const Color(0x33000000));
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -254,7 +264,9 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
               Container(
                 width: 2,
                 height: 22,
-                color: done ? AppColors.primary : const Color(0x22FFFFFF),
+                color: done
+                    ? AppColors.primary
+                    : (isDark ? const Color(0x22FFFFFF) : const Color(0x22000000)),
               ),
           ],
         ),
@@ -264,8 +276,10 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
           child: Text(label,
               style: text.bodyMedium?.copyWith(
                 color: active || done
-                    ? AppColors.textPrimary
-                    : AppColors.textSecondary.withValues(alpha: 0.5),
+                    ? Theme.of(context).colorScheme.onSurface
+                    : (isDark
+                        ? AppColors.textSecondary.withValues(alpha: 0.5)
+                        : AppColors.textSecondaryLight),
                 fontWeight: active ? FontWeight.w700 : FontWeight.w400,
               )),
         ),
@@ -284,8 +298,12 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
       label: Text(label),
       style: OutlinedButton.styleFrom(
         minimumSize: const Size.fromHeight(50),
-        foregroundColor: AppColors.textPrimary,
-        side: const BorderSide(color: Color(0x33FFFFFF)),
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
+        side: BorderSide(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? const Color(0x33FFFFFF)
+              : const Color(0x33000000),
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
         ),

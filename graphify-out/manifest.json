@@ -1,822 +1,1517 @@
 {
-  "C:\\Users\\youss\\Documents\\Task App\\.claude\\launch.json": {
+  ".claude/launch.json": {
     "mtime": 1781995312.6439984,
     "ast_hash": "bf98c77997670751f7829b9bd854a6d9",
     "semantic_hash": "bf98c77997670751f7829b9bd854a6d9"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\.claude\\settings.local.json": {
-    "mtime": 1782030129.5244484,
-    "ast_hash": "7f2e6d2fd5ef8fd4363bcbf862f00d24",
-    "semantic_hash": "7f2e6d2fd5ef8fd4363bcbf862f00d24"
+  ".claude/settings.local.json": {
+    "mtime": 1782066663.5660124,
+    "ast_hash": "d23332a1816567b331f7fb862654517e",
+    "semantic_hash": ""
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\lib\\main.dart": {
+  "apps/admin/lib/main.dart": {
     "mtime": 1781994479.0727744,
     "ast_hash": "c80ebc9b987c18b3288549dd71929040",
     "semantic_hash": "c80ebc9b987c18b3288549dd71929040"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\test\\widget_test.dart": {
+  "apps/admin/test/widget_test.dart": {
     "mtime": 1781994479.123299,
     "ast_hash": "377f77403df4cae708c43afdc5ad1510",
     "semantic_hash": "377f77403df4cae708c43afdc5ad1510"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\manifest.json": {
+  "apps/admin/web/manifest.json": {
     "mtime": 1781994289.2992065,
     "ast_hash": "fb8b26ab2941d31dccf5fa0cdd564fec",
     "semantic_hash": "fb8b26ab2941d31dccf5fa0cdd564fec"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\build.gradle.kts": {
+  "apps/customer/android/app/build.gradle.kts": {
     "mtime": 1781994264.9029033,
     "ast_hash": "d3c26f0ff1b006023e5b1e386dbfd610",
     "semantic_hash": "d3c26f0ff1b006023e5b1e386dbfd610"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\java\\io\\flutter\\plugins\\GeneratedPluginRegistrant.java": {
+  "apps/customer/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java": {
     "mtime": 1781996302.0008793,
     "ast_hash": "026f5934d71e820a7866854a3e684096",
     "semantic_hash": "026f5934d71e820a7866854a3e684096"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\kotlin\\com\\task\\customer\\MainActivity.kt": {
+  "apps/customer/android/app/src/main/kotlin/com/task/customer/MainActivity.kt": {
     "mtime": 1781994264.9271646,
     "ast_hash": "108bac2092d81130da7176699b14624d",
     "semantic_hash": "108bac2092d81130da7176699b14624d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\build.gradle.kts": {
+  "apps/customer/android/build.gradle.kts": {
     "mtime": 1781994264.9462745,
     "ast_hash": "803fe22651fbe96ed401eb0b66a492d1",
     "semantic_hash": "803fe22651fbe96ed401eb0b66a492d1"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\gradlew": {
+  "apps/customer/android/gradlew": {
     "mtime": 1781994265.9351015,
     "ast_hash": "7f1cd7eb3f75a1dc85cd37753972a6e2",
     "semantic_hash": "7f1cd7eb3f75a1dc85cd37753972a6e2"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\settings.gradle.kts": {
+  "apps/customer/android/settings.gradle.kts": {
     "mtime": 1781994265.243539,
     "ast_hash": "087a01c04d081ae02a8e5db89f4bf3f3",
     "semantic_hash": "087a01c04d081ae02a8e5db89f4bf3f3"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Flutter\\ephemeral\\Packages\\FlutterGeneratedPluginSwiftPackage\\Package.swift": {
-    "mtime": 1782030370.7990713,
+  "apps/customer/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift": {
+    "mtime": 1782066767.452944,
     "ast_hash": "63bc00d19466662a75b7492ac07d5a97",
     "semantic_hash": "63bc00d19466662a75b7492ac07d5a97"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Flutter\\ephemeral\\Packages\\FlutterGeneratedPluginSwiftPackage\\Sources\\FlutterGeneratedPluginSwiftPackage\\FlutterGeneratedPluginSwiftPackage.swift": {
+  "apps/customer/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Sources/FlutterGeneratedPluginSwiftPackage/FlutterGeneratedPluginSwiftPackage.swift": {
     "mtime": 1781994268.1212149,
     "ast_hash": "e6366d8685ad56268730656aa0a6e00c",
     "semantic_hash": "e6366d8685ad56268730656aa0a6e00c"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Flutter\\ephemeral\\flutter_lldb_helper.py": {
+  "apps/customer/ios/Flutter/ephemeral/flutter_lldb_helper.py": {
     "mtime": 1781994267.9556227,
     "ast_hash": "98fc75412162af387e2e3461e4e58094",
     "semantic_hash": "98fc75412162af387e2e3461e4e58094"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Flutter\\flutter_export_environment.sh": {
+  "apps/customer/ios/Flutter/flutter_export_environment.sh": {
     "mtime": 1781994267.964628,
     "ast_hash": "4ea7e828a753bbb36bd92fa172ed7e3b",
     "semantic_hash": "4ea7e828a753bbb36bd92fa172ed7e3b"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\RunnerTests\\RunnerTests.swift": {
+  "apps/customer/ios/RunnerTests/RunnerTests.swift": {
     "mtime": 1781994265.710322,
     "ast_hash": "24e5d095048eb86c30423f4e04b6e57b",
     "semantic_hash": "24e5d095048eb86c30423f4e04b6e57b"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\AppDelegate.swift": {
+  "apps/customer/ios/Runner/AppDelegate.swift": {
     "mtime": 1781993252.1769056,
     "ast_hash": "9e1de9c329a3fe4931876063de95132b",
     "semantic_hash": "9e1de9c329a3fe4931876063de95132b"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Contents.json": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json": {
     "mtime": 1781993252.1779037,
     "ast_hash": "31a08e429403e265cabfb31b3d65f049",
     "semantic_hash": "31a08e429403e265cabfb31b3d65f049"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\Contents.json": {
+  "apps/customer/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json": {
     "mtime": 1781993252.187426,
     "ast_hash": "b9e927ac17345f2d5f052fe68a3487f9",
     "semantic_hash": "b9e927ac17345f2d5f052fe68a3487f9"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\GeneratedPluginRegistrant.h": {
+  "apps/customer/ios/Runner/GeneratedPluginRegistrant.h": {
     "mtime": 1781994268.0992138,
     "ast_hash": "decb9041b5e91a07e66f4664e5dac408",
     "semantic_hash": "decb9041b5e91a07e66f4664e5dac408"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\GeneratedPluginRegistrant.m": {
+  "apps/customer/ios/Runner/GeneratedPluginRegistrant.m": {
     "mtime": 1781996302.0078938,
     "ast_hash": "354246593a864e92b4fd9ba7e37bdd9d",
     "semantic_hash": "354246593a864e92b4fd9ba7e37bdd9d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Runner-Bridging-Header.h": {
+  "apps/customer/ios/Runner/Runner-Bridging-Header.h": {
     "mtime": 1781993252.192428,
     "ast_hash": "7ad7b5cea096132de13ba526b2b9efbe",
     "semantic_hash": "7ad7b5cea096132de13ba526b2b9efbe"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\SceneDelegate.swift": {
+  "apps/customer/ios/Runner/SceneDelegate.swift": {
     "mtime": 1781993252.1934278,
     "ast_hash": "0c3e86af131f6a9e547c80b5ed058914",
     "semantic_hash": "0c3e86af131f6a9e547c80b5ed058914"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\app\\bootstrap.dart": {
-    "mtime": 1781994395.3808975,
-    "ast_hash": "92ade4684a3b4760304101b28a2f0d58",
-    "semantic_hash": "92ade4684a3b4760304101b28a2f0d58"
+  "apps/customer/lib/app/bootstrap.dart": {
+    "mtime": 1782035166.3995337,
+    "ast_hash": "4f3d98e5a328b04e4d6bceb44c8e9bbf",
+    "semantic_hash": ""
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\app\\customer_app.dart": {
+  "apps/customer/lib/app/customer_app.dart": {
     "mtime": 1781996224.6709783,
     "ast_hash": "23ea70e031ffe66708b7f26a57b6c907",
     "semantic_hash": "23ea70e031ffe66708b7f26a57b6c907"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\app\\flavor.dart": {
+  "apps/customer/lib/app/flavor.dart": {
     "mtime": 1781994390.132068,
     "ast_hash": "7df9735e0d22cf8c5897a215b165fe5a",
     "semantic_hash": "7df9735e0d22cf8c5897a215b165fe5a"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\app\\router.dart": {
-    "mtime": 1781998527.4715266,
-    "ast_hash": "22b7d1cc393f24609ec17642bff77f2f",
-    "semantic_hash": "22b7d1cc393f24609ec17642bff77f2f"
+  "apps/customer/lib/app/router.dart": {
+    "mtime": 1782065959.3984654,
+    "ast_hash": "a1f5169a3713a0f79eb19247ea945124",
+    "semantic_hash": ""
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\features\\auth\\sign_in_screen.dart": {
-    "mtime": 1781999794.1625547,
-    "ast_hash": "9575b1a0518ace75ba530e00c0e23ace",
-    "semantic_hash": "9575b1a0518ace75ba530e00c0e23ace"
+  "apps/customer/lib/features/auth/sign_in_screen.dart": {
+    "mtime": 1782050328.6857388,
+    "ast_hash": "0e1d4ab5bf235b09eee211c4da214355",
+    "semantic_hash": ""
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\features\\localization\\language_switcher.dart": {
+  "apps/customer/lib/features/localization/language_switcher.dart": {
     "mtime": 1781996182.9590993,
     "ast_hash": "23175de3a3e9970ea178e5ac6ad0a1fb",
     "semantic_hash": "23175de3a3e9970ea178e5ac6ad0a1fb"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\features\\localization\\locale_controller.dart": {
+  "apps/customer/lib/features/localization/locale_controller.dart": {
     "mtime": 1781996177.6457992,
     "ast_hash": "f2c15a264c87825c94e4dc94ef26a964",
     "semantic_hash": "f2c15a264c87825c94e4dc94ef26a964"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\features\\splash\\splash_screen.dart": {
-    "mtime": 1782000650.6694095,
-    "ast_hash": "6866932b8f76b417a9bdf3b9678b6224",
-    "semantic_hash": "6866932b8f76b417a9bdf3b9678b6224"
+  "apps/customer/lib/features/splash/splash_screen.dart": {
+    "mtime": 1782050628.852206,
+    "ast_hash": "7318760bc2cb1febccf325c5ccc9bf0e",
+    "semantic_hash": ""
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\l10n\\app_localizations.dart": {
-    "mtime": 1782030371.869764,
+  "apps/customer/lib/l10n/app_localizations.dart": {
+    "mtime": 1782054152.0739732,
     "ast_hash": "ccee36059ae6f998caa25d9dc915e5d8",
     "semantic_hash": "ccee36059ae6f998caa25d9dc915e5d8"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\l10n\\app_localizations_ar.dart": {
-    "mtime": 1782030371.8624792,
+  "apps/customer/lib/l10n/app_localizations_ar.dart": {
+    "mtime": 1782054152.0709946,
     "ast_hash": "625c1dd58dc4df49be4a7cf0cf269e36",
     "semantic_hash": "625c1dd58dc4df49be4a7cf0cf269e36"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\l10n\\app_localizations_en.dart": {
-    "mtime": 1782030371.2040317,
+  "apps/customer/lib/l10n/app_localizations_en.dart": {
+    "mtime": 1782054151.8076053,
     "ast_hash": "d3a38eaf2abcd140ac2908b1e0d99aa3",
     "semantic_hash": "d3a38eaf2abcd140ac2908b1e0d99aa3"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\main.dart": {
+  "apps/customer/lib/main.dart": {
     "mtime": 1781994429.2061126,
     "ast_hash": "b55c8272698c29bf8628e573b9bc17d5",
     "semantic_hash": "b55c8272698c29bf8628e573b9bc17d5"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\main_dev.dart": {
+  "apps/customer/lib/main_dev.dart": {
     "mtime": 1781994417.16478,
     "ast_hash": "4d8cd1f0a429098fca79b91e740299e5",
     "semantic_hash": "4d8cd1f0a429098fca79b91e740299e5"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\main_prod.dart": {
+  "apps/customer/lib/main_prod.dart": {
     "mtime": 1781994419.5388465,
     "ast_hash": "5489e3032aec3f991fd39dd8767a3ca2",
     "semantic_hash": "5489e3032aec3f991fd39dd8767a3ca2"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\lib\\main_staging.dart": {
+  "apps/customer/lib/main_staging.dart": {
     "mtime": 1781994418.5776732,
     "ast_hash": "bf28507e1f904a6037a3118112afa5b7",
     "semantic_hash": "bf28507e1f904a6037a3118112afa5b7"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\test\\widget_test.dart": {
-    "mtime": 1781998584.0344503,
-    "ast_hash": "f7aaf0dae98789599ae25afc7be66157",
-    "semantic_hash": "f7aaf0dae98789599ae25afc7be66157"
+  "apps/customer/test/widget_test.dart": {
+    "mtime": 1782050328.9776604,
+    "ast_hash": "903b6acdd770ff89c6453a102a6282fe",
+    "semantic_hash": ""
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\manifest.json": {
+  "apps/customer/web/manifest.json": {
     "mtime": 1781994265.9051054,
     "ast_hash": "f11aacd3bce9a0326d8d0e2d70cfbd53",
     "semantic_hash": "f11aacd3bce9a0326d8d0e2d70cfbd53"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\build.gradle.kts": {
+  "apps/technician/android/app/build.gradle.kts": {
     "mtime": 1781994285.2567792,
     "ast_hash": "720ac5174c39262b86f99ddff7b99ac5",
     "semantic_hash": "720ac5174c39262b86f99ddff7b99ac5"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\java\\io\\flutter\\plugins\\GeneratedPluginRegistrant.java": {
+  "apps/technician/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java": {
     "mtime": 1781994495.440276,
     "ast_hash": "ac8be7d431fd1479a54488d87f95fbe0",
     "semantic_hash": "ac8be7d431fd1479a54488d87f95fbe0"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\kotlin\\com\\task\\technician\\MainActivity.kt": {
+  "apps/technician/android/app/src/main/kotlin/com/task/technician/MainActivity.kt": {
     "mtime": 1781994285.2637808,
     "ast_hash": "b1b6f436daf10576adbc8e5a66da7197",
     "semantic_hash": "b1b6f436daf10576adbc8e5a66da7197"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\build.gradle.kts": {
+  "apps/technician/android/build.gradle.kts": {
     "mtime": 1781994285.2647803,
     "ast_hash": "803fe22651fbe96ed401eb0b66a492d1",
     "semantic_hash": "803fe22651fbe96ed401eb0b66a492d1"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\gradlew": {
+  "apps/technician/android/gradlew": {
     "mtime": 1781994285.4594235,
     "ast_hash": "7f1cd7eb3f75a1dc85cd37753972a6e2",
     "semantic_hash": "7f1cd7eb3f75a1dc85cd37753972a6e2"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\settings.gradle.kts": {
+  "apps/technician/android/settings.gradle.kts": {
     "mtime": 1781994285.3139467,
     "ast_hash": "087a01c04d081ae02a8e5db89f4bf3f3",
     "semantic_hash": "087a01c04d081ae02a8e5db89f4bf3f3"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Flutter\\ephemeral\\Packages\\FlutterGeneratedPluginSwiftPackage\\Package.swift": {
-    "mtime": 1781996303.2532296,
+  "apps/technician/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift": {
+    "mtime": 1782055330.8251598,
     "ast_hash": "63bc00d19466662a75b7492ac07d5a97",
     "semantic_hash": "63bc00d19466662a75b7492ac07d5a97"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Flutter\\ephemeral\\Packages\\FlutterGeneratedPluginSwiftPackage\\Sources\\FlutterGeneratedPluginSwiftPackage\\FlutterGeneratedPluginSwiftPackage.swift": {
+  "apps/technician/ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Sources/FlutterGeneratedPluginSwiftPackage/FlutterGeneratedPluginSwiftPackage.swift": {
     "mtime": 1781994286.2965481,
     "ast_hash": "e6366d8685ad56268730656aa0a6e00c",
     "semantic_hash": "e6366d8685ad56268730656aa0a6e00c"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Flutter\\ephemeral\\flutter_lldb_helper.py": {
+  "apps/technician/ios/Flutter/ephemeral/flutter_lldb_helper.py": {
     "mtime": 1781994286.202637,
     "ast_hash": "98fc75412162af387e2e3461e4e58094",
     "semantic_hash": "98fc75412162af387e2e3461e4e58094"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Flutter\\flutter_export_environment.sh": {
+  "apps/technician/ios/Flutter/flutter_export_environment.sh": {
     "mtime": 1781994286.215216,
     "ast_hash": "1aaa4bfbe1b2303319743ed5d236e74f",
     "semantic_hash": "1aaa4bfbe1b2303319743ed5d236e74f"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\RunnerTests\\RunnerTests.swift": {
+  "apps/technician/ios/RunnerTests/RunnerTests.swift": {
     "mtime": 1781994285.4314177,
     "ast_hash": "24e5d095048eb86c30423f4e04b6e57b",
     "semantic_hash": "24e5d095048eb86c30423f4e04b6e57b"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\AppDelegate.swift": {
+  "apps/technician/ios/Runner/AppDelegate.swift": {
     "mtime": 1781993252.1769056,
     "ast_hash": "9e1de9c329a3fe4931876063de95132b",
     "semantic_hash": "9e1de9c329a3fe4931876063de95132b"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Contents.json": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json": {
     "mtime": 1781993252.1779037,
     "ast_hash": "31a08e429403e265cabfb31b3d65f049",
     "semantic_hash": "31a08e429403e265cabfb31b3d65f049"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\Contents.json": {
+  "apps/technician/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json": {
     "mtime": 1781993252.187426,
     "ast_hash": "b9e927ac17345f2d5f052fe68a3487f9",
     "semantic_hash": "b9e927ac17345f2d5f052fe68a3487f9"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\GeneratedPluginRegistrant.h": {
+  "apps/technician/ios/Runner/GeneratedPluginRegistrant.h": {
     "mtime": 1781994286.283862,
     "ast_hash": "decb9041b5e91a07e66f4664e5dac408",
     "semantic_hash": "decb9041b5e91a07e66f4664e5dac408"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\GeneratedPluginRegistrant.m": {
+  "apps/technician/ios/Runner/GeneratedPluginRegistrant.m": {
     "mtime": 1781994495.4439144,
     "ast_hash": "2835b1b77b2dd88746cdb16896de5a20",
     "semantic_hash": "2835b1b77b2dd88746cdb16896de5a20"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Runner-Bridging-Header.h": {
+  "apps/technician/ios/Runner/Runner-Bridging-Header.h": {
     "mtime": 1781993252.192428,
     "ast_hash": "7ad7b5cea096132de13ba526b2b9efbe",
     "semantic_hash": "7ad7b5cea096132de13ba526b2b9efbe"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\SceneDelegate.swift": {
+  "apps/technician/ios/Runner/SceneDelegate.swift": {
     "mtime": 1781993252.1934278,
     "ast_hash": "0c3e86af131f6a9e547c80b5ed058914",
     "semantic_hash": "0c3e86af131f6a9e547c80b5ed058914"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\lib\\main.dart": {
+  "apps/technician/lib/main.dart": {
     "mtime": 1781994478.9707236,
     "ast_hash": "bed2af53d9ad3433494d69d6a132f31d",
     "semantic_hash": "bed2af53d9ad3433494d69d6a132f31d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\test\\widget_test.dart": {
+  "apps/technician/test/widget_test.dart": {
     "mtime": 1781994479.0227592,
     "ast_hash": "d7f6b71f07dbd3a66978df8e5bd32728",
     "semantic_hash": "d7f6b71f07dbd3a66978df8e5bd32728"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\backend\\firestore.indexes.json": {
+  "backend/firestore.indexes.json": {
     "mtime": 1781994787.7189403,
     "ast_hash": "6c1369bcee45fa3baebaaf77f2dc3ae3",
     "semantic_hash": "6c1369bcee45fa3baebaaf77f2dc3ae3"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\backend\\functions\\package.json": {
+  "backend/functions/package.json": {
     "mtime": 1781994797.6709194,
     "ast_hash": "66405a11ad3c6c1034a310b7733e213f",
     "semantic_hash": "66405a11ad3c6c1034a310b7733e213f"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\backend\\functions\\src\\index.ts": {
+  "backend/functions/src/index.ts": {
     "mtime": 1781994804.7161176,
     "ast_hash": "216551fdd8a59b9e67cf56b8e97fa57a",
     "semantic_hash": "216551fdd8a59b9e67cf56b8e97fa57a"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\backend\\functions\\tsconfig.json": {
+  "backend/functions/tsconfig.json": {
     "mtime": 1781994800.0953043,
     "ast_hash": "c85284b380347fae3b4afbbede7b3d08",
     "semantic_hash": "c85284b380347fae3b4afbbede7b3d08"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\firebase.json": {
+  "firebase.json": {
     "mtime": 1781994775.481575,
     "ast_hash": "01d0f5edf4a5b87bf4a0e1b44066a43b",
     "semantic_hash": "01d0f5edf4a5b87bf4a0e1b44066a43b"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_core\\lib\\src\\constants\\business_rules.dart": {
+  "packages/task_core/lib/src/constants/business_rules.dart": {
     "mtime": 1781993923.987311,
     "ast_hash": "e6ba46b68ab0c10c3a02de716221c0a0",
     "semantic_hash": "e6ba46b68ab0c10c3a02de716221c0a0"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_core\\lib\\src\\failures\\failure.dart": {
+  "packages/task_core/lib/src/failures/failure.dart": {
     "mtime": 1781993904.03996,
     "ast_hash": "34d0911f0b9ea96be8e85db66a694318",
     "semantic_hash": "34d0911f0b9ea96be8e85db66a694318"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_core\\lib\\src\\result\\result.dart": {
+  "packages/task_core/lib/src/result/result.dart": {
     "mtime": 1781993912.9487321,
     "ast_hash": "a598a6cc13459a8b3a51b526bc15977a",
     "semantic_hash": "a598a6cc13459a8b3a51b526bc15977a"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_core\\lib\\task_core.dart": {
+  "packages/task_core/lib/task_core.dart": {
     "mtime": 1781993894.596481,
     "ast_hash": "4e4c2c69819dd2db2aefd621e11b7c5a",
     "semantic_hash": "4e4c2c69819dd2db2aefd621e11b7c5a"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_data\\lib\\src\\mappers\\enum_codecs.dart": {
+  "packages/task_data/lib/src/mappers/enum_codecs.dart": {
     "mtime": 1781994049.5444362,
     "ast_hash": "113d288f4ce3ec71e6c8a6d006b8f352",
     "semantic_hash": "113d288f4ce3ec71e6c8a6d006b8f352"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_data\\lib\\task_data.dart": {
+  "packages/task_data/lib/task_data.dart": {
     "mtime": 1781994032.784109,
     "ast_hash": "2cabc4cbcc097ec1459546c985fb6ed1",
     "semantic_hash": "2cabc4cbcc097ec1459546c985fb6ed1"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\lib\\src\\theme\\app_colors.dart": {
+  "packages/task_design/lib/src/theme/app_colors.dart": {
     "mtime": 1781993996.3271554,
     "ast_hash": "68bf16a99553111ac494fb8e46d12334",
     "semantic_hash": "68bf16a99553111ac494fb8e46d12334"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\lib\\src\\theme\\app_spacing.dart": {
+  "packages/task_design/lib/src/theme/app_spacing.dart": {
     "mtime": 1781994000.7332444,
     "ast_hash": "fefeba492da6ae510f63b8bc9eb3f955",
     "semantic_hash": "fefeba492da6ae510f63b8bc9eb3f955"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\lib\\src\\theme\\app_theme.dart": {
+  "packages/task_design/lib/src/theme/app_theme.dart": {
     "mtime": 1781999803.2764015,
     "ast_hash": "b4f774e050b918e2e4bf1f0f05bc3361",
     "semantic_hash": "b4f774e050b918e2e4bf1f0f05bc3361"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\lib\\src\\theme\\app_typography.dart": {
+  "packages/task_design/lib/src/theme/app_typography.dart": {
     "mtime": 1781996165.864488,
     "ast_hash": "7474ecbf98887c88b057e86ac6c001d0",
     "semantic_hash": "7474ecbf98887c88b057e86ac6c001d0"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\lib\\task_design.dart": {
-    "mtime": 1781996167.584624,
-    "ast_hash": "19e8596a08c02b015f63537fb2bb7ae5",
-    "semantic_hash": "19e8596a08c02b015f63537fb2bb7ae5"
+  "packages/task_design/lib/task_design.dart": {
+    "mtime": 1782055370.0697672,
+    "ast_hash": "f55115a1b62d378fb4cec469bb46d7ca",
+    "semantic_hash": ""
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_domain\\lib\\src\\entities\\enums.dart": {
+  "packages/task_domain/lib/src/entities/enums.dart": {
     "mtime": 1781994186.586545,
     "ast_hash": "c5804792a59106a9ebfb5dcd48a88e17",
     "semantic_hash": "c5804792a59106a9ebfb5dcd48a88e17"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_domain\\lib\\src\\repositories\\auth_repository.dart": {
+  "packages/task_domain/lib/src/repositories/auth_repository.dart": {
     "mtime": 1781993949.214617,
     "ast_hash": "8cca6ada29c925cc0130aedb4da0eadb",
     "semantic_hash": "8cca6ada29c925cc0130aedb4da0eadb"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_domain\\lib\\task_domain.dart": {
-    "mtime": 1781993937.5299113,
-    "ast_hash": "9eb29a6a4c5639570a963990a6fc25b8",
-    "semantic_hash": "9eb29a6a4c5639570a963990a6fc25b8"
+  "packages/task_domain/lib/task_domain.dart": {
+    "mtime": 1782055139.0505104,
+    "ast_hash": "19e5647b02ed4e72c64d7e0df397b730",
+    "semantic_hash": ""
   },
-  "C:\\Users\\youss\\Documents\\Task App\\README.md": {
+  "README.md": {
     "mtime": 1781994976.307599,
     "ast_hash": "547e343372574781aae9f9d5b38162b5",
     "semantic_hash": "547e343372574781aae9f9d5b38162b5"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\analysis_options.yaml": {
+  "analysis_options.yaml": {
     "mtime": 1781993865.9950943,
     "ast_hash": "447e008dd408d0766fdea5ac68c60a27",
     "semantic_hash": "447e008dd408d0766fdea5ac68c60a27"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\README.md": {
+  "apps/admin/README.md": {
     "mtime": 1781994289.276185,
     "ast_hash": "51f4be9566ecdacf953074033158b63f",
     "semantic_hash": "51f4be9566ecdacf953074033158b63f"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\analysis_options.yaml": {
+  "apps/admin/analysis_options.yaml": {
     "mtime": 1781994352.5661209,
     "ast_hash": "10c9905e302b8015025c15eceff3083d",
     "semantic_hash": "10c9905e302b8015025c15eceff3083d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\pubspec.yaml": {
+  "apps/admin/pubspec.yaml": {
     "mtime": 1781994537.1412158,
     "ast_hash": "55d1d3113421bc7fc34fc3442dcb6bc6",
     "semantic_hash": "55d1d3113421bc7fc34fc3442dcb6bc6"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\index.html": {
+  "apps/admin/web/index.html": {
     "mtime": 1781994289.2968643,
     "ast_hash": "1e1b7f4a5992a3af162c0f131456efa8",
     "semantic_hash": "1e1b7f4a5992a3af162c0f131456efa8"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\README.md": {
+  "apps/customer/README.md": {
     "mtime": 1781994265.787863,
     "ast_hash": "9df6c1b5b76bc3c73e6c1fe92e51c25d",
     "semantic_hash": "9df6c1b5b76bc3c73e6c1fe92e51c25d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\analysis_options.yaml": {
+  "apps/customer/analysis_options.yaml": {
     "mtime": 1781994352.564117,
     "ast_hash": "10c9905e302b8015025c15eceff3083d",
     "semantic_hash": "10c9905e302b8015025c15eceff3083d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\README.md": {
+  "apps/customer/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md": {
     "mtime": 1781993252.189429,
     "ast_hash": "f7ee1b402881509d197f34963e569927",
     "semantic_hash": "f7ee1b402881509d197f34963e569927"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\l10n.yaml": {
+  "apps/customer/l10n.yaml": {
     "mtime": 1781996374.9078636,
     "ast_hash": "9eebc61edfd9a8e6ef92dfda7cf87f36",
     "semantic_hash": "9eebc61edfd9a8e6ef92dfda7cf87f36"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\pubspec.yaml": {
-    "mtime": 1781996262.6662667,
-    "ast_hash": "42bab13ef0a7d120ce5c0eecac4ec003",
-    "semantic_hash": "42bab13ef0a7d120ce5c0eecac4ec003"
+  "apps/customer/pubspec.yaml": {
+    "mtime": 1782035572.5625608,
+    "ast_hash": "23a127d11a0a5cf681166b8bc555b94d",
+    "semantic_hash": ""
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\index.html": {
+  "apps/customer/web/index.html": {
     "mtime": 1781994265.887107,
     "ast_hash": "a081f6da18a5c85dd465d216ffdbf01a",
     "semantic_hash": "a081f6da18a5c85dd465d216ffdbf01a"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\README.md": {
+  "apps/technician/README.md": {
     "mtime": 1781994285.438413,
     "ast_hash": "bf455dcf0efb4dcca46f49cd09fe4e3c",
     "semantic_hash": "bf455dcf0efb4dcca46f49cd09fe4e3c"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\analysis_options.yaml": {
+  "apps/technician/analysis_options.yaml": {
     "mtime": 1781994352.5651178,
     "ast_hash": "10c9905e302b8015025c15eceff3083d",
     "semantic_hash": "10c9905e302b8015025c15eceff3083d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\README.md": {
+  "apps/technician/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md": {
     "mtime": 1781993252.189429,
     "ast_hash": "f7ee1b402881509d197f34963e569927",
     "semantic_hash": "f7ee1b402881509d197f34963e569927"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\pubspec.yaml": {
+  "apps/technician/pubspec.yaml": {
     "mtime": 1781994535.8871524,
     "ast_hash": "a20a212b0c8df179a195d108049e7f4b",
     "semantic_hash": "a20a212b0c8df179a195d108049e7f4b"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\docs\\superpowers\\specs\\2026-06-21-task-customer-v1-design.md": {
+  "docs/superpowers/specs/2026-06-21-task-customer-v1-design.md": {
     "mtime": 1781993114.886916,
     "ast_hash": "64d7a5be7f89fcef61a507378d30ba0a",
     "semantic_hash": "64d7a5be7f89fcef61a507378d30ba0a"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\melos.yaml": {
+  "melos.yaml": {
     "mtime": 1781993863.023754,
     "ast_hash": "cc9f950999797c20e5892ea3b39ce4c0",
     "semantic_hash": "cc9f950999797c20e5892ea3b39ce4c0"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_core\\analysis_options.yaml": {
+  "packages/task_core/analysis_options.yaml": {
     "mtime": 1781993892.2895527,
     "ast_hash": "10c9905e302b8015025c15eceff3083d",
     "semantic_hash": "10c9905e302b8015025c15eceff3083d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_core\\pubspec.yaml": {
+  "packages/task_core/pubspec.yaml": {
     "mtime": 1781993891.2972357,
     "ast_hash": "0c3fcc45880604052ffe41cbd76fa7f9",
     "semantic_hash": "0c3fcc45880604052ffe41cbd76fa7f9"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_data\\analysis_options.yaml": {
+  "packages/task_data/analysis_options.yaml": {
     "mtime": 1781994030.350827,
     "ast_hash": "10c9905e302b8015025c15eceff3083d",
     "semantic_hash": "10c9905e302b8015025c15eceff3083d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_data\\pubspec.yaml": {
+  "packages/task_data/pubspec.yaml": {
     "mtime": 1781994029.3783593,
     "ast_hash": "e3d3ba09fc27a500d7a1190547dd87d8",
     "semantic_hash": "e3d3ba09fc27a500d7a1190547dd87d8"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\analysis_options.yaml": {
+  "packages/task_design/analysis_options.yaml": {
     "mtime": 1781993989.7288687,
     "ast_hash": "10c9905e302b8015025c15eceff3083d",
     "semantic_hash": "10c9905e302b8015025c15eceff3083d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_design\\pubspec.yaml": {
-    "mtime": 1781993988.7942631,
-    "ast_hash": "1c84d57510eeb2ad33285f80246df540",
-    "semantic_hash": "1c84d57510eeb2ad33285f80246df540"
+  "packages/task_design/pubspec.yaml": {
+    "mtime": 1782055310.794643,
+    "ast_hash": "db0e5978854d898d7c6eb2659332a4c5",
+    "semantic_hash": ""
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_domain\\analysis_options.yaml": {
+  "packages/task_domain/analysis_options.yaml": {
     "mtime": 1781993935.6226976,
     "ast_hash": "10c9905e302b8015025c15eceff3083d",
     "semantic_hash": "10c9905e302b8015025c15eceff3083d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\packages\\task_domain\\pubspec.yaml": {
+  "packages/task_domain/pubspec.yaml": {
     "mtime": 1781993934.6827462,
     "ast_hash": "a61cfda6c57af8cb4283f0ac8bf96032",
     "semantic_hash": "a61cfda6c57af8cb4283f0ac8bf96032"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\pubspec.yaml": {
+  "pubspec.yaml": {
     "mtime": 1781994342.1974535,
     "ast_hash": "597f1aa8d86aa21b352e2b6eeb7d7320",
     "semantic_hash": "597f1aa8d86aa21b352e2b6eeb7d7320"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\favicon.png": {
+  "apps/admin/web/favicon.png": {
     "mtime": 1781993252.2254257,
     "ast_hash": "5dcef449791fa27946b3d35ad8803796",
     "semantic_hash": "5dcef449791fa27946b3d35ad8803796"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\icons\\Icon-192.png": {
+  "apps/admin/web/icons/Icon-192.png": {
     "mtime": 1781993252.2264235,
     "ast_hash": "ac9a721a12bbc803b44f645561ecb1e1",
     "semantic_hash": "ac9a721a12bbc803b44f645561ecb1e1"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\icons\\Icon-512.png": {
+  "apps/admin/web/icons/Icon-512.png": {
     "mtime": 1781993252.2264235,
     "ast_hash": "96e752610906ba2a93c65f8abe1645f1",
     "semantic_hash": "96e752610906ba2a93c65f8abe1645f1"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\icons\\Icon-maskable-192.png": {
+  "apps/admin/web/icons/Icon-maskable-192.png": {
     "mtime": 1781993521.4489336,
     "ast_hash": "c457ef57daa1d16f64b27b786ec2ea3c",
     "semantic_hash": "c457ef57daa1d16f64b27b786ec2ea3c"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\admin\\web\\icons\\Icon-maskable-512.png": {
+  "apps/admin/web/icons/Icon-maskable-512.png": {
     "mtime": 1781993521.4425676,
     "ast_hash": "301a7604d45b3e739efc881eb04896ea",
     "semantic_hash": "301a7604d45b3e739efc881eb04896ea"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png": {
+  "apps/customer/android/app/src/main/res/mipmap-hdpi/ic_launcher.png": {
     "mtime": 1781993252.1528935,
     "ast_hash": "13e9c72ec37fac220397aa819fa1ef2d",
     "semantic_hash": "13e9c72ec37fac220397aa819fa1ef2d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png": {
+  "apps/customer/android/app/src/main/res/mipmap-mdpi/ic_launcher.png": {
     "mtime": 1781993252.1548998,
     "ast_hash": "6270344430679711b81476e29878caa7",
     "semantic_hash": "6270344430679711b81476e29878caa7"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png": {
+  "apps/customer/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png": {
     "mtime": 1781993252.1558933,
     "ast_hash": "a0a8db5985280b3679d99a820ae2db79",
     "semantic_hash": "a0a8db5985280b3679d99a820ae2db79"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png": {
+  "apps/customer/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png": {
     "mtime": 1781993252.156893,
     "ast_hash": "afe1b655b9f32da22f9a4301bb8e6ba8",
     "semantic_hash": "afe1b655b9f32da22f9a4301bb8e6ba8"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png": {
+  "apps/customer/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png": {
     "mtime": 1781993252.1588943,
     "ast_hash": "57838d52c318faff743130c3fcfae0c6",
     "semantic_hash": "57838d52c318faff743130c3fcfae0c6"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\assets\\images\\task_logo.jpg": {
+  "apps/customer/assets/images/task_logo.jpg": {
     "mtime": 1781996139.394197,
     "ast_hash": "fb6e8318daf1d2f87f1303bfe25e23ab",
     "semantic_hash": "fb6e8318daf1d2f87f1303bfe25e23ab"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\assets\\images\\task_logo_light.jpg": {
+  "apps/customer/assets/images/task_logo_light.jpg": {
     "mtime": 1781996139.4543066,
     "ast_hash": "7afc87de7f31a06be3cfbdaab2e3a98b",
     "semantic_hash": "7afc87de7f31a06be3cfbdaab2e3a98b"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-1024x1024@1x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png": {
     "mtime": 1781993520.724605,
     "ast_hash": "c785f8932297af4acd5f5ccb7630f01c",
     "semantic_hash": "c785f8932297af4acd5f5ccb7630f01c"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-20x20@1x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png": {
     "mtime": 1781993520.7336051,
     "ast_hash": "a2f8558fb1d42514111fbbb19fb67314",
     "semantic_hash": "a2f8558fb1d42514111fbbb19fb67314"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-20x20@2x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png": {
     "mtime": 1781993520.7046044,
     "ast_hash": "2247a840b6ee72b8a069208af170e5b1",
     "semantic_hash": "2247a840b6ee72b8a069208af170e5b1"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-20x20@3x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png": {
     "mtime": 1781993520.7466128,
     "ast_hash": "1b3b1538136316263c7092951e923e9d",
     "semantic_hash": "1b3b1538136316263c7092951e923e9d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-29x29@1x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png": {
     "mtime": 1781993520.7634947,
     "ast_hash": "be8887071dd7ec39cb754d236aa9584f",
     "semantic_hash": "be8887071dd7ec39cb754d236aa9584f"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-29x29@2x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png": {
     "mtime": 1781993520.6537418,
     "ast_hash": "043119ef4faa026ff82bd03f241e5338",
     "semantic_hash": "043119ef4faa026ff82bd03f241e5338"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-29x29@3x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png": {
     "mtime": 1781993520.7426045,
     "ast_hash": "2b1452c4c1bda6177b4fbbb832df217f",
     "semantic_hash": "2b1452c4c1bda6177b4fbbb832df217f"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-40x40@1x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png": {
     "mtime": 1781993520.6650882,
     "ast_hash": "2247a840b6ee72b8a069208af170e5b1",
     "semantic_hash": "2247a840b6ee72b8a069208af170e5b1"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-40x40@2x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png": {
     "mtime": 1781993520.7586055,
     "ast_hash": "8245359312aea1b0d2412f79a07b0ca5",
     "semantic_hash": "8245359312aea1b0d2412f79a07b0ca5"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-40x40@3x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png": {
     "mtime": 1781993520.6790867,
     "ast_hash": "5b3c0902200ce596e9848f22e1f0fe0e",
     "semantic_hash": "5b3c0902200ce596e9848f22e1f0fe0e"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-60x60@2x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png": {
     "mtime": 1781993520.7136047,
     "ast_hash": "5b3c0902200ce596e9848f22e1f0fe0e",
     "semantic_hash": "5b3c0902200ce596e9848f22e1f0fe0e"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-60x60@3x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png": {
     "mtime": 1781993520.640743,
     "ast_hash": "e419d22a37bc40ba185aca1acb6d4ac6",
     "semantic_hash": "e419d22a37bc40ba185aca1acb6d4ac6"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-76x76@1x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png": {
     "mtime": 1781993520.6920888,
     "ast_hash": "36c0d7a7132bdde18898ffdfcfcdc4d2",
     "semantic_hash": "36c0d7a7132bdde18898ffdfcfcdc4d2"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-76x76@2x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png": {
     "mtime": 1781993520.8451698,
     "ast_hash": "643842917530acf4c5159ae851b0baf2",
     "semantic_hash": "643842917530acf4c5159ae851b0baf2"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-83.5x83.5@2x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png": {
     "mtime": 1781993520.752609,
     "ast_hash": "665cb5e3c5729da6d639d26eff47a503",
     "semantic_hash": "665cb5e3c5729da6d639d26eff47a503"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\LaunchImage.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png": {
     "mtime": 1781993520.633742,
     "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
     "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\LaunchImage@2x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png": {
     "mtime": 1781993520.6157436,
     "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
     "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\LaunchImage@3x.png": {
+  "apps/customer/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png": {
     "mtime": 1781993520.6037424,
     "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
     "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\favicon.png": {
+  "apps/customer/web/favicon.png": {
     "mtime": 1781993252.2254257,
     "ast_hash": "5dcef449791fa27946b3d35ad8803796",
     "semantic_hash": "5dcef449791fa27946b3d35ad8803796"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\icons\\Icon-192.png": {
+  "apps/customer/web/icons/Icon-192.png": {
     "mtime": 1781993252.2264235,
     "ast_hash": "ac9a721a12bbc803b44f645561ecb1e1",
     "semantic_hash": "ac9a721a12bbc803b44f645561ecb1e1"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\icons\\Icon-512.png": {
+  "apps/customer/web/icons/Icon-512.png": {
     "mtime": 1781993252.2264235,
     "ast_hash": "96e752610906ba2a93c65f8abe1645f1",
     "semantic_hash": "96e752610906ba2a93c65f8abe1645f1"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\icons\\Icon-maskable-192.png": {
+  "apps/customer/web/icons/Icon-maskable-192.png": {
     "mtime": 1781993521.4489336,
     "ast_hash": "c457ef57daa1d16f64b27b786ec2ea3c",
     "semantic_hash": "c457ef57daa1d16f64b27b786ec2ea3c"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\customer\\web\\icons\\Icon-maskable-512.png": {
+  "apps/customer/web/icons/Icon-maskable-512.png": {
     "mtime": 1781993521.4425676,
     "ast_hash": "301a7604d45b3e739efc881eb04896ea",
     "semantic_hash": "301a7604d45b3e739efc881eb04896ea"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png": {
+  "apps/technician/android/app/src/main/res/mipmap-hdpi/ic_launcher.png": {
     "mtime": 1781993252.1528935,
     "ast_hash": "13e9c72ec37fac220397aa819fa1ef2d",
     "semantic_hash": "13e9c72ec37fac220397aa819fa1ef2d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png": {
+  "apps/technician/android/app/src/main/res/mipmap-mdpi/ic_launcher.png": {
     "mtime": 1781993252.1548998,
     "ast_hash": "6270344430679711b81476e29878caa7",
     "semantic_hash": "6270344430679711b81476e29878caa7"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png": {
+  "apps/technician/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png": {
     "mtime": 1781993252.1558933,
     "ast_hash": "a0a8db5985280b3679d99a820ae2db79",
     "semantic_hash": "a0a8db5985280b3679d99a820ae2db79"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png": {
+  "apps/technician/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png": {
     "mtime": 1781993252.156893,
     "ast_hash": "afe1b655b9f32da22f9a4301bb8e6ba8",
     "semantic_hash": "afe1b655b9f32da22f9a4301bb8e6ba8"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png": {
+  "apps/technician/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png": {
     "mtime": 1781993252.1588943,
     "ast_hash": "57838d52c318faff743130c3fcfae0c6",
     "semantic_hash": "57838d52c318faff743130c3fcfae0c6"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-1024x1024@1x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png": {
     "mtime": 1781993520.724605,
     "ast_hash": "c785f8932297af4acd5f5ccb7630f01c",
     "semantic_hash": "c785f8932297af4acd5f5ccb7630f01c"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-20x20@1x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png": {
     "mtime": 1781993520.7336051,
     "ast_hash": "a2f8558fb1d42514111fbbb19fb67314",
     "semantic_hash": "a2f8558fb1d42514111fbbb19fb67314"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-20x20@2x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png": {
     "mtime": 1781993520.7046044,
     "ast_hash": "2247a840b6ee72b8a069208af170e5b1",
     "semantic_hash": "2247a840b6ee72b8a069208af170e5b1"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-20x20@3x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png": {
     "mtime": 1781993520.7466128,
     "ast_hash": "1b3b1538136316263c7092951e923e9d",
     "semantic_hash": "1b3b1538136316263c7092951e923e9d"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-29x29@1x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png": {
     "mtime": 1781993520.7634947,
     "ast_hash": "be8887071dd7ec39cb754d236aa9584f",
     "semantic_hash": "be8887071dd7ec39cb754d236aa9584f"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-29x29@2x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png": {
     "mtime": 1781993520.6537418,
     "ast_hash": "043119ef4faa026ff82bd03f241e5338",
     "semantic_hash": "043119ef4faa026ff82bd03f241e5338"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-29x29@3x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png": {
     "mtime": 1781993520.7426045,
     "ast_hash": "2b1452c4c1bda6177b4fbbb832df217f",
     "semantic_hash": "2b1452c4c1bda6177b4fbbb832df217f"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-40x40@1x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png": {
     "mtime": 1781993520.6650882,
     "ast_hash": "2247a840b6ee72b8a069208af170e5b1",
     "semantic_hash": "2247a840b6ee72b8a069208af170e5b1"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-40x40@2x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png": {
     "mtime": 1781993520.7586055,
     "ast_hash": "8245359312aea1b0d2412f79a07b0ca5",
     "semantic_hash": "8245359312aea1b0d2412f79a07b0ca5"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-40x40@3x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png": {
     "mtime": 1781993520.6790867,
     "ast_hash": "5b3c0902200ce596e9848f22e1f0fe0e",
     "semantic_hash": "5b3c0902200ce596e9848f22e1f0fe0e"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-60x60@2x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png": {
     "mtime": 1781993520.7136047,
     "ast_hash": "5b3c0902200ce596e9848f22e1f0fe0e",
     "semantic_hash": "5b3c0902200ce596e9848f22e1f0fe0e"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-60x60@3x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png": {
     "mtime": 1781993520.640743,
     "ast_hash": "e419d22a37bc40ba185aca1acb6d4ac6",
     "semantic_hash": "e419d22a37bc40ba185aca1acb6d4ac6"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-76x76@1x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png": {
     "mtime": 1781993520.6920888,
     "ast_hash": "36c0d7a7132bdde18898ffdfcfcdc4d2",
     "semantic_hash": "36c0d7a7132bdde18898ffdfcfcdc4d2"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-76x76@2x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png": {
     "mtime": 1781993520.8451698,
     "ast_hash": "643842917530acf4c5159ae851b0baf2",
     "semantic_hash": "643842917530acf4c5159ae851b0baf2"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\AppIcon.appiconset\\Icon-App-83.5x83.5@2x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png": {
     "mtime": 1781993520.752609,
     "ast_hash": "665cb5e3c5729da6d639d26eff47a503",
     "semantic_hash": "665cb5e3c5729da6d639d26eff47a503"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\LaunchImage.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png": {
     "mtime": 1781993520.633742,
     "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
     "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\LaunchImage@2x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png": {
     "mtime": 1781993520.6157436,
     "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
     "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
   },
-  "C:\\Users\\youss\\Documents\\Task App\\apps\\technician\\ios\\Runner\\Assets.xcassets\\LaunchImage.imageset\\LaunchImage@3x.png": {
+  "apps/technician/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png": {
     "mtime": 1781993520.6037424,
     "ast_hash": "978c1bee49d7ad5fc1a4d81099b13e18",
     "semantic_hash": "978c1bee49d7ad5fc1a4d81099b13e18"
+  },
+  ".agents/skills/remotion-best-practices/rules/assets/charts-bar-chart.tsx": {
+    "mtime": 1782048109.372303,
+    "ast_hash": "f77c314f6d6d2b4034e40c2a73f9cf13",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/assets/text-animations-typewriter.tsx": {
+    "mtime": 1782048109.372303,
+    "ast_hash": "c924d22f206d9d2cf341ac895f673691",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/assets/text-animations-word-highlight.tsx": {
+    "mtime": 1782048109.372303,
+    "ast_hash": "f81cfd35ae495452dcdb1f7e73794796",
+    "semantic_hash": ""
+  },
+  ".claude/settings.json": {
+    "mtime": 1782066355.5098603,
+    "ast_hash": "7bf81dca0376bde3a32244b82bc7cbc0",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/assets/charts-bar-chart.tsx": {
+    "mtime": 1782048109.372303,
+    "ast_hash": "f77c314f6d6d2b4034e40c2a73f9cf13",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/assets/text-animations-typewriter.tsx": {
+    "mtime": 1782048109.372303,
+    "ast_hash": "c924d22f206d9d2cf341ac895f673691",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/assets/text-animations-word-highlight.tsx": {
+    "mtime": 1782048109.372303,
+    "ast_hash": "f81cfd35ae495452dcdb1f7e73794796",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/app/firebase_init.dart": {
+    "mtime": 1782035154.3591912,
+    "ast_hash": "8f6bb005a9d45c0d4bd5a2f60ffe54a7",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/address/address_screen.dart": {
+    "mtime": 1782066249.402323,
+    "ast_hash": "25b73dd275f6743248425c93d16b171c",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/assistant/ai_chat_screen.dart": {
+    "mtime": 1782034188.9624212,
+    "ast_hash": "522ede293c0049f3c2375124830b1469",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/auth/auth_controller.dart": {
+    "mtime": 1782049717.2299554,
+    "ast_hash": "fe47fc37946270d1227917565e9695d5",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/auth/otp_verify_screen.dart": {
+    "mtime": 1782035300.0452974,
+    "ast_hash": "13a86cd84083e27c13f7a69e43d715b9",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/booking/asap_dispatch_screen.dart": {
+    "mtime": 1782066228.0094204,
+    "ast_hash": "25ce7a4a632541fb847ec8f62fd7c6a0",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/booking/booking_state.dart": {
+    "mtime": 1782065910.2128341,
+    "ast_hash": "43fddcd2d97eb89ae99a918916372b20",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/booking/quote_bids_screen.dart": {
+    "mtime": 1782066128.3040333,
+    "ast_hash": "a1d7d5399db005be1d7c2853e3e8fc5e",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/bookings/bookings_screen.dart": {
+    "mtime": 1782066089.604509,
+    "ast_hash": "8db94c9dd21e3e22acb681dfc6d00f58",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/home/home_screen.dart": {
+    "mtime": 1782066006.9502676,
+    "ast_hash": "7be7726299c970e521ed6833d15574c4",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/home/home_shell.dart": {
+    "mtime": 1782034106.1268973,
+    "ast_hash": "b8ba88855ecda176f4739f99d350f2bd",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/job/job_tracking_screen.dart": {
+    "mtime": 1782066192.4742298,
+    "ast_hash": "2c5d504c181917575d93cccb67d8ca43",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/marketplace/job_create_stub_screen.dart": {
+    "mtime": 1782065943.9648762,
+    "ast_hash": "c35e4a5831abf825cee8133120af10a0",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/marketplace/marketplace_providers.dart": {
+    "mtime": 1782055748.038528,
+    "ast_hash": "280c6ab27d389ba2fa5b20917ccd5eff",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/marketplace/mock_job_marketplace_repository.dart": {
+    "mtime": 1782055740.764513,
+    "ast_hash": "1f8e08c72b9e438c45ccbbb8229f02f1",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/payment/payment_screen.dart": {
+    "mtime": 1782066734.067315,
+    "ast_hash": "2e7fcb195035db0e6ff326a1d6e8cc48",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/profile/profile_screen.dart": {
+    "mtime": 1782034155.4631348,
+    "ast_hash": "f70abbb095f01196b77cf75494072bbf",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/review/rating_screen.dart": {
+    "mtime": 1782066149.1766336,
+    "ast_hash": "7f75092e00b3a89391715dec59ca56ee",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/services/technician_catalog.dart": {
+    "mtime": 1782065974.0690517,
+    "ast_hash": "305f186ab3b67939bcb1282f7a2455b5",
+    "semantic_hash": ""
+  },
+  "apps/customer/lib/features/wallet/wallet_screen.dart": {
+    "mtime": 1782034146.3207788,
+    "ast_hash": "3207edc4f90fe3a427840c7cfb629a63",
+    "semantic_hash": ""
+  },
+  "apps/customer/test/auth_state_provider_test.dart": {
+    "mtime": 1782049647.9331443,
+    "ast_hash": "4772a5d3dacada2d5cbc8b243fa1d0c4",
+    "semantic_hash": ""
+  },
+  "apps/customer/test/mock_job_marketplace_repository_test.dart": {
+    "mtime": 1782055672.1003728,
+    "ast_hash": "f6aa9cdb6e3424800309c9c0dcd7ee86",
+    "semantic_hash": ""
+  },
+  "packages/task_design/lib/src/theme/category_visuals.dart": {
+    "mtime": 1782055366.7499907,
+    "ast_hash": "34e529cf37924cdf533c8c03c7950902",
+    "semantic_hash": ""
+  },
+  "packages/task_design/lib/src/widgets/ambient_background.dart": {
+    "mtime": 1782031192.2353437,
+    "ast_hash": "a46df7cb808cac474b21da2f5d861f17",
+    "semantic_hash": ""
+  },
+  "packages/task_design/lib/src/widgets/glow_button.dart": {
+    "mtime": 1782031199.7586596,
+    "ast_hash": "c6e36ec057883f593be40fdf7fa6c663",
+    "semantic_hash": ""
+  },
+  "packages/task_design/lib/src/widgets/section_header.dart": {
+    "mtime": 1782031204.0666726,
+    "ast_hash": "b5e57952044c00fc253d8a7fd1f81f8e",
+    "semantic_hash": ""
+  },
+  "packages/task_design/lib/src/widgets/status_pill.dart": {
+    "mtime": 1782031208.858841,
+    "ast_hash": "0d2b833d5e33242519a36a5b64b6ab29",
+    "semantic_hash": ""
+  },
+  "packages/task_design/test/category_visuals_test.dart": {
+    "mtime": 1782055526.0465815,
+    "ast_hash": "b482d90f998ef4641c6a06bc499a0970",
+    "semantic_hash": ""
+  },
+  "packages/task_domain/lib/src/entities/job_category.dart": {
+    "mtime": 1782054375.8901832,
+    "ast_hash": "c871a18ce9d7498b515f1d28d8406547",
+    "semantic_hash": ""
+  },
+  "packages/task_domain/lib/src/entities/job_enums.dart": {
+    "mtime": 1782054379.3590941,
+    "ast_hash": "4574419337b6ca8c4eb621d93f5a0589",
+    "semantic_hash": ""
+  },
+  "packages/task_domain/lib/src/entities/job_request.dart": {
+    "mtime": 1782054600.9413903,
+    "ast_hash": "fd94426dd32303b8b0d5b0db7022e5f3",
+    "semantic_hash": ""
+  },
+  "packages/task_domain/lib/src/entities/job_request_draft.dart": {
+    "mtime": 1782055121.1106327,
+    "ast_hash": "212274c0e7284a2f23ad30f441b6f4c3",
+    "semantic_hash": ""
+  },
+  "packages/task_domain/lib/src/entities/offer.dart": {
+    "mtime": 1782054595.749169,
+    "ast_hash": "2ba91c49a2289c8ffcdb0ae9c486473b",
+    "semantic_hash": ""
+  },
+  "packages/task_domain/lib/src/repositories/job_marketplace_repository.dart": {
+    "mtime": 1782055133.4445221,
+    "ast_hash": "a0b72ceeb65e8ac74e52ca9d369e5aa4",
+    "semantic_hash": ""
+  },
+  "packages/task_domain/test/job_category_test.dart": {
+    "mtime": 1782054352.1562328,
+    "ast_hash": "351fc813c3b5d3cf7771b5571fc8d909",
+    "semantic_hash": ""
+  },
+  "packages/task_domain/test/job_request_draft_test.dart": {
+    "mtime": 1782055035.0980837,
+    "ast_hash": "15fc109bc086bfec2cde781ee751aabe",
+    "semantic_hash": ""
+  },
+  "packages/task_domain/test/job_request_test.dart": {
+    "mtime": 1782054582.4721875,
+    "ast_hash": "0ee2907fa436db619de32d8bf88b7b92",
+    "semantic_hash": ""
+  },
+  "packages/task_domain/test/offer_test.dart": {
+    "mtime": 1782054577.831411,
+    "ast_hash": "b23741b97012d82b201885ef273ed82e",
+    "semantic_hash": ""
+  },
+  "skills-lock.json": {
+    "mtime": 1782048110.6096807,
+    "ast_hash": "6208b21d5ddf9b0f624db610e8676706",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/SKILL.md": {
+    "mtime": 1782048109.3712976,
+    "ast_hash": "74cec3d55fc4ae0b77cccad224ed81aa",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/3d.md": {
+    "mtime": 1782048109.3712976,
+    "ast_hash": "106c8921e5cf97267f127d17802fe2f8",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/audio-visualization.md": {
+    "mtime": 1782048109.373299,
+    "ast_hash": "62c70158c2f57695fbfcc6552d485c93",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/audio.md": {
+    "mtime": 1782048109.373299,
+    "ast_hash": "7882f9086ad1ed65d40c7bb09fa61911",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/calculate-metadata.md": {
+    "mtime": 1782048109.3742998,
+    "ast_hash": "adce0db0c75869fb5267f3bdb60c5f6e",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/compositions.md": {
+    "mtime": 1782048109.3742998,
+    "ast_hash": "ea8becc3032a2a37ffef5e8a1a0b42b8",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/display-captions.md": {
+    "mtime": 1782048109.3742998,
+    "ast_hash": "1841269711eb1dcea20a5a2f578c2852",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/ffmpeg.md": {
+    "mtime": 1782048109.3753116,
+    "ast_hash": "20c0a668285fbafa1cbef072da4d9895",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/get-audio-duration.md": {
+    "mtime": 1782048109.3753116,
+    "ast_hash": "35415ede0f8e13892ade5f157de7935c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/get-video-dimensions.md": {
+    "mtime": 1782048109.3753116,
+    "ast_hash": "f9fb42a53589952580dfce643960f536",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/get-video-duration.md": {
+    "mtime": 1782048109.3753116,
+    "ast_hash": "9242ed2c997f6d4b3c638e8c98a88557",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/gifs.md": {
+    "mtime": 1782048109.3762994,
+    "ast_hash": "ffa640f7490d839d8913970432895893",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/google-fonts.md": {
+    "mtime": 1782048109.3762994,
+    "ast_hash": "3a9ecd466712a87b7346574592387410",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/html-in-canvas.md": {
+    "mtime": 1782048109.3762994,
+    "ast_hash": "ecb4e46fc070345091ae0947f3daef54",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/images.md": {
+    "mtime": 1782048109.3772962,
+    "ast_hash": "92e4a80500ec2bd0d3ce8af9bbf50aa6",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/import-srt-captions.md": {
+    "mtime": 1782048109.3772962,
+    "ast_hash": "4407a0791b9776587ae201a00a5a366d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/light-leaks.md": {
+    "mtime": 1782048109.3772962,
+    "ast_hash": "d2b46e159f19163d72955fe89373fd48",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/local-fonts.md": {
+    "mtime": 1782048109.3772962,
+    "ast_hash": "3c911cfe649c43f2723bd08836a752cd",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/lottie.md": {
+    "mtime": 1782048109.378299,
+    "ast_hash": "031738470e6efcbea966a547ff5a0435",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/maplibre.md": {
+    "mtime": 1782048109.378299,
+    "ast_hash": "2d82044d6d9e6fa2782f86f47b8a1041",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/measuring-dom-nodes.md": {
+    "mtime": 1782048109.378299,
+    "ast_hash": "075210f0388165cb4bf02a633368f5d4",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/measuring-text.md": {
+    "mtime": 1782048109.378299,
+    "ast_hash": "7ce16815edb752cb6e47444199f9b358",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/parameters.md": {
+    "mtime": 1782048109.378299,
+    "ast_hash": "479ff61d9d3beb96e793e8657f5f0bf0",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/sequencing.md": {
+    "mtime": 1782048109.3792987,
+    "ast_hash": "28992a021a55253d57c3b094f44c290a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/sfx.md": {
+    "mtime": 1782048109.3792987,
+    "ast_hash": "18a872b2d2629d67aa23840d2a668466",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/silence-detection.md": {
+    "mtime": 1782048109.3792987,
+    "ast_hash": "9e11667bd3e23e932da39a8cd6086368",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/subtitles.md": {
+    "mtime": 1782048109.3792987,
+    "ast_hash": "a2e387c99b6ef13efccac244b4370483",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/tailwind.md": {
+    "mtime": 1782048109.380306,
+    "ast_hash": "832040c4ada8ed81665c39b1bc3a9bc6",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/text-animations.md": {
+    "mtime": 1782048109.380306,
+    "ast_hash": "988097a225b964e9e8397317ba9d1100",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/timing.md": {
+    "mtime": 1782048109.380306,
+    "ast_hash": "575355128d74f048893b006163089d04",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/transcribe-captions.md": {
+    "mtime": 1782048109.380306,
+    "ast_hash": "ccc2ae6b2dcb7a813ef0197d8a7e742c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/transitions.md": {
+    "mtime": 1782048109.381301,
+    "ast_hash": "9fd6e0cdc93ecd2e8b0b7c9bc08192e1",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/transparent-videos.md": {
+    "mtime": 1782048109.381301,
+    "ast_hash": "011ecbd8c3a832584d52f995bb95b760",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/trimming.md": {
+    "mtime": 1782048109.381301,
+    "ast_hash": "6f8bbe4b1bbb4c7cb54a47413be120cb",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/videos.md": {
+    "mtime": 1782048109.381301,
+    "ast_hash": "9217da2638da0db0c5c4e8194de9f8d3",
+    "semantic_hash": ""
+  },
+  ".agents/skills/remotion-best-practices/rules/voiceover.md": {
+    "mtime": 1782048109.3822997,
+    "ast_hash": "91f4e8178256beafb915deb316adf9fb",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/SKILL.md": {
+    "mtime": 1782048109.3712976,
+    "ast_hash": "74cec3d55fc4ae0b77cccad224ed81aa",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/3d.md": {
+    "mtime": 1782048109.3712976,
+    "ast_hash": "106c8921e5cf97267f127d17802fe2f8",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/audio-visualization.md": {
+    "mtime": 1782048109.373299,
+    "ast_hash": "62c70158c2f57695fbfcc6552d485c93",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/audio.md": {
+    "mtime": 1782048109.373299,
+    "ast_hash": "7882f9086ad1ed65d40c7bb09fa61911",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/calculate-metadata.md": {
+    "mtime": 1782048109.3742998,
+    "ast_hash": "adce0db0c75869fb5267f3bdb60c5f6e",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/compositions.md": {
+    "mtime": 1782048109.3742998,
+    "ast_hash": "ea8becc3032a2a37ffef5e8a1a0b42b8",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/display-captions.md": {
+    "mtime": 1782048109.3742998,
+    "ast_hash": "1841269711eb1dcea20a5a2f578c2852",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/ffmpeg.md": {
+    "mtime": 1782048109.3753116,
+    "ast_hash": "20c0a668285fbafa1cbef072da4d9895",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/get-audio-duration.md": {
+    "mtime": 1782048109.3753116,
+    "ast_hash": "35415ede0f8e13892ade5f157de7935c",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/get-video-dimensions.md": {
+    "mtime": 1782048109.3753116,
+    "ast_hash": "f9fb42a53589952580dfce643960f536",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/get-video-duration.md": {
+    "mtime": 1782048109.3753116,
+    "ast_hash": "9242ed2c997f6d4b3c638e8c98a88557",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/gifs.md": {
+    "mtime": 1782048109.3762994,
+    "ast_hash": "ffa640f7490d839d8913970432895893",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/google-fonts.md": {
+    "mtime": 1782048109.3762994,
+    "ast_hash": "3a9ecd466712a87b7346574592387410",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/html-in-canvas.md": {
+    "mtime": 1782048109.3762994,
+    "ast_hash": "ecb4e46fc070345091ae0947f3daef54",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/images.md": {
+    "mtime": 1782048109.3772962,
+    "ast_hash": "92e4a80500ec2bd0d3ce8af9bbf50aa6",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/import-srt-captions.md": {
+    "mtime": 1782048109.3772962,
+    "ast_hash": "4407a0791b9776587ae201a00a5a366d",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/light-leaks.md": {
+    "mtime": 1782048109.3772962,
+    "ast_hash": "d2b46e159f19163d72955fe89373fd48",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/local-fonts.md": {
+    "mtime": 1782048109.3772962,
+    "ast_hash": "3c911cfe649c43f2723bd08836a752cd",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/lottie.md": {
+    "mtime": 1782048109.378299,
+    "ast_hash": "031738470e6efcbea966a547ff5a0435",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/maplibre.md": {
+    "mtime": 1782048109.378299,
+    "ast_hash": "2d82044d6d9e6fa2782f86f47b8a1041",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/measuring-dom-nodes.md": {
+    "mtime": 1782048109.378299,
+    "ast_hash": "075210f0388165cb4bf02a633368f5d4",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/measuring-text.md": {
+    "mtime": 1782048109.378299,
+    "ast_hash": "7ce16815edb752cb6e47444199f9b358",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/parameters.md": {
+    "mtime": 1782048109.378299,
+    "ast_hash": "479ff61d9d3beb96e793e8657f5f0bf0",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/sequencing.md": {
+    "mtime": 1782048109.3792987,
+    "ast_hash": "28992a021a55253d57c3b094f44c290a",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/sfx.md": {
+    "mtime": 1782048109.3792987,
+    "ast_hash": "18a872b2d2629d67aa23840d2a668466",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/silence-detection.md": {
+    "mtime": 1782048109.3792987,
+    "ast_hash": "9e11667bd3e23e932da39a8cd6086368",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/subtitles.md": {
+    "mtime": 1782048109.3792987,
+    "ast_hash": "a2e387c99b6ef13efccac244b4370483",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/tailwind.md": {
+    "mtime": 1782048109.380306,
+    "ast_hash": "832040c4ada8ed81665c39b1bc3a9bc6",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/text-animations.md": {
+    "mtime": 1782048109.380306,
+    "ast_hash": "988097a225b964e9e8397317ba9d1100",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/timing.md": {
+    "mtime": 1782048109.380306,
+    "ast_hash": "575355128d74f048893b006163089d04",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/transcribe-captions.md": {
+    "mtime": 1782048109.380306,
+    "ast_hash": "ccc2ae6b2dcb7a813ef0197d8a7e742c",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/transitions.md": {
+    "mtime": 1782048109.381301,
+    "ast_hash": "9fd6e0cdc93ecd2e8b0b7c9bc08192e1",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/transparent-videos.md": {
+    "mtime": 1782048109.381301,
+    "ast_hash": "011ecbd8c3a832584d52f995bb95b760",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/trimming.md": {
+    "mtime": 1782048109.381301,
+    "ast_hash": "6f8bbe4b1bbb4c7cb54a47413be120cb",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/videos.md": {
+    "mtime": 1782048109.381301,
+    "ast_hash": "9217da2638da0db0c5c4e8194de9f8d3",
+    "semantic_hash": ""
+  },
+  ".claude/skills/remotion-best-practices/rules/voiceover.md": {
+    "mtime": 1782048109.3822997,
+    "ast_hash": "91f4e8178256beafb915deb316adf9fb",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/progress.md": {
+    "mtime": 1782055865.184117,
+    "ast_hash": "a4dd92c137443e9be5491338a9eec827",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-1-brief.md": {
+    "mtime": 1782054329.2795646,
+    "ast_hash": "14ff33172b3d74b521371dfc22a8a6f1",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-1-report.md": {
+    "mtime": 1782054432.0043695,
+    "ast_hash": "7d0b79980cb474501f512b63e103ba2a",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-10-brief.md": {
+    "mtime": 1782055986.4064348,
+    "ast_hash": "80bef9e26066fce10503b9d797f82493",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-2-brief.md": {
+    "mtime": 1782054559.339118,
+    "ast_hash": "a440edb178e2dce1efd60bf196ee2c9a",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-2-report.md": {
+    "mtime": 1782054815.0998168,
+    "ast_hash": "57e24855be832d89eeab31d715875983",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-3-brief.md": {
+    "mtime": 1782055018.2718134,
+    "ast_hash": "ea1b5cb352cdc0f4e65d161748a89e2d",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-3-report.md": {
+    "mtime": 1782055174.967622,
+    "ast_hash": "0f0fd078d436da9b68e5c3304197f225",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-4-brief.md": {
+    "mtime": 1782055282.7145612,
+    "ast_hash": "85a41149b69c6d16da37f2255c7f449b",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-4-report.md": {
+    "mtime": 1782055572.5785801,
+    "ast_hash": "782978660b102e5365dec02e3dd2e793",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-5-brief.md": {
+    "mtime": 1782055624.2009194,
+    "ast_hash": "dc3faa9d6425542061690ef81140c174",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-5-report.md": {
+    "mtime": 1782055783.6973221,
+    "ast_hash": "c192972b7fe8a8f1a7a57dee12006751",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-6-brief.md": {
+    "mtime": 1782055984.0597732,
+    "ast_hash": "f347f48c955feec6ffdf220a71bea7ef",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-7-brief.md": {
+    "mtime": 1782055984.708418,
+    "ast_hash": "af1affdf82ecfc7a6571ad6a60821f28",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-8-brief.md": {
+    "mtime": 1782055985.3356733,
+    "ast_hash": "fbdd4d7bf5d1cd25090ee006f8a6baae",
+    "semantic_hash": ""
+  },
+  ".superpowers/sdd/task-9-brief.md": {
+    "mtime": 1782055985.8548026,
+    "ast_hash": "37cedb3268cc520a5924eb17d693c864",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1782066355.506841,
+    "ast_hash": "8a6643a420fdad6bfb583523bc6cef16",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-06-21-fixed-price-domain-pivot.md": {
+    "mtime": 1782053643.4918897,
+    "ast_hash": "6323d4164b6c5aea4137c36029ef9a83",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-06-21-uber-splash-auto-route.md": {
+    "mtime": 1782049333.6035123,
+    "ast_hash": "be499dbcc2046b2e714cc748c436ac08",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-06-21-fixed-price-domain-pivot-design.md": {
+    "mtime": 1782053075.0601854,
+    "ast_hash": "063dd0687abb7dec0379a262c5c556a2",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-06-21-uber-splash-auto-routing-design.md": {
+    "mtime": 1782048890.1209247,
+    "ast_hash": "a114392b8908974ab892395db78eec85",
+    "semantic_hash": ""
   }
 }

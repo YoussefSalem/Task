@@ -1,9 +1,15 @@
 import 'package:customer/features/address/address_screen.dart';
 import 'package:customer/features/assistant/ai_chat_screen.dart';
+import 'package:customer/features/auth/complete_profile_screen.dart';
 import 'package:customer/features/auth/otp_verify_screen.dart';
 import 'package:customer/features/auth/sign_in_screen.dart';
 import 'package:customer/features/booking/asap_dispatch_screen.dart';
+import 'package:customer/features/chat/chat_screen.dart';
+import 'package:customer/features/location/pick_location_screen.dart';
+import 'package:customer/features/matching/matching_screen.dart';
+import 'package:customer/features/marketplace/all_services_screen.dart';
 import 'package:customer/features/marketplace/job_create_stub_screen.dart';
+import 'package:customer/features/offers/offers_screen.dart';
 import 'package:customer/features/booking/quote_bids_screen.dart';
 import 'package:customer/features/bookings/bookings_screen.dart';
 import 'package:customer/features/home/home_screen.dart';
@@ -13,7 +19,7 @@ import 'package:customer/features/payment/payment_screen.dart';
 import 'package:customer/features/profile/profile_screen.dart';
 import 'package:customer/features/review/rating_screen.dart';
 import 'package:customer/features/splash/splash_screen.dart';
-import 'package:customer/features/wallet/wallet_screen.dart';
+import 'package:customer/features/messages/messages_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -46,6 +52,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           phone: state.uri.queryParameters['phone'] ?? 'your phone',
         ),
       ),
+      GoRoute(
+        path: CompleteProfileScreen.routePath,
+        name: CompleteProfileScreen.routeName,
+        builder: (context, state) => const CompleteProfileScreen(),
+      ),
 
       // Bottom-nav shell.
       StatefulShellRoute.indexedStack(
@@ -74,9 +85,9 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: <RouteBase>[
               GoRoute(
-                path: HomeShell.walletRoutePath,
-                name: HomeShell.walletRouteName,
-                builder: (context, state) => const WalletScreen(),
+                path: HomeShell.messagesRoutePath,
+                name: HomeShell.messagesRouteName,
+                builder: (context, state) => const MessagesScreen(),
               ),
             ],
           ),
@@ -93,6 +104,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
 
       // Booking journey (full-screen, above the shell).
+      GoRoute(
+        path: AllServicesScreen.routePath,
+        name: AllServicesScreen.routeName,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const AllServicesScreen(),
+      ),
       GoRoute(
         path: JobCreateStubScreen.routePath,
         name: JobCreateStubScreen.routeName,
@@ -134,7 +151,41 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AiChatScreen.routePath,
         parentNavigatorKey: _rootKey,
-        builder: (context, state) => const AiChatScreen(),
+        builder: (context, state) => AiChatScreen(
+          initialMessage: state.extra as String?,
+        ),
+      ),
+      GoRoute(
+        path: PickLocationScreen.routePath,
+        name: PickLocationScreen.routeName,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const PickLocationScreen(),
+      ),
+      GoRoute(
+        path: MatchingScreen.routePath,
+        name: MatchingScreen.routeName,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => MatchingScreen(
+          jobId: state.uri.queryParameters['jobId'],
+        ),
+      ),
+      GoRoute(
+        path: OffersScreen.routePath,
+        name: OffersScreen.routeName,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const OffersScreen(),
+      ),
+      GoRoute(
+        path: ChatScreen.routePath,
+        name: ChatScreen.routeName,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) {
+          final args = state.extra as ChatArgs;
+          return ChatScreen(
+            technicianId: args.technicianId,
+            technicianName: args.technicianName,
+          );
+        },
       ),
     ],
   );

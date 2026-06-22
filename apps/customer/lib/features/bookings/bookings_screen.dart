@@ -68,6 +68,7 @@ class BookingsScreen extends ConsumerWidget {
 
   Widget _card(BuildContext context, JobRequest job, TextTheme text,
       {VoidCallback? onTap}) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final (Color, IconData) badge = switch (job.status) {
       JobStatus.completed => (AppColors.success, Icons.check_circle),
       JobStatus.inProgress => (AppColors.primary, Icons.bolt),
@@ -76,52 +77,59 @@ class BookingsScreen extends ConsumerWidget {
     };
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
-      child: Material(
-        color: AppColors.surface.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-        child: InkWell(
-          onTap: onTap,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    color: categoryTint(job.category).withValues(alpha: 0.16),
-                    borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+          border: isDark ? null : Border.all(color: const Color(0x12000000)),
+        ),
+        child: Material(
+          color: isDark ? AppColors.surface.withValues(alpha: 0.5) : Colors.white,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+            child: Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: categoryTint(job.category).withValues(alpha: 0.16),
+                      borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+                    ),
+                    child: Icon(categoryIcon(job.category),
+                        color: categoryTint(job.category)),
                   ),
-                  child: Icon(categoryIcon(job.category),
-                      color: categoryTint(job.category)),
-                ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(job.title,
-                          style: text.titleSmall
-                              ?.copyWith(fontWeight: FontWeight.w700)),
-                      const SizedBox(height: 2),
-                      Text(job.category.displayLabel,
-                          style: text.bodySmall?.copyWith(
-                            color: AppColors.textSecondary
-                                .withValues(alpha: 0.6),
-                          )),
-                      const SizedBox(height: 6),
-                      StatusPill(
-                          label: job.status.name,
-                          tint: badge.$1,
-                          icon: badge.$2),
-                    ],
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(job.title,
+                            style: text.titleSmall
+                                ?.copyWith(fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 2),
+                        Text(job.category.displayLabel,
+                            style: text.bodySmall?.copyWith(
+                              color: isDark
+                                  ? AppColors.textSecondary.withValues(alpha: 0.6)
+                                  : AppColors.textSecondaryLight,
+                            )),
+                        const SizedBox(height: 6),
+                        StatusPill(
+                            label: job.status.name,
+                            tint: badge.$1,
+                            icon: badge.$2),
+                      ],
+                    ),
                   ),
-                ),
-                Text('${job.settledPrice} EGP',
-                    style: text.titleSmall
-                        ?.copyWith(fontWeight: FontWeight.w700)),
-              ],
+                  Text('${job.settledPrice} EGP',
+                      style: text.titleSmall
+                          ?.copyWith(fontWeight: FontWeight.w700)),
+                ],
+              ),
             ),
           ),
         ),
@@ -130,18 +138,24 @@ class BookingsScreen extends ConsumerWidget {
   }
 
   Widget _empty(TextTheme text) {
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.xl),
-      alignment: Alignment.center,
-      child: Column(
-        children: <Widget>[
-          Icon(Icons.receipt_long_rounded,
-              size: 44, color: AppColors.textSecondary.withValues(alpha: 0.4)),
-          const SizedBox(height: AppSpacing.md),
-          Text('No past jobs yet',
-              style: text.titleSmall?.copyWith(fontWeight: FontWeight.w600)),
-        ],
-      ),
-    );
+    return Builder(builder: (context) {
+      final bool isDark = Theme.of(context).brightness == Brightness.dark;
+      return Container(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        alignment: Alignment.center,
+        child: Column(
+          children: <Widget>[
+            Icon(Icons.receipt_long_rounded,
+                size: 44,
+                color: isDark
+                    ? AppColors.textSecondary.withValues(alpha: 0.4)
+                    : AppColors.textSecondaryLight.withValues(alpha: 0.5)),
+            const SizedBox(height: AppSpacing.md),
+            Text('No past jobs yet',
+                style: text.titleSmall?.copyWith(fontWeight: FontWeight.w600)),
+          ],
+        ),
+      );
+    });
   }
 }
