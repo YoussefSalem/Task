@@ -325,7 +325,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get confirmedPreparingToHeadOut => 'Confirmed — preparing to head out';
 
   @override
-  String get confirmed => 'Confirmed';
+  String get confirmed => 'Confirmed — preparing to head out';
 
   @override
   String get constructionAndFinishing => 'Construction & Finishing';
@@ -749,4 +749,115 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get history => 'History';
+
+  @override
+  String helloUsername(Object username) {
+    return 'Hello, $username';
+  }
+
+  @override
+  String arrrivingIn(Object category, Object minutes) {
+    return '$category arriving in $minutes min';
+  }
+
+  @override
+  String isWorking(Object category) {
+    return '$category is working';
+  }
+
+  @override
+  String get waitingForApproval => 'Waiting for your approval';
+
+  @override
+  String get jobActive => 'Job active';
+
+  @override
+  String get addAddress => 'Add address';
+
+  @override
+  String get describeTheProblem => 'Describe the problem';
+
+  @override
+  String get selectCategory => 'Select category';
+
+  @override
+  String get enterYourPrice => 'Enter your price in EGP…';
+
+  @override
+  String get thankYou => 'Thank you for booking with Task!';
+
+  @override
+  String get viewYourBooking => 'View your booking';
+
+  @override
+  String get bookingNumber => 'Booking number';
+
+  @override
+  String get completeProfile => 'Complete your profile';
+
+  @override
+  String get pleaseAddYourName => 'Please add your name to continue';
+
+  @override
+  String get phoneNumber => 'Phone number';
+
+  @override
+  String get enterOtp => 'Enter the OTP sent to your phone';
+
+  @override
+  String get resendCode => 'Resend code';
+
+  @override
+  String get codeExpires => 'Code expires in';
+
+  @override
+  String get verifyOtp => 'Verify OTP';
+
+  @override
+  String get selectPaymentMethod => 'Select payment method';
+
+  @override
+  String get cashPayment => 'Cash on arrival';
+
+  @override
+  String get cardPayment => 'Pay with card';
+
+  @override
+  String get confirmPayment => 'Confirm payment';
+
+  @override
+  String get enterCardDetails => 'Enter your card details';
+
+  @override
+  String get cardNumber => 'Card number';
+
+  @override
+  String get expiryDate => 'Expiry date';
+
+  @override
+  String get cvv => 'CVV';
+
+  @override
+  String get paymentSuccessful => 'Payment successful';
+
+  @override
+  String get paymentFailed => 'Payment failed. Please try again.';
+
+  @override
+  String get currentLocation => 'Current location';
+
+  @override
+  String get bookNow => 'Book now';
+
+  @override
+  String get estimatedPrice => 'Estimated price';
+
+  @override
+  String get totalPrice => 'Total price';
+
+  @override
+  String get tax => 'Tax';
+
+  @override
+  String get discount => 'Discount';
 }

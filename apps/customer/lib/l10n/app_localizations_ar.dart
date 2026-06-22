@@ -324,7 +324,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get confirmedPreparingToHeadOut => 'تم — بينتظر يطلع';
 
   @override
-  String get confirmed => 'تم';
+  String get confirmed => 'تم — بينتظر يطلع';
 
   @override
   String get constructionAndFinishing => 'البناء والتشطيب';
@@ -746,4 +746,115 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get history => 'السجل';
+
+  @override
+  String helloUsername(Object username) {
+    return 'أهلا، $username';
+  }
+
+  @override
+  String arrrivingIn(Object category, Object minutes) {
+    return '$category بيوصل في $minutes دقيقة';
+  }
+
+  @override
+  String isWorking(Object category) {
+    return '$category بشتغل دلوقتي';
+  }
+
+  @override
+  String get waitingForApproval => 'في انتظار موافقتك';
+
+  @override
+  String get jobActive => 'الشغل نشيط';
+
+  @override
+  String get addAddress => 'ضيف عنوان';
+
+  @override
+  String get describeTheProblem => 'اكتب المشكلة';
+
+  @override
+  String get selectCategory => 'اختار القسم';
+
+  @override
+  String get enterYourPrice => 'ادخل السعر بالجنيه…';
+
+  @override
+  String get thankYou => 'شكرا للحجز مع Task!';
+
+  @override
+  String get viewYourBooking => 'شوف الحجز بتاعك';
+
+  @override
+  String get bookingNumber => 'رقم الحجز';
+
+  @override
+  String get completeProfile => 'ملّي ملفك';
+
+  @override
+  String get pleaseAddYourName => 'من فضلك ضيف اسمك عشان نكمل';
+
+  @override
+  String get phoneNumber => 'رقم التليفون';
+
+  @override
+  String get enterOtp => 'ادخل الكود المرسول على تليفونك';
+
+  @override
+  String get resendCode => 'ابعت الكود مرة تانية';
+
+  @override
+  String get codeExpires => 'الكود بينتهي في';
+
+  @override
+  String get verifyOtp => 'تحقق من الكود';
+
+  @override
+  String get selectPaymentMethod => 'اختار طريقة الدفع';
+
+  @override
+  String get cashPayment => 'فلوس عند الاستقبال';
+
+  @override
+  String get cardPayment => 'ادفع ببطاقة';
+
+  @override
+  String get confirmPayment => 'وافق على الدفع';
+
+  @override
+  String get enterCardDetails => 'ادخل بيانات البطاقة';
+
+  @override
+  String get cardNumber => 'رقم البطاقة';
+
+  @override
+  String get expiryDate => 'تاريخ الانتهاء';
+
+  @override
+  String get cvv => 'رمز الحماية';
+
+  @override
+  String get paymentSuccessful => 'الدفع تم بنجاح';
+
+  @override
+  String get paymentFailed => 'الدفع فشل. حاول مرة تانية من فضلك.';
+
+  @override
+  String get currentLocation => 'المكان الحالي';
+
+  @override
+  String get bookNow => 'احجز دلوقتي';
+
+  @override
+  String get estimatedPrice => 'السعر المتوقع';
+
+  @override
+  String get totalPrice => 'السعر النهائي';
+
+  @override
+  String get tax => 'الضريبة';
+
+  @override
+  String get discount => 'خصم';
 }

@@ -719,7 +719,7 @@ abstract class AppLocalizations {
   /// No description provided for @confirmed.
   ///
   /// In en, this message translates to:
-  /// **'Confirmed'**
+  /// **'Confirmed — preparing to head out'**
   String get confirmed;
 
   /// No description provided for @constructionAndFinishing.
@@ -1543,6 +1543,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'History'**
   String get history;
+
+  /// No description provided for @helloUsername.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {username}'**
+  String helloUsername(Object username);
+
+  /// No description provided for @arrrivingIn.
+  ///
+  /// In en, this message translates to:
+  /// **'{category} arriving in {minutes} min'**
+  String arrrivingIn(Object category, Object minutes);
+
+  /// No description provided for @isWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'{category} is working'**
+  String isWorking(Object category);
+
+  /// No description provided for @waitingForApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for your approval'**
+  String get waitingForApproval;
+
+  /// No description provided for @jobActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Job active'**
+  String get jobActive;
+
+  /// No description provided for @addAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Add address'**
+  String get addAddress;
+
+  /// No description provided for @describeTheProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the problem'**
+  String get describeTheProblem;
+
+  /// No description provided for @selectCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select category'**
+  String get selectCategory;
+
+  /// No description provided for @enterYourPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your price in EGP…'**
+  String get enterYourPrice;
+
+  /// No description provided for @thankYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for booking with Task!'**
+  String get thankYou;
+
+  /// No description provided for @viewYourBooking.
+  ///
+  /// In en, this message translates to:
+  /// **'View your booking'**
+  String get viewYourBooking;
+
+  /// No description provided for @bookingNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking number'**
+  String get bookingNumber;
+
+  /// No description provided for @completeProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your profile'**
+  String get completeProfile;
+
+  /// No description provided for @pleaseAddYourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please add your name to continue'**
+  String get pleaseAddYourName;
+
+  /// No description provided for @phoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get phoneNumber;
+
+  /// No description provided for @enterOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the OTP sent to your phone'**
+  String get enterOtp;
+
+  /// No description provided for @resendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get resendCode;
+
+  /// No description provided for @codeExpires.
+  ///
+  /// In en, this message translates to:
+  /// **'Code expires in'**
+  String get codeExpires;
+
+  /// No description provided for @verifyOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify OTP'**
+  String get verifyOtp;
+
+  /// No description provided for @selectPaymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Select payment method'**
+  String get selectPaymentMethod;
+
+  /// No description provided for @cashPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash on arrival'**
+  String get cashPayment;
+
+  /// No description provided for @cardPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with card'**
+  String get cardPayment;
+
+  /// No description provided for @confirmPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm payment'**
+  String get confirmPayment;
+
+  /// No description provided for @enterCardDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your card details'**
+  String get enterCardDetails;
+
+  /// No description provided for @cardNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Card number'**
+  String get cardNumber;
+
+  /// No description provided for @expiryDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiry date'**
+  String get expiryDate;
+
+  /// No description provided for @cvv.
+  ///
+  /// In en, this message translates to:
+  /// **'CVV'**
+  String get cvv;
+
+  /// No description provided for @paymentSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment successful'**
+  String get paymentSuccessful;
+
+  /// No description provided for @paymentFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment failed. Please try again.'**
+  String get paymentFailed;
+
+  /// No description provided for @currentLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Current location'**
+  String get currentLocation;
+
+  /// No description provided for @bookNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Book now'**
+  String get bookNow;
+
+  /// No description provided for @estimatedPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated price'**
+  String get estimatedPrice;
+
+  /// No description provided for @totalPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Total price'**
+  String get totalPrice;
+
+  /// No description provided for @tax.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax'**
+  String get tax;
+
+  /// No description provided for @discount.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get discount;
 }
 
 class _AppLocalizationsDelegate
