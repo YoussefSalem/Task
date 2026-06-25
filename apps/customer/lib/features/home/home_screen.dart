@@ -17,6 +17,8 @@ import 'home_shell.dart';
 import '../marketplace/all_services_screen.dart';
 import '../marketplace/job_create_stub_screen.dart';
 import '../marketplace/marketplace_providers.dart';
+import '../auth/auth_controller.dart';
+import '../services/category_l10n.dart';
 import '../services/technician_catalog.dart';
 
 /// Home dashboard. The hero is the AI request flow - describe a problem, set
@@ -31,13 +33,6 @@ class HomeScreen extends ConsumerWidget {
     JobCategory.cleaning, JobCategory.carpentry, JobCategory.painting,
     JobCategory.satelliteInstallation, JobCategory.smartHome,
   ];
-
-  // Short, grid-friendly labels (the domain labels run long for two ids).
-  static String _shortLabel(JobCategory c) => switch (c) {
-        JobCategory.satelliteInstallation => 'Satellite',
-        JobCategory.smartHome => 'Smart Home',
-        _ => c.displayLabel,
-      };
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -106,22 +101,25 @@ const double _kBarClearance = 120;
 // Top bar
 // ─────────────────────────────────────────────────────────────────────────
 
-class _TopBar extends StatelessWidget {
+class _TopBar extends ConsumerWidget {
   const _TopBar({required this.text});
   final TextTheme text;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AppLocalizations l = AppLocalizations.of(context);
+    final user = ref.watch(authStateProvider).valueOrNull;
+    final String displayName = user?.displayName?.split(' ').first.trim() ?? l.demoUserName;
     return Row(
       children: <Widget>[
         Expanded(
-          child: Text('Hello, Ahmed',
+          child: Text(l.helloUsername(displayName),
               style: text.headlineSmall
                   ?.copyWith(fontWeight: FontWeight.w800)),
         ),
         _CircleButton(
           icon: Icons.notifications_none_rounded,
-          label: 'Notifications',
+          label: l.notifications,
           showDot: true,
           onTap: () {},
         ),
@@ -129,7 +127,7 @@ class _TopBar extends StatelessWidget {
         GestureDetector(
           onTap: () => context.go(HomeShell.profileRoutePath),
           child: Semantics(
-            label: 'Your profile',
+            label: l.yourProfile,
             button: true,
             child: Container(
               height: 46,
@@ -138,8 +136,8 @@ class _TopBar extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: AppColors.primary, width: 2),
               ),
-              child: const ClipOval(
-                child: _Avatar(seed: 'ahmed-user', initials: 'A'),
+              child: ClipOval(
+                child: _Avatar(seed: 'ahmed-user', initials: l.demoUserName.substring(0, 1)),
               ),
             ),
           ),
@@ -267,7 +265,7 @@ class _LocationBar extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('Service at',
+                  Text(AppLocalizations.of(context).serviceAt,
                       style: text.labelSmall?.copyWith(
                         color: secondary,
                         fontWeight: FontWeight.w600,
@@ -303,9 +301,10 @@ class _AskAiHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextTheme text = Theme.of(context).textTheme;
+    final AppLocalizations l = AppLocalizations.of(context);
     return Semantics(
       button: true,
-      label: 'Describe your problem to the AI assistant and set your price',
+      label: l.describeYourProblemToAi,
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppSpacing.radiusLg + 6),
@@ -360,7 +359,7 @@ class _AskAiHero extends StatelessWidget {
                                     color: Colors.white, size: 18),
                               ),
                               const SizedBox(width: AppSpacing.sm),
-                              Text('AI Assistant',
+                              Text(l.aiAssistant,
                                   style: text.labelLarge?.copyWith(
                                     color: Colors.white.withValues(alpha: 0.9),
                                     fontWeight: FontWeight.w700,
@@ -371,7 +370,7 @@ class _AskAiHero extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: AppSpacing.lg),
-                          Text('What needs fixing?',
+                          Text(l.whatNeedsFixing,
                               style: text.headlineSmall?.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w800,
@@ -379,8 +378,7 @@ class _AskAiHero extends StatelessWidget {
                               )),
                           const SizedBox(height: 6),
                           Text(
-                            "Describe it in your words — I'll line up the right "
-                            "pro. You decide the price.",
+                            l.describeItInYourWords,
                             style: text.bodyMedium?.copyWith(
                               color: Colors.white.withValues(alpha: 0.82),
                               height: 1.35,
@@ -420,7 +418,7 @@ class _PriceTag extends StatelessWidget {
         children: <Widget>[
           const Icon(Icons.sell_rounded, size: 13, color: Colors.white),
           const SizedBox(width: 5),
-          Text('You set the price',
+          Text(AppLocalizations.of(context).youSetThePrice,
               style: text.labelSmall?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -442,12 +440,7 @@ class _FauxInput extends StatefulWidget {
 
 class _FauxInputState extends State<_FauxInput>
     with SingleTickerProviderStateMixin {
-  static const List<String> _examples = <String>[
-    'My AC is leaking water…',
-    'Power keeps tripping…',
-    'Need a deep clean this weekend…',
-    'Kitchen sink is blocked…',
-  ];
+  List<String> _examples = const <String>[''];
   int _i = 0;
   int _charCount = 0;
   Timer? _typeTimer;
@@ -479,6 +472,14 @@ class _FauxInputState extends State<_FauxInput>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final AppLocalizations l = AppLocalizations.of(context);
+    _examples = <String>[
+      l.myAcIsLeakingWater,
+      l.powerKeepsTripping,
+      l.needDeepCleanWeekend,
+      l.kitchenSinkIsBlocked,
+    ];
+    if (_i >= _examples.length) _i = 0;
     _reduceMotion =
         MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     if (!_focused) {
@@ -578,7 +579,7 @@ class _FauxInputState extends State<_FauxInput>
                     fontWeight: FontWeight.w500,
                   ),
                   decoration: InputDecoration(
-                    hintText: showTypewriter ? '' : 'Describe your problem...',
+                    hintText: showTypewriter ? '' : AppLocalizations.of(context).describeYourProblem,
                     hintStyle: widget.text.bodyMedium?.copyWith(
                       color: const Color(0xFF9CA3AF),
                       fontWeight: FontWeight.w400,
@@ -703,28 +704,28 @@ class _BannerData {
   final String? badge;
 }
 
-const List<_BannerData> _banners = <_BannerData>[
-  _BannerData(
-    headline: 'Summer AC Check-up',
-    sub: 'Book a full AC service before the heat hits - verified pros, same-day slots.',
-    gradient: [Color(0xFF0EA5E9), Color(0xFF0369A1)],
-    icon: Icons.ac_unit_rounded,
-    badge: 'LIMITED',
-  ),
-  _BannerData(
-    headline: 'Refer & Earn 50 EGP',
-    sub: 'Share your code with friends - you both get 50 EGP credit on your next booking.',
-    gradient: [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
-    icon: Icons.card_giftcard_rounded,
-    badge: 'NEW',
-  ),
-  _BannerData(
-    headline: 'Ramadan Deep Clean',
-    sub: 'Professional whole-home cleaning packages - book now, pay after.',
-    gradient: [Color(0xFF10B981), Color(0xFF047857)],
-    icon: Icons.cleaning_services_rounded,
-  ),
-];
+List<_BannerData> _bannersFor(AppLocalizations l) => <_BannerData>[
+      _BannerData(
+        headline: l.summerAcCheckup,
+        sub: l.bookFullAcService,
+        gradient: const [Color(0xFF0EA5E9), Color(0xFF0369A1)],
+        icon: Icons.ac_unit_rounded,
+        badge: l.badgeLimited,
+      ),
+      _BannerData(
+        headline: l.referAndEarn,
+        sub: l.shareYourCode,
+        gradient: const [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
+        icon: Icons.card_giftcard_rounded,
+        badge: l.newTag,
+      ),
+      _BannerData(
+        headline: l.ramadanDeepClean,
+        sub: l.professionalWholeHomeCleaning,
+        gradient: const [Color(0xFF10B981), Color(0xFF047857)],
+        icon: Icons.cleaning_services_rounded,
+      ),
+    ];
 
 class _HeroBannerCarousel extends StatefulWidget {
   const _HeroBannerCarousel();
@@ -737,10 +738,13 @@ class _HeroBannerCarouselState extends State<_HeroBannerCarousel> {
   final PageController _page = PageController(viewportFraction: 1.0);
   int _current = 0;
   Timer? _autoScroll;
+  List<_BannerData> _banners = const <_BannerData>[];
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _banners = _bannersFor(AppLocalizations.of(context));
+    if (_current >= _banners.length) _current = 0;
     final reduce = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     _autoScroll?.cancel();
     if (!reduce) {
@@ -875,6 +879,7 @@ class _TrustStrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations l = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
       decoration: BoxDecoration(
@@ -884,21 +889,21 @@ class _TrustStrip extends StatelessWidget {
           color: isDark ? Colors.white.withValues(alpha: 0.06) : const Color(0x12000000),
         ),
       ),
-      child: const Row(
+      child: Row(
         children: <Widget>[
           Expanded(
             child: _TrustStat(
-                value: '1,200+', label: 'Verified pros', icon: Icons.verified_rounded),
+                value: '1,200+', label: l.verifiedPros, icon: Icons.verified_rounded),
           ),
-          _StatDivider(),
+          const _StatDivider(),
           Expanded(
             child: _TrustStat(
-                value: '4.9', label: 'Avg rating', icon: Icons.star_rounded),
+                value: '4.9', label: l.avgRating, icon: Icons.star_rounded),
           ),
-          _StatDivider(),
+          const _StatDivider(),
           Expanded(
             child: _TrustStat(
-                value: '~30m', label: 'Avg arrival', icon: Icons.bolt_rounded),
+                value: '~30m', label: l.avgArrival, icon: Icons.bolt_rounded),
           ),
         ],
       ),
@@ -975,38 +980,38 @@ class _PopularItem {
   final String bookings;
 }
 
-const List<_PopularItem> _popularItems = <_PopularItem>[
-  _PopularItem(
-    category: JobCategory.ac,
-    label: 'AC Deep Clean',
-    price: 'From 250 EGP',
-    bookings: '2.4k booked',
-  ),
-  _PopularItem(
-    category: JobCategory.plumbing,
-    label: 'Leak Repair',
-    price: 'From 150 EGP',
-    bookings: '1.8k booked',
-  ),
-  _PopularItem(
-    category: JobCategory.electrical,
-    label: 'Outlet Install',
-    price: 'From 120 EGP',
-    bookings: '1.2k booked',
-  ),
-  _PopularItem(
-    category: JobCategory.cleaning,
-    label: 'Full Home Clean',
-    price: 'From 400 EGP',
-    bookings: '3.1k booked',
-  ),
-  _PopularItem(
-    category: JobCategory.painting,
-    label: 'Room Repaint',
-    price: 'From 600 EGP',
-    bookings: '900 booked',
-  ),
-];
+List<_PopularItem> _popularItemsFor(AppLocalizations l) => <_PopularItem>[
+      _PopularItem(
+        category: JobCategory.ac,
+        label: l.acDeepClean,
+        price: l.from250Egp,
+        bookings: '2.4k ${l.booked}',
+      ),
+      _PopularItem(
+        category: JobCategory.plumbing,
+        label: l.leakRepair,
+        price: l.from150Egp,
+        bookings: '1.8k ${l.booked}',
+      ),
+      _PopularItem(
+        category: JobCategory.electrical,
+        label: l.outletInstall,
+        price: l.from120Egp,
+        bookings: '1.2k ${l.booked}',
+      ),
+      _PopularItem(
+        category: JobCategory.cleaning,
+        label: l.fullHomeClean,
+        price: l.from400Egp,
+        bookings: '3.1k ${l.booked}',
+      ),
+      _PopularItem(
+        category: JobCategory.painting,
+        label: l.roomRepaint,
+        price: l.from600Egp,
+        bookings: '900 ${l.booked}',
+      ),
+    ];
 
 class _PopularServices extends StatelessWidget {
   const _PopularServices({required this.onTap});
@@ -1015,10 +1020,12 @@ class _PopularServices extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
+    final AppLocalizations l = AppLocalizations.of(context);
+    final List<_PopularItem> items = _popularItemsFor(l);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const SectionHeader(title: 'Popular in your area'),
+        SectionHeader(title: l.popularInYourArea),
         const SizedBox(height: AppSpacing.lg),
         SizedBox(
           height: 130,
@@ -1026,10 +1033,10 @@ class _PopularServices extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             clipBehavior: Clip.none,
             padding: EdgeInsets.zero,
-            itemCount: _popularItems.length,
+            itemCount: items.length,
             separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
             itemBuilder: (context, i) {
-              final item = _popularItems[i];
+              final item = items[i];
               final tint = categoryTint(item.category);
               final bool isDark = Theme.of(context).brightness == Brightness.dark;
               return GestureDetector(
@@ -1105,6 +1112,7 @@ class _CategoryGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -1114,8 +1122,8 @@ class _CategoryGrid extends StatelessWidget {
       childAspectRatio: 0.78,
       children: order
           .map((JobCategory c) => _CategoryTile(
-                label: HomeScreen._shortLabel(c),
-                fullLabel: c.displayLabel,
+                label: categoryLabel(c, l),
+                fullLabel: categoryLabel(c, l),
                 icon: categoryIcon(c),
                 tint: categoryTint(c),
                 onTap: () => onTap(c),
@@ -1203,16 +1211,17 @@ class _TopProsCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Technician> pros = technicians(AppLocalizations.of(context));
     return SizedBox(
       height: 184,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         clipBehavior: Clip.none,
         padding: EdgeInsets.zero,
-        itemCount: kTechnicians.length,
+        itemCount: pros.length,
         separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
         itemBuilder: (BuildContext context, int i) {
-          final Technician t = kTechnicians[i];
+          final Technician t = pros[i];
           return _ProCard(tech: t, onTap: () => onTap(t));
         },
       ),
@@ -1326,9 +1335,9 @@ class _ProCard extends StatelessWidget {
                 const Spacer(),
                 Row(
                   children: <Widget>[
-                    StatusPill(label: tech.badge.label, tint: tech.badge.tint),
+                    StatusPill(label: tech.badge.label(AppLocalizations.of(context)), tint: tech.badge.tint),
                     const Spacer(),
-                    Text('${tech.hourlyRate} EGP/hr',
+                    Text('${tech.hourlyRate} ${AppLocalizations.of(context).egpPerHour}',
                         style: text.labelMedium?.copyWith(
                           fontWeight: FontWeight.w700,
                           fontFeatures: const <FontFeature>[
@@ -1362,6 +1371,7 @@ class _ActiveSearchCard extends ConsumerWidget {
     final bool hasOffers = search.offersReady;
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final TextTheme text = Theme.of(context).textTheme;
+    final AppLocalizations l = AppLocalizations.of(context);
 
     void navigate() {
       if (hasOffers) {
@@ -1396,7 +1406,7 @@ class _ActiveSearchCard extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      hasOffers ? 'Offers received!' : 'Searching for pros…',
+                      hasOffers ? l.offersReceived : l.searchingForPros,
                       style: text.titleSmall?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: hasOffers ? AppColors.success : AppColors.primary,
@@ -1405,8 +1415,8 @@ class _ActiveSearchCard extends ConsumerWidget {
                     const SizedBox(height: 2),
                     Text(
                       hasOffers
-                          ? 'Tap to review and hire a technician'
-                          : 'Tap to view live search progress',
+                          ? l.tapToReviewHire
+                          : l.tapToViewProgress,
                       style: text.bodySmall?.copyWith(
                         color: isDark
                             ? AppColors.textSecondary.withValues(alpha: 0.7)

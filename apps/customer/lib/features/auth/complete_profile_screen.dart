@@ -1,5 +1,6 @@
 import 'package:customer/l10n/app_localizations.dart';
 import 'package:customer/features/home/home_shell.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,13 +37,15 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
     super.dispose();
   }
 
-  String? _requiredValidator(String? v) =>
-      (v == null || v.trim().isEmpty) ? 'Required' : null;
+  String? _requiredValidator(String? v) => (v == null || v.trim().isEmpty)
+      ? AppLocalizations.of(context).requiredField
+      : null;
 
   String? _emailValidator(String? v) {
-    if (v == null || v.trim().isEmpty) return 'Required';
+    final AppLocalizations l = AppLocalizations.of(context);
+    if (v == null || v.trim().isEmpty) return l.requiredField;
     final valid = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v.trim());
-    return valid ? null : 'Enter a valid email';
+    return valid ? null : l.enterValidEmail;
   }
 
   Future<void> _pickBirthday() async {
@@ -76,8 +79,14 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
     FocusScope.of(context).unfocus();
     setState(() => _saving = true);
 
-    // TODO: persist to Firestore user doc when backend is wired
-    await Future<void>.delayed(const Duration(milliseconds: 600));
+    // Persist first name to Firebase Auth profile (no Firestore needed yet).
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await user.updateDisplayName(_firstName.text.trim());
+        await user.reload();
+      }
+    } catch (_) {}
 
     if (!mounted) return;
     context.goNamed(HomeShell.homeRouteName);
@@ -86,6 +95,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
+    final AppLocalizations l = AppLocalizations.of(context);
 
     return Scaffold(
       body: Stack(
@@ -117,7 +127,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
                     ),
                     const SizedBox(height: AppSpacing.xl),
                     Text(
-                      'Complete your profile',
+                      l.completeYourProfile,
                       style: text.headlineMedium?.copyWith(
                         fontWeight: FontWeight.w800,
                         letterSpacing: -0.5,
@@ -126,7 +136,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      "A few details so technicians know who they're helping.",
+                      l.profileSubtitle,
                       style: text.bodyLarge?.copyWith(
                         color: Theme.of(context).brightness == Brightness.dark
                             ? AppColors.textSecondary.withValues(alpha: 0.7)
@@ -141,8 +151,8 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
                         Expanded(
                           child: _field(
                             controller: _firstName,
-                            label: 'First name',
-                            hint: 'Ahmed',
+                            label: l.firstName,
+                            hint: l.hintFirstName,
                             icon: Icons.badge_rounded,
                             validator: _requiredValidator,
                             autofillHints: const [AutofillHints.givenName],
@@ -152,8 +162,8 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
                         Expanded(
                           child: _field(
                             controller: _lastName,
-                            label: 'Last name',
-                            hint: 'Hassan',
+                            label: l.lastName,
+                            hint: l.hintLastName,
                             icon: Icons.badge_rounded,
                             validator: _requiredValidator,
                             autofillHints: const [AutofillHints.familyName],
@@ -164,7 +174,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
                     const SizedBox(height: AppSpacing.lg),
                     _field(
                       controller: _email,
-                      label: 'Email address',
+                      label: l.emailAddress,
                       hint: 'ahmed@example.com',
                       icon: Icons.email_rounded,
                       keyboard: TextInputType.emailAddress,
@@ -175,7 +185,7 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
                     _birthdayPicker(),
                     const SizedBox(height: AppSpacing.xxl + AppSpacing.md),
                     GlowButton(
-                      label: 'Continue',
+                      label: l.continueAction,
                       icon: Icons.arrow_forward_rounded,
                       loading: _saving,
                       onPressed: _submit,
@@ -192,13 +202,14 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
   }
 
   String get _birthdayLabel {
-    if (_birthday == null) return 'Select your birthday';
+    final AppLocalizations l = AppLocalizations.of(context);
+    if (_birthday == null) return l.selectYourBirthday;
     final d = _birthday!;
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    final List<String> months = <String>[
+      l.january, l.february, l.march, l.april, l.may, l.june,
+      l.july, l.august, l.september, l.october, l.november, l.december,
     ];
-    return '${months[d.month - 1]} ${d.day}, ${d.year}';
+    return '${months[d.month - 1]} ${d.day}، ${d.year}';
   }
 
   Widget _birthdayPicker() {
