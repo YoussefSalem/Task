@@ -4,6 +4,21 @@
 <dict>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Task needs microphone access to call technicians.</string>
+	<!-- Phone-auth reCAPTCHA fallback + Google Sign-In callback URL schemes. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<!-- Encoded app ID (phone-auth reCAPTCHA fallback). -->
+				<string>app-1-1071154220753-ios-755c6f8b73d734d55dfff0</string>
+				<!-- REVERSED_CLIENT_ID (Google Sign-In). -->
+				<string>com.googleusercontent.apps.1071154220753-0r9alhghv0f8p1n53jht0uvfiv08nh28</string>
+			</array>
+		</dict>
+	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

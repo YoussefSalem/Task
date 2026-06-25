@@ -99,11 +99,12 @@ class AuthController {
       );
       return done.future;
     } on FirebaseAuthException catch (e) {
-      if (_isConnectivity(e)) {
-        _mockPending = true;
-        return const AuthOutcome(AuthStep.codeSent, mock: true);
-      }
-      return AuthOutcome(AuthStep.failed, message: _friendly(e));
+      // Real Firebase is up: surface the actual error instead of silently
+      // falling back to the mock (which masks reCAPTCHA/config failures and
+      // lets any code through). The mock only covers the no-Firebase case
+      // handled by [_looksOffline] above.
+      return AuthOutcome(AuthStep.failed,
+          message: '[${e.code}] ${_friendly(e)}');
     } catch (e) {
       return AuthOutcome(AuthStep.failed, message: e.toString());
     }
