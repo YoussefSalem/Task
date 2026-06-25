@@ -7,6 +7,7 @@ import 'package:task_design/task_design.dart';
 import '../booking/booking_state.dart';
 import '../localization/language_switcher.dart';
 import '../settings/theme_controller.dart';
+import 'user_profile.dart';
 
 /// The Profile tab: identity header, wallet credit, and account menu. Most rows
 /// are stubbed affordances pending their feature phases; sign-out returns to
@@ -17,6 +18,8 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme text = Theme.of(context).textTheme;
+    final UserProfile profile =
+        ref.watch(userProfileProvider).valueOrNull ?? const UserProfile();
 
     return Stack(
       fit: StackFit.expand,
@@ -39,13 +42,15 @@ class ProfileScreen extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: AppSpacing.xl),
-              _identity(context, text),
+              _identity(context, text, profile),
+              const SizedBox(height: AppSpacing.xl),
+              _personalDetails(context, text, profile),
               const SizedBox(height: AppSpacing.xl),
               _walletCard(context, text, ref),
               const SizedBox(height: AppSpacing.xl),
               _AppearanceSection(text: text),
               const SizedBox(height: AppSpacing.xl),
-              _menu(context, text),
+              _menu(context, text, ref),
               const SizedBox(height: AppSpacing.xl),
               OutlinedButton.icon(
                 onPressed: () => context.go('/'),
@@ -68,36 +73,124 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _identity(BuildContext context, TextTheme text) {
+  Widget _identity(BuildContext context, TextTheme text, UserProfile profile) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations l = AppLocalizations.of(context);
+    final String name =
+        profile.fullName.isNotEmpty ? profile.fullName : l.demoProfileName;
+    final String phone =
+        profile.phone.isNotEmpty ? profile.phone : l.notSet;
+    final String initials =
+        profile.fullName.isNotEmpty ? profile.initials : l.demoProfileInitials;
     return Row(
       children: <Widget>[
-        const CircleAvatar(
+        CircleAvatar(
           radius: 32,
           backgroundColor: AppColors.primary,
-          child: Text('NA',
-              style: TextStyle(
+          child: Text(initials,
+              style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
                   fontSize: 22)),
         ),
         const SizedBox(width: AppSpacing.lg),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text('Nour Adel',
-                style: text.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
-            const SizedBox(height: 2),
-            Text('+20 100 482 1928',
-                style: text.bodyMedium?.copyWith(
-                  color: isDark
-                      ? AppColors.textSecondary.withValues(alpha: 0.65)
-                      : AppColors.textSecondaryLight,
-                )),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(name,
+                  style:
+                      text.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+              const SizedBox(height: 2),
+              Text(phone,
+                  style: text.bodyMedium?.copyWith(
+                    color: isDark
+                        ? AppColors.textSecondary.withValues(alpha: 0.65)
+                        : AppColors.textSecondaryLight,
+                  )),
+            ],
+          ),
         ),
       ],
     );
+  }
+
+  /// Email + birthday card. Both fall back to "Not set" when the user signed in
+  /// via a path that didn't collect them.
+  Widget _personalDetails(
+      BuildContext context, TextTheme text, UserProfile profile) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations l = AppLocalizations.of(context);
+    final Color dividerColor =
+        isDark ? const Color(0x14FFFFFF) : const Color(0x14000000);
+    final Color labelColor = isDark
+        ? AppColors.textSecondary.withValues(alpha: 0.55)
+        : AppColors.textSecondaryLight;
+
+    final String email = profile.email.isNotEmpty ? profile.email : l.notSet;
+    final String birthday = profile.birthday != null
+        ? _formatBirthday(profile.birthday!, l)
+        : l.notSet;
+
+    Widget row(IconData icon, String label, String value) => Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+          child: Row(
+            children: <Widget>[
+              Icon(icon, size: 20, color: AppColors.primary),
+              const SizedBox(width: AppSpacing.md),
+              Text(label,
+                  style: text.bodySmall?.copyWith(color: labelColor)),
+              const Spacer(),
+              Flexible(
+                child: Text(value,
+                    textAlign: TextAlign.end,
+                    overflow: TextOverflow.ellipsis,
+                    style: text.bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.w600)),
+              ),
+            ],
+          ),
+        );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: AppSpacing.sm),
+          child: Text(l.personalDetails,
+              style: text.labelMedium?.copyWith(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.4,
+              )),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: isDark
+                ? AppColors.surface.withValues(alpha: 0.5)
+                : AppColors.surfaceLight,
+            borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+            border: Border.all(color: dividerColor),
+          ),
+          child: Column(
+            children: <Widget>[
+              row(Icons.email_rounded, l.emailAddress, email),
+              Divider(height: 1, color: dividerColor),
+              row(Icons.cake_rounded, l.birthday, birthday),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _formatBirthday(DateTime d, AppLocalizations l) {
+    final List<String> months = <String>[
+      l.january, l.february, l.march, l.april, l.may, l.june,
+      l.july, l.august, l.september, l.october, l.november, l.december,
+    ];
+    return '${months[d.month - 1]} ${d.day}, ${d.year}';
   }
 
   Widget _walletCard(BuildContext context, TextTheme text, WidgetRef ref) {
@@ -123,7 +216,7 @@ class ProfileScreen extends ConsumerWidget {
                       color: Colors.white.withValues(alpha: 0.85),
                     )),
                 const SizedBox(height: 4),
-                Text('$balance EGP',
+                Text('$balance ${AppLocalizations.of(context).egp}',
                     style: text.headlineSmall?.copyWith(
                         color: Colors.white, fontWeight: FontWeight.w700)),
               ],
@@ -136,7 +229,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _menu(BuildContext context, TextTheme text) {
+  Widget _menu(BuildContext context, TextTheme text, WidgetRef ref) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final Color iconColor = isDark
         ? AppColors.textSecondary
@@ -149,8 +242,11 @@ class ProfileScreen extends ConsumerWidget {
         isDark ? const Color(0x14FFFFFF) : const Color(0x14000000);
 
     final AppLocalizations loc = AppLocalizations.of(context);
+    final List<SavedAddress> addresses = savedAddresses(loc);
+    final String addressSummary =
+        addresses.map((SavedAddress a) => a.label).join(', ');
     final List<(IconData, String, String)> items = <(IconData, String, String)>[
-      (Icons.location_on_rounded, loc.savedAddresses, '${loc.home}, ${loc.work}'),
+      (Icons.location_on_rounded, loc.savedAddresses, addressSummary),
       (Icons.credit_card_rounded, loc.paymentMethods, loc.cashCard),
       (Icons.history_rounded, loc.bookingHistory, ''),
       (Icons.headset_mic_rounded, loc.helpAndSupport, ''),
@@ -180,7 +276,7 @@ class ProfileScreen extends ConsumerWidget {
                 ScaffoldMessenger.of(context)
                   ..clearSnackBars()
                   ..showSnackBar(SnackBar(
-                      content: Text('${items[i].$2} arrives in a later phase.')));
+                      content: Text(loc.featureArrivesLater(items[i].$2))));
               },
             ),
             if (i < items.length - 1) Divider(height: 1, color: dividerColor),

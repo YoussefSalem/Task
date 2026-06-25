@@ -1696,4 +1696,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get callError => 'تعذّر الاتصال.';
+
+  @override
+  String get personalDetails => 'البيانات الشخصية';
+
+  @override
+  String get notSet => 'غير محدد';
 }

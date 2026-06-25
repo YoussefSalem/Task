@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
 
+import '../profile/user_profile.dart';
+
 /// Collects name and email from phone-only sign-ups before entering the app.
 /// Social sign-in (Google / Apple) already provides this data, so only phone
 /// users land here.
@@ -79,14 +81,31 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
     FocusScope.of(context).unfocus();
     setState(() => _saving = true);
 
-    // Persist first name to Firebase Auth profile (no Firestore needed yet).
+    final String first = _firstName.text.trim();
+    final String last = _lastName.text.trim();
     try {
+      // Display name on the Auth user (drives the home greeting instantly).
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        await user.updateDisplayName(_firstName.text.trim());
+        await user.updateDisplayName('$first $last'.trim());
         await user.reload();
       }
-    } catch (_) {}
+      // Full profile to Firestore users/{uid}.
+      final repo = ref.read(userProfileRepositoryProvider);
+      await repo?.save(
+        firstName: first,
+        lastName: last,
+        email: _email.text.trim(),
+        birthday: _birthday!,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _saving = false);
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(SnackBar(content: Text(e.toString())));
+      return;
+    }
 
     if (!mounted) return;
     context.goNamed(HomeShell.homeRouteName);

@@ -535,5 +535,7 @@
   "callSpeaker": "مكبر الصوت",
   "callEarpiece": "سماعة الأذن",
   "callRetry": "حاول مجدداً",
-  "callError": "تعذّر الاتصال."
+  "callError": "تعذّر الاتصال.",
+  "personalDetails": "البيانات الشخصية",
+  "notSet": "غير محدد"
 }

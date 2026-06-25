@@ -1705,4 +1705,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get callError => 'Could not connect.';
+
+  @override
+  String get personalDetails => 'Personal details';
+
+  @override
+  String get notSet => 'Not set';
 }

@@ -3313,6 +3313,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not connect.'**
   String get callError;
+
+  /// No description provided for @personalDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal details'**
+  String get personalDetails;
+
+  /// No description provided for @notSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get notSet;
 }
 
 class _AppLocalizationsDelegate

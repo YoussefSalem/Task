@@ -535,5 +535,7 @@
   "callSpeaker": "Speaker",
   "callEarpiece": "Earpiece",
   "callRetry": "Try again",
-  "callError": "Could not connect."
+  "callError": "Could not connect.",
+  "personalDetails": "Personal details",
+  "notSet": "Not set"
 }
