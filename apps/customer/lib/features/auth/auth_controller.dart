@@ -1,14 +1,20 @@
 import 'dart:async';
 
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../localization/locale_controller.dart';
 
 /// Whether Firebase initialised successfully — overridden in `bootstrap`.
 final firebaseReadyProvider = Provider<bool>((ref) => false);
 
 final authControllerProvider = Provider<AuthController>(
-  (ref) => AuthController(ready: ref.watch(firebaseReadyProvider)),
+  (ref) => AuthController(
+    ready: ref.watch(firebaseReadyProvider),
+    l: lookupAppLocalizations(ref.watch(localeControllerProvider)),
+  ),
 );
 
 /// The current signed-in user, or null. Emits null whenever Firebase is
@@ -37,9 +43,10 @@ class AuthOutcome {
 /// and points at the emulator in dev; if Firebase is down or unreachable it
 /// falls back to a local mock so the prototype stays navigable.
 class AuthController {
-  AuthController({required this.ready});
+  AuthController({required this.ready, required this.l});
 
   final bool ready;
+  final AppLocalizations l;
 
   FirebaseAuth get _auth => FirebaseAuth.instance;
 
@@ -92,15 +99,13 @@ class AuthController {
       );
       return done.future;
     } on FirebaseAuthException catch (e) {
-      // Emulator unreachable / network → fall back to mock so the flow lives.
       if (_isConnectivity(e)) {
         _mockPending = true;
         return const AuthOutcome(AuthStep.codeSent, mock: true);
       }
       return AuthOutcome(AuthStep.failed, message: _friendly(e));
-    } catch (_) {
-      _mockPending = true;
-      return const AuthOutcome(AuthStep.codeSent, mock: true);
+    } catch (e) {
+      return AuthOutcome(AuthStep.failed, message: e.toString());
     }
   }
 
@@ -109,21 +114,21 @@ class AuthController {
     if (_mockPending) {
       // Any 4–6 digit code clears the mock flow.
       if (code.length < 4) {
-        return const AuthOutcome(AuthStep.failed, message: 'Enter the full code.');
+        return AuthOutcome(AuthStep.failed, message: l.enterFullCode);
       }
       return const AuthOutcome(AuthStep.signedIn, mock: true);
     }
     try {
       if (kIsWeb) {
         if (_webConfirmation == null) {
-          return const AuthOutcome(AuthStep.failed,
-              message: 'Request a new code, please.');
+          return AuthOutcome(AuthStep.failed,
+              message: l.requestNewCode);
         }
         await _webConfirmation!.confirm(code);
       } else {
         if (_verificationId == null) {
-          return const AuthOutcome(AuthStep.failed,
-              message: 'Request a new code, please.');
+          return AuthOutcome(AuthStep.failed,
+              message: l.requestNewCode);
         }
         final PhoneAuthCredential cred = PhoneAuthProvider.credential(
             verificationId: _verificationId!, smsCode: code);
@@ -157,22 +162,21 @@ class AuthController {
         return const AuthOutcome(AuthStep.signedIn, mock: true);
       }
       return AuthOutcome(AuthStep.failed, message: '$label: ${_friendly(e)}');
-    } catch (_) {
-      return const AuthOutcome(AuthStep.signedIn, mock: true);
+    } catch (e) {
+      return AuthOutcome(AuthStep.failed, message: e.toString());
     }
   }
 
   bool _isConnectivity(FirebaseAuthException e) =>
       e.code == 'network-request-failed' ||
       e.code == 'unknown' ||
-      e.code == 'internal-error' ||
-      e.code == 'app-not-authorized';
+      e.code == 'internal-error';
 
   String _friendly(FirebaseAuthException e) => switch (e.code) {
-        'invalid-phone-number' => 'That phone number looks invalid.',
-        'invalid-verification-code' => 'That code is incorrect.',
-        'too-many-requests' => 'Too many attempts. Try again later.',
-        'popup-closed-by-user' => 'Sign-in was cancelled.',
-        _ => e.message ?? 'Something went wrong. Please try again.',
+        'invalid-phone-number' => l.invalidPhone,
+        'invalid-verification-code' => l.incorrectCode,
+        'too-many-requests' => l.tooManyAttempts,
+        'popup-closed-by-user' => l.signInCancelled,
+        _ => e.message ?? l.genericAuthError,
       };
 }
