@@ -17,7 +17,7 @@ import 'home_shell.dart';
 import '../marketplace/all_services_screen.dart';
 import '../marketplace/job_create_stub_screen.dart';
 import '../marketplace/marketplace_providers.dart';
-import '../auth/auth_controller.dart';
+import '../profile/user_profile.dart';
 import '../services/category_l10n.dart';
 import '../services/technician_catalog.dart';
 
@@ -108,8 +108,11 @@ class _TopBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AppLocalizations l = AppLocalizations.of(context);
-    final user = ref.watch(authStateProvider).valueOrNull;
-    final String displayName = user?.displayName?.split(' ').first.trim() ?? l.demoUserName;
+    // Firestore-backed profile streams live (the Auth displayName stream does
+    // not re-emit on profile updates), so a freshly-saved name shows at once.
+    final profile = ref.watch(userProfileProvider).valueOrNull;
+    final String first = (profile?.firstName ?? '').trim();
+    final String displayName = first.isNotEmpty ? first : l.demoUserName;
     return Row(
       children: <Widget>[
         Expanded(
