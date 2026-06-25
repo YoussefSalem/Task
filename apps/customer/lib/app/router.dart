@@ -1,4 +1,6 @@
 import 'package:customer/features/address/address_screen.dart';
+import 'package:customer/features/call/call_controller.dart';
+import 'package:customer/features/call/call_screen.dart';
 import 'package:customer/features/assistant/ai_chat_screen.dart';
 import 'package:customer/features/auth/complete_profile_screen.dart';
 import 'package:customer/features/auth/otp_verify_screen.dart';
@@ -185,6 +187,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             technicianId: args.technicianId,
             technicianName: args.technicianName,
           );
+        },
+      ),
+      GoRoute(
+        path: CallScreen.routePath,
+        name: CallScreen.routeName,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) {
+          final args = state.extra as CallArgs;
+          return CallScreen(args: args);
         },
       ),
     ],

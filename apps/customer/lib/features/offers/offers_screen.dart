@@ -1,5 +1,4 @@
 import 'package:customer/l10n/app_localizations.dart';
-import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -8,8 +7,10 @@ import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
 import 'package:task_domain/task_domain.dart';
 
-import '../marketplace/marketplace_providers.dart';
+import '../call/call_controller.dart';
+import '../call/call_screen.dart';
 import '../chat/chat_screen.dart';
+import '../marketplace/marketplace_providers.dart';
 
 /// Offer phase: technicians have responded with bids.
 /// Users can chat or call each technician, compare offers, and hire.
@@ -51,6 +52,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
         : jobs.where((j) => j.offers.isNotEmpty).first;
     final offers = job?.offers ?? const <Offer>[];
     final text = Theme.of(context).textTheme;
+    final AppLocalizations l = AppLocalizations.of(context);
     final mq = MediaQuery.of(context);
 
     final cheapest = offers.isEmpty
@@ -72,11 +74,11 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                 surfaceTintColor: Colors.transparent,
                 // Back to home — search is done once the user is reviewing offers.
                 leading: IconButton(
-                  tooltip: 'Back to home',
+                  tooltip: l.backToHome,
                   icon: const Icon(Icons.arrow_back_rounded),
                   onPressed: () => context.go('/home'),
                 ),
-                title: const Text('Offers received'),
+                title: Text(l.offersReceived),
                 actions: [
                   Container(
                     margin: const EdgeInsets.only(right: 12),
@@ -94,7 +96,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                               shape: BoxShape.circle, color: AppColors.success),
                         ),
                         const SizedBox(width: 6),
-                        Text('${offers.length} offers',
+                        Text(l.offersCountShort(offers.length),
                             style: text.labelSmall?.copyWith(
                               color: AppColors.success,
                               fontWeight: FontWeight.w700,
@@ -125,7 +127,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'Chat or call a technician before hiring. All payments go through the app.',
+                            l.chatOrCallTechnician,
                             style: text.bodySmall?.copyWith(
                               color: AppColors.primary.withValues(alpha: 0.8),
                               height: 1.35,
@@ -208,7 +210,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen>
                   ),
                 ),
                 child: GlowButton(
-                  label: 'Hire & track',
+                  label: l.hireAndTrack,
                   icon: Icons.check_circle_rounded,
                   onPressed: () {
                     // Hiring closes the active search.
@@ -253,6 +255,7 @@ class _OfferCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final text = Theme.of(context).textTheme;
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations l = AppLocalizations.of(context);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
@@ -305,7 +308,7 @@ class _OfferCard extends ConsumerWidget {
                                     color: AppColors.success.withValues(alpha: 0.14),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  child: Text('Best price',
+                                  child: Text(l.bestPrice,
                                       style: text.labelSmall?.copyWith(
                                         color: AppColors.success,
                                         fontWeight: FontWeight.w700,
@@ -320,7 +323,7 @@ class _OfferCard extends ConsumerWidget {
                                   size: 13, color: AppColors.warning),
                               const SizedBox(width: 3),
                               Text(
-                                '${offer.rating} · ${offer.jobsDone} jobs done',
+                                '${offer.rating} · ${l.jobsDoneCount(offer.jobsDone)}',
                                 style: text.bodySmall?.copyWith(
                                   color: isDark
                                       ? AppColors.textSecondary.withValues(alpha: 0.65)
@@ -350,14 +353,14 @@ class _OfferCard extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Price',
+                          Text(l.price,
                               style: text.labelSmall?.copyWith(
                                 color: isDark
                                     ? AppColors.textSecondary.withValues(alpha: 0.45)
                                     : AppColors.textSecondaryLight,
                               )),
                           const SizedBox(height: 3),
-                          Text('${offer.currentPrice} EGP',
+                          Text('${offer.currentPrice} ${l.egp}',
                               style: text.titleLarge?.copyWith(
                                 fontWeight: FontWeight.w800,
                                 color: selected ? AppColors.primary : null,
@@ -369,7 +372,7 @@ class _OfferCard extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Arrives',
+                          Text(l.arrives,
                               style: text.labelSmall?.copyWith(
                                 color: isDark
                                     ? AppColors.textSecondary.withValues(alpha: 0.45)
@@ -403,7 +406,7 @@ class _OfferCard extends ConsumerWidget {
                     Expanded(
                       child: _ActionButton(
                         icon: Icons.chat_bubble_outline_rounded,
-                        label: 'Chat',
+                        label: l.chat,
                         color: AppColors.primary,
                         onTap: () => context.push(
                           ChatScreen.routePath,
@@ -418,9 +421,9 @@ class _OfferCard extends ConsumerWidget {
                     Expanded(
                       child: _ActionButton(
                         icon: Icons.call_rounded,
-                        label: 'Call',
+                        label: l.call,
                         color: AppColors.success,
-                        onTap: () => _showCallSheet(context, offer),
+                        onTap: () => _callTechnician(context, offer),
                       ),
                     ),
                     const SizedBox(width: AppSpacing.sm),
@@ -430,7 +433,7 @@ class _OfferCard extends ConsumerWidget {
                         icon: selected
                             ? Icons.check_rounded
                             : Icons.handshake_rounded,
-                        label: selected ? 'Selected' : 'Select offer',
+                        label: selected ? l.selectedLabel : l.selectOffer,
                         color: selected ? AppColors.success : AppColors.primary,
                         filled: true,
                         onTap: () => _acceptAndSelect(ref),
@@ -446,185 +449,18 @@ class _OfferCard extends ConsumerWidget {
     );
   }
 
-  void _showCallSheet(BuildContext context, Offer o) {
-    final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: isDark ? AppColors.surface : AppColors.surfaceLight,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-      builder: (ctx) => _CallSheet(offer: o),
-    );
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Call bottom sheet (VoIP stub)
-// ---------------------------------------------------------------------------
-class _CallSheet extends StatefulWidget {
-  const _CallSheet({required this.offer});
-  final Offer offer;
-
-  @override
-  State<_CallSheet> createState() => _CallSheetState();
-}
-
-class _CallSheetState extends State<_CallSheet>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _pulseCtrl;
-  bool _callActive = false;
-  int _seconds = 0;
-  Timer? _ticker;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulseCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    )..repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _pulseCtrl.dispose();
-    _ticker?.cancel();
-    super.dispose();
-  }
-
-  void _startCall() {
-    setState(() => _callActive = true);
-    _ticker = Timer.periodic(const Duration(seconds: 1),
-        (_) => setState(() => _seconds++));
-  }
-
-  void _endCall() {
-    _ticker?.cancel();
-    Navigator.pop(context);
-  }
-
-  String get _timer {
-    final m = _seconds ~/ 60;
-    final s = _seconds % 60;
-    return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
-    final mq = MediaQuery.of(context);
-
-    return Container(
-      padding: EdgeInsets.fromLTRB(
-          AppSpacing.xl, AppSpacing.xl, AppSpacing.xl,
-          AppSpacing.xl + mq.padding.bottom),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Handle
-          Container(
-            width: 36, height: 4,
-            decoration: BoxDecoration(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white.withValues(alpha: 0.12)
-                  : const Color(0x22000000),
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.xl),
-
-          AnimatedBuilder(
-            animation: _pulseCtrl,
-            builder: (_, child) => Container(
-              width: 80, height: 80,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.success.withValues(alpha: 0.15),
-                boxShadow: _callActive
-                    ? [
-                        BoxShadow(
-                          color: AppColors.success.withValues(
-                              alpha: 0.2 + _pulseCtrl.value * 0.18),
-                          blurRadius: 24 + _pulseCtrl.value * 12,
-                          spreadRadius: 4,
-                        ),
-                      ]
-                    : [],
-              ),
-              child: const Icon(Icons.call_rounded,
-                  color: AppColors.success, size: 38),
-            ),
-          ),
-
-          const SizedBox(height: AppSpacing.lg),
-          Text(widget.offer.technicianName,
-              style: text.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
-          const SizedBox(height: 4),
-          Text(
-            _callActive ? _timer : 'In-app VoIP call',
-            style: text.bodyMedium?.copyWith(
-              color: _callActive
-                  ? AppColors.success
-                  : (Theme.of(context).brightness == Brightness.dark
-                      ? AppColors.textSecondary.withValues(alpha: 0.6)
-                      : AppColors.textSecondaryLight),
-              fontWeight: _callActive ? FontWeight.w600 : null,
-              fontFeatures: _callActive
-                  ? const [FontFeature.tabularFigures()]
-                  : null,
-            ),
-          ),
-
-          const SizedBox(height: AppSpacing.xxl),
-
-          if (!_callActive)
-            SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: FilledButton.icon(
-                onPressed: _startCall,
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.success,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                ),
-                icon: const Icon(Icons.call_rounded),
-                label: const Text('Start call',
-                    style: TextStyle(fontWeight: FontWeight.w700)),
-              ),
-            )
-          else
-            SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: FilledButton.icon(
-                onPressed: _endCall,
-                style: FilledButton.styleFrom(
-                  backgroundColor: Colors.red.shade600,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                ),
-                icon: const Icon(Icons.call_end_rounded),
-                label: const Text('End call',
-                    style: TextStyle(fontWeight: FontWeight.w700)),
-              ),
-            ),
-
-          const SizedBox(height: AppSpacing.md),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Go back to offers',
-                style: TextStyle(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? AppColors.textSecondary.withValues(alpha: 0.6)
-                      : AppColors.textSecondaryLight,
-                )),
-          ),
-        ],
+  void _callTechnician(BuildContext context, Offer o) {
+    context.push(
+      CallScreen.routePath,
+      extra: CallArgs(
+        offerId: o.id,
+        technicianId: o.technicianId,
+        technicianName: o.technicianName,
       ),
     );
   }
 }
+
 
 // ---------------------------------------------------------------------------
 // Helpers
