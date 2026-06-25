@@ -24,3 +24,5 @@ setGlobalOptions({region: "europe-west1"});
 export const ping = onCall({enforceAppCheck: false}, () => {
   return {status: "ok", ts: Date.now()};
 });
+
+export {generateCallToken} from "./calls/generate_call_token";
