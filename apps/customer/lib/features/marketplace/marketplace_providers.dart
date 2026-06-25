@@ -1,12 +1,18 @@
-import 'package:customer/l10n/app_localizations.dart';
 // apps/customer/lib/features/marketplace/marketplace_providers.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_domain/task_domain.dart';
 
-import 'mock_job_marketplace_repository.dart';
+import '../auth/auth_controller.dart';
+import 'firestore_job_marketplace_repository.dart';
 
+/// Firestore-backed jobs, scoped to the signed-in customer so their posted jobs
+/// pull on any device. Falls back to an empty repo when signed out.
 final jobMarketplaceRepositoryProvider = Provider<JobMarketplaceRepository>(
-  (ref) => MockJobMarketplaceRepository(),
+  (ref) {
+    final user = ref.watch(authStateProvider).valueOrNull;
+    if (user == null) return const EmptyJobMarketplaceRepository();
+    return FirestoreJobMarketplaceRepository(user.uid);
+  },
 );
 
 final myJobsProvider = StreamProvider<List<JobRequest>>(

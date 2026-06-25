@@ -6,6 +6,7 @@ import 'package:task_design/task_design.dart';
 import 'package:task_domain/task_domain.dart';
 
 import '../marketplace/marketplace_providers.dart';
+import '../services/category_l10n.dart';
 import 'job_create_stub_screen.dart';
 
 class AllServicesScreen extends ConsumerWidget {
@@ -14,48 +15,50 @@ class AllServicesScreen extends ConsumerWidget {
   static const String routePath = '/services';
   static const String routeName = 'all-services';
 
-  static const List<_ServiceGroup> _groups = [
-    _ServiceGroup('Popular', [
-      JobCategory.plumbing,
-      JobCategory.electrical,
-      JobCategory.painting,
-      JobCategory.carpentry,
-      JobCategory.ac,
-      JobCategory.cleaning,
-    ]),
-    _ServiceGroup('Construction & Finishing', [
-      JobCategory.tilesHandyman,
-      JobCategory.masonStones,
-      JobCategory.plaster,
-      JobCategory.gypsumWorks,
-      JobCategory.gypsumBoard,
-      JobCategory.marbleGranite,
-      JobCategory.parquet,
-      JobCategory.puCornices,
-    ]),
-    _ServiceGroup('Doors, Windows & Glass', [
-      JobCategory.alumetal,
-      JobCategory.glassCecurit,
-      JobCategory.curtainsUpholstery,
-    ]),
-    _ServiceGroup('Specialized Services', [
-      JobCategory.smith,
-      JobCategory.woodPainter,
-      JobCategory.satelliteInstallation,
-      JobCategory.smartHome,
-      JobCategory.movingServices,
-      JobCategory.materialWinch,
-    ]),
-    _ServiceGroup('Maintenance', [
-      JobCategory.appliancesMaintenance,
-      JobCategory.swimmingPool,
-      JobCategory.pestControl,
-    ]),
-  ];
+  static List<_ServiceGroup> _groupsFor(AppLocalizations l) => <_ServiceGroup>[
+        _ServiceGroup(l.popular, const [
+          JobCategory.plumbing,
+          JobCategory.electrical,
+          JobCategory.painting,
+          JobCategory.carpentry,
+          JobCategory.ac,
+          JobCategory.cleaning,
+        ]),
+        _ServiceGroup(l.constructionAndFinishing, const [
+          JobCategory.tilesHandyman,
+          JobCategory.masonStones,
+          JobCategory.plaster,
+          JobCategory.gypsumWorks,
+          JobCategory.gypsumBoard,
+          JobCategory.marbleGranite,
+          JobCategory.parquet,
+          JobCategory.puCornices,
+        ]),
+        _ServiceGroup(l.doorsWindowsAndGlass, const [
+          JobCategory.alumetal,
+          JobCategory.glassCecurit,
+          JobCategory.curtainsUpholstery,
+        ]),
+        _ServiceGroup(l.specializedServices, const [
+          JobCategory.smith,
+          JobCategory.woodPainter,
+          JobCategory.satelliteInstallation,
+          JobCategory.smartHome,
+          JobCategory.movingServices,
+          JobCategory.materialWinch,
+        ]),
+        _ServiceGroup(l.maintenanceGroup, const [
+          JobCategory.appliancesMaintenance,
+          JobCategory.swimmingPool,
+          JobCategory.pestControl,
+        ]),
+      ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final text = Theme.of(context).textTheme;
+    final AppLocalizations l = AppLocalizations.of(context);
+    final List<_ServiceGroup> groups = _groupsFor(l);
     final mq = MediaQuery.of(context);
 
     void selectCategory(JobCategory c) {
@@ -98,7 +101,7 @@ class AllServicesScreen extends ConsumerWidget {
                   }),
                   onPressed: () => context.pop(),
                 ),
-                title: Text('All Services',
+                title: Text(l.allServices,
                     style: text.titleMedium
                         ?.copyWith(fontWeight: FontWeight.w700)),
                 centerTitle: true,
@@ -109,7 +112,7 @@ class AllServicesScreen extends ConsumerWidget {
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      final group = _groups[index];
+                      final group = groups[index];
                       return _GroupSection(
                         group: group,
                         text: text,
@@ -117,7 +120,7 @@ class AllServicesScreen extends ConsumerWidget {
                         onTap: selectCategory,
                       );
                     },
-                    childCount: _groups.length,
+                    childCount: groups.length,
                   ),
                 ),
               ),
@@ -285,7 +288,7 @@ class _ServiceTileState extends State<_ServiceTile> {
               ),
               const SizedBox(height: 8),
               Text(
-                widget.category.displayLabel,
+                categoryLabel(widget.category, AppLocalizations.of(context)),
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

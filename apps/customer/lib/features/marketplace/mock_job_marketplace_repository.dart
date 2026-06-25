@@ -1,15 +1,18 @@
 // apps/customer/lib/features/marketplace/mock_job_marketplace_repository.dart
 import 'dart:async';
 
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:task_domain/task_domain.dart';
 
 /// In-memory [JobMarketplaceRepository] for the prototype. Holds jobs in a list
 /// and re-emits the whole list through a broadcast stream on every mutation.
 class MockJobMarketplaceRepository implements JobMarketplaceRepository {
-  MockJobMarketplaceRepository() {
+  MockJobMarketplaceRepository(this._l) {
     _jobs = _seed();
     _emit();
   }
+
+  final AppLocalizations _l;
 
   late List<JobRequest> _jobs;
   final StreamController<List<JobRequest>> _controller =
@@ -38,7 +41,7 @@ class MockJobMarketplaceRepository implements JobMarketplaceRepository {
       parking: draft.parking,
       photos: draft.photos,
       locationLabel:
-          draft.locationLabel.isEmpty ? 'Maadi, Cairo' : draft.locationLabel,
+          draft.locationLabel.isEmpty ? _l.locDefaultAddress : draft.locationLabel,
       notes: draft.notes,
       status: JobStatus.biddingActive,
       offers: const <Offer>[],
@@ -103,28 +106,28 @@ class MockJobMarketplaceRepository implements JobMarketplaceRepository {
       JobRequest(
         id: 'JOB-SEED1',
         category: JobCategory.plumbing,
-        title: 'Leaking kitchen sink',
-        description: 'Steady drip under the sink, water pooling in the cabinet.',
+        title: _l.jobSeed1Title,
+        description: _l.jobSeed1Desc,
         fixedPrice: 180,
         urgency: Urgency.soon,
         propertyType: PropertyType.apartment,
-        locationLabel: 'Maadi, Cairo',
+        locationLabel: _l.locDefaultAddress,
         status: JobStatus.biddingActive,
         createdAt: now,
         offers: <Offer>[
           Offer(
-            id: 'OF-1', technicianId: 'T-1', technicianName: 'Khaled Mansour',
-            rating: 4.9, jobsDone: 1284, etaLabel: 'Can start in 40 min',
+            id: 'OF-1', technicianId: 'T-1', technicianName: _l.techNameKhaled,
+            rating: 4.9, jobsDone: 1284, etaLabel: _l.etaCanStart40,
             status: OfferStatus.pending, proposals: <PriceProposal>[tech(165)],
           ),
           Offer(
-            id: 'OF-2', technicianId: 'T-2', technicianName: 'Sayed Abdel-Rahman',
-            rating: 4.7, jobsDone: 612, etaLabel: 'Available this evening',
+            id: 'OF-2', technicianId: 'T-2', technicianName: _l.techNameSayed,
+            rating: 4.7, jobsDone: 612, etaLabel: _l.etaThisEvening,
             status: OfferStatus.pending, proposals: <PriceProposal>[tech(140)],
           ),
           Offer(
-            id: 'OF-3', technicianId: 'T-3', technicianName: 'Mostafa Eid',
-            rating: 4.8, jobsDone: 903, etaLabel: 'Can start in 25 min',
+            id: 'OF-3', technicianId: 'T-3', technicianName: _l.techNameMostafa,
+            rating: 4.8, jobsDone: 903, etaLabel: _l.etaCanStart25,
             status: OfferStatus.pending, proposals: <PriceProposal>[tech(190)],
           ),
         ],
@@ -132,24 +135,24 @@ class MockJobMarketplaceRepository implements JobMarketplaceRepository {
       JobRequest(
         id: 'JOB-SEED2',
         category: JobCategory.ac,
-        title: 'AC not cooling',
-        description: 'Split unit runs but blows warm air.',
+        title: _l.jobSeed2Title,
+        description: _l.jobSeed2Desc,
         fixedPrice: 240,
         urgency: Urgency.urgent,
         propertyType: PropertyType.apartment,
-        locationLabel: 'Nasr City, Cairo',
+        locationLabel: _l.locNasrCity,
         status: JobStatus.inProgress,
         createdAt: now.subtract(const Duration(hours: 3)),
       ),
       JobRequest(
         id: 'JOB-SEED3',
         category: JobCategory.electrical,
-        title: 'Replace tripping breaker',
-        description: 'Main breaker trips when the heater runs.',
+        title: _l.jobSeed3Title,
+        description: _l.jobSeed3Desc,
         fixedPrice: 150,
         urgency: Urgency.flexible,
         propertyType: PropertyType.villa,
-        locationLabel: 'Sheikh Zayed, Giza',
+        locationLabel: _l.locSheikhZayed,
         status: JobStatus.completed,
         createdAt: now.subtract(const Duration(days: 1)),
       ),

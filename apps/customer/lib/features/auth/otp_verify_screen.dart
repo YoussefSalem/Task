@@ -1,6 +1,9 @@
 import 'package:customer/l10n/app_localizations.dart';
 import 'package:customer/features/auth/auth_controller.dart';
 import 'package:customer/features/auth/complete_profile_screen.dart';
+import 'package:customer/features/home/home_shell.dart';
+import 'package:customer/features/profile/user_profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -86,9 +89,22 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
     if (!mounted) return;
     setState(() => _verifying = false);
     if (out.step == AuthStep.signedIn) {
-      context.goNamed(CompleteProfileScreen.routeName);
+      // Returning users (profile already on file) skip straight home; new users
+      // go collect their name/birthday.
+      final user = FirebaseAuth.instance.currentUser;
+      bool completed = false;
+      if (user != null) {
+        try {
+          await seedUserDocument(user);
+          completed = await hasCompletedProfile(user.uid);
+        } catch (_) {}
+      }
+      if (!mounted) return;
+      context.goNamed(completed
+          ? HomeShell.homeRouteName
+          : CompleteProfileScreen.routeName);
     } else {
-      _toast(out.message ?? 'That code is incorrect.');
+      _toast(out.message ?? AppLocalizations.of(context).incorrectCode);
       for (final TextEditingController c in _controllers) {
         c.clear();
       }
@@ -105,10 +121,10 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
       setState(() => _secondsLeft = 30);
       _tickResend();
       _toast(out.mock
-          ? 'Demo mode — enter any 6 digits.'
-          : 'A new code is on its way.');
+          ? AppLocalizations.of(context).demoModeEnterSixDigits
+          : AppLocalizations.of(context).newCodeOnTheWay);
     } else {
-      _toast(out.message ?? 'Could not resend the code.');
+      _toast(out.message ?? AppLocalizations.of(context).couldNotResendCode);
     }
   }
 
@@ -134,7 +150,7 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                         letterSpacing: -0.5,
                       )),
                   const SizedBox(height: AppSpacing.sm),
-                  Text('We sent a 6-digit code to ${widget.phone}.',
+                  Text(AppLocalizations.of(context).sentCodeTo(widget.phone),
                       style: text.titleMedium?.copyWith(
                         color: Theme.of(context).brightness == Brightness.dark
                             ? AppColors.textSecondary.withValues(alpha: 0.7)
@@ -150,7 +166,8 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                   Center(
                     child: _secondsLeft > 0
                         ? Text(
-                            'Resend code in 0:${_secondsLeft.toString().padLeft(2, '0')}',
+                            AppLocalizations.of(context).resendCodeIn(
+                                '0:${_secondsLeft.toString().padLeft(2, '0')}'),
                             style: text.bodyMedium?.copyWith(
                               color: Theme.of(context).brightness == Brightness.dark
                                   ? AppColors.textSecondary.withValues(alpha: 0.6)
@@ -164,7 +181,7 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                   ),
                   const Spacer(),
                   GlowButton(
-                    label: 'Verify',
+                    label: AppLocalizations.of(context).verifyAction,
                     loading: _verifying,
                     onPressed: _complete ? _verify : null,
                   ),

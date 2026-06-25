@@ -9,6 +9,7 @@ import 'package:task_design/task_design.dart';
 import 'package:task_domain/task_domain.dart';
 
 import '../matching/matching_screen.dart';
+import '../services/category_l10n.dart';
 import 'marketplace_providers.dart';
 
 class JobCreateStubScreen extends ConsumerStatefulWidget {
@@ -112,7 +113,7 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
               const SizedBox(height: AppSpacing.lg),
               _SheetOption(
                 icon: Icons.photo_library_rounded,
-                label: 'Choose photos',
+                label: AppLocalizations.of(context).choosePhotos,
                 onTap: () {
                   Navigator.pop(context);
                   _pickMedia(ImageSource.gallery);
@@ -120,7 +121,7 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
               ),
               _SheetOption(
                 icon: Icons.camera_alt_rounded,
-                label: 'Take a photo',
+                label: AppLocalizations.of(context).takeAPhoto,
                 onTap: () {
                   Navigator.pop(context);
                   _pickMedia(ImageSource.camera);
@@ -128,7 +129,7 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
               ),
               _SheetOption(
                 icon: Icons.videocam_rounded,
-                label: 'Record a video',
+                label: AppLocalizations.of(context).recordAVideo,
                 onTap: () {
                   Navigator.pop(context);
                   _pickMedia(ImageSource.camera, video: true);
@@ -152,8 +153,8 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
     if (!draft.isValid) {
       ScaffoldMessenger.of(context)
         ..clearSnackBars()
-        ..showSnackBar(const SnackBar(
-          content: const Text('Add a short description and a price above 0.'),
+        ..showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context).addAShortDescription),
           behavior: SnackBarBehavior.floating,
         ));
       return;
@@ -244,7 +245,7 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
                           style: text.bodyMedium,
                           decoration: InputDecoration(
                             hintText:
-                                'e.g. Living-room lights keep flickering when I turn on the AC...',
+                                AppLocalizations.of(context).describeProblemHint,
                             hintStyle: text.bodyMedium?.copyWith(
                               color: Theme.of(context).brightness == Brightness.dark
                                   ? AppColors.textSecondary.withValues(alpha: 0.4)
@@ -324,7 +325,7 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
             right: AppSpacing.xl,
             bottom: mq.padding.bottom + AppSpacing.lg,
             child: GlowButton(
-              label: 'Publish job',
+              label: AppLocalizations.of(context).publishJob,
               icon: Icons.rocket_launch_rounded,
               loading: _publishing,
               onPressed: () => _publish(category),
@@ -430,7 +431,7 @@ class _CategoryBadge extends StatelessWidget {
                       letterSpacing: 0.3,
                     )),
                 const SizedBox(height: 2),
-                Text(category.displayLabel,
+                Text(categoryLabel(category, AppLocalizations.of(context)),
                     style: text.titleSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                     )),
@@ -574,7 +575,7 @@ class _AddMediaTile extends StatelessWidget {
                   color: AppColors.primary, size: 20),
             ),
             const SizedBox(height: 6),
-            Text('Add',
+            Text(AppLocalizations.of(context).add,
                 style: text.labelSmall?.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w600,
@@ -673,7 +674,7 @@ class _PriceInput extends StatelessWidget {
               color: AppColors.primary.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Text('EGP',
+            child: Text(AppLocalizations.of(context).egp,
                 style: text.labelMedium?.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w700,

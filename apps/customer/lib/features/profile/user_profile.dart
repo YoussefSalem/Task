@@ -67,6 +67,41 @@ class UserProfileRepository {
   }
 }
 
+/// Ensures a `users/{uid}` document exists for the signed-in user, regardless
+/// of auth method. Merges auth-derived fields (name from displayName, email,
+/// phone, photo) so social sign-ins are persisted just like phone users —
+/// without clobbering anything the complete-profile form already wrote.
+Future<void> seedUserDocument(User user) async {
+  final doc = FirebaseFirestore.instance.collection('users').doc(user.uid);
+  final snap = await doc.get();
+
+  final parts = (user.displayName ?? '').trim().split(RegExp(r'\s+'))
+    ..removeWhere((s) => s.isEmpty);
+  final first = parts.isNotEmpty ? parts.first : '';
+  final last = parts.length > 1 ? parts.sublist(1).join(' ') : '';
+
+  await doc.set(<String, dynamic>{
+    'role': 'customer',
+    if (first.isNotEmpty) 'first_name': first,
+    if (last.isNotEmpty) 'last_name': last,
+    if ((user.email ?? '').isNotEmpty) 'email': user.email,
+    if ((user.phoneNumber ?? '').isNotEmpty) 'phone': user.phoneNumber,
+    if ((user.photoURL ?? '').isNotEmpty) 'photo_url': user.photoURL,
+    if (!snap.exists) 'created_at': FieldValue.serverTimestamp(),
+    'updated_at': FieldValue.serverTimestamp(),
+  }, SetOptions(merge: true));
+}
+
+/// Whether the user already has a usable profile (a name on file), used to send
+/// returning sign-ins straight home instead of back through complete-profile.
+Future<bool> hasCompletedProfile(String uid) async {
+  final snap =
+      await FirebaseFirestore.instance.collection('users').doc(uid).get();
+  if (!snap.exists) return false;
+  final first = (snap.data()?['first_name'] as String?)?.trim() ?? '';
+  return first.isNotEmpty;
+}
+
 final userProfileRepositoryProvider =
     Provider<UserProfileRepository?>((ref) {
   final user = ref.watch(authStateProvider).valueOrNull;

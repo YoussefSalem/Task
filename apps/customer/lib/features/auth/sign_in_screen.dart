@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:customer/features/auth/auth_controller.dart';
 import 'package:customer/features/auth/otp_verify_screen.dart';
+import 'package:customer/features/profile/user_profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:customer/features/localization/language_switcher.dart';
 import 'package:customer/features/home/home_shell.dart';
 import 'package:customer/l10n/app_localizations.dart';
@@ -79,9 +81,18 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     if (!mounted) return;
     setState(() => _socialBusy = null);
     if (out.step == AuthStep.signedIn) {
+      // Persist the social profile (name/email/photo from the provider) so it
+      // pulls on any device, then go straight home.
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        try {
+          await seedUserDocument(user);
+        } catch (_) {}
+      }
+      if (!mounted) return;
       context.goNamed(HomeShell.homeRouteName);
     } else {
-      _toast(out.message ?? 'Sign-in failed.');
+      _toast(out.message ?? AppLocalizations.of(context).signInFailed);
     }
   }
 
@@ -287,7 +298,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       children: <Widget>[
         // Country chip — Egypt only for v1.
         GestureDetector(
-          onTap: () => _toast('More countries arrive with international launch.'),
+          onTap: () => _toast(AppLocalizations.of(context).moreCountriesSoon),
           child: Builder(builder: (context) {
             final bool isDark = Theme.of(context).brightness == Brightness.dark;
             final Color secondary = isDark ? AppColors.textSecondary : AppColors.textSecondaryLight;
@@ -306,7 +317,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text('EG',
+                  Text(AppLocalizations.of(context).eg,
                       style: text.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: secondary,
@@ -420,14 +431,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         GestureDetector(
-            onTap: () => _toast('Privacy Policy opens in a later phase.'),
+            onTap: () => _toast(AppLocalizations.of(context).privacyOpensLater),
             child: Text(AppLocalizations.of(context).privacyPolicy, style: style)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Icon(Icons.circle, size: 4, color: muted),
         ),
         GestureDetector(
-            onTap: () => _toast('Terms of Service opens in a later phase.'),
+            onTap: () => _toast(AppLocalizations.of(context).termsOpensLater),
             child: Text(AppLocalizations.of(context).termsOfService, style: style)),
       ],
     );
