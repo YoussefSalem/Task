@@ -1,6 +1,5 @@
 import {onCall, HttpsError} from "firebase-functions/v2/https";
 import {defineSecret} from "firebase-functions/params";
-import {AccessToken} from "livekit-server-sdk";
 
 const livekitApiKey = defineSecret("LIVEKIT_API_KEY");
 const livekitApiSecret = defineSecret("LIVEKIT_API_SECRET");
@@ -23,6 +22,9 @@ export const generateCallToken = onCall(
     }
 
     const identity = request.auth.uid;
+
+    // Dynamic import required: livekit-server-sdk v2 is ESM-only; functions use CommonJS.
+    const {AccessToken} = await import("livekit-server-sdk");
 
     const token = new AccessToken(
       livekitApiKey.value(),
