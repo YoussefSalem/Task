@@ -74,8 +74,10 @@ class _FloatingNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final double bottomInset = MediaQuery.of(context).padding.bottom;
     return Padding(
+      // Wider side insets so the pill reads as a compact floating bar.
       padding: EdgeInsets.fromLTRB(
-          AppSpacing.lg, 0, AppSpacing.lg, bottomInset + AppSpacing.md),
+          AppSpacing.xl + AppSpacing.sm, 0, AppSpacing.xl + AppSpacing.sm,
+          bottomInset + AppSpacing.md),
       child: SizedBox(
         height: 72,
         child: Stack(
@@ -112,11 +114,39 @@ class _FloatingNavBar extends StatelessWidget {
                   ),
                   child: Row(
                     children: <Widget>[
-                      _navItem(context, 0, Icons.home_outlined, Icons.home_rounded, AppLocalizations.of(context).home),
-                      _navItem(context, 1, Icons.handyman_outlined, Icons.handyman_rounded, AppLocalizations.of(context).myJobs),
+                      _NavItem(
+                        index: 0,
+                        active: currentIndex == 0,
+                        icon: Icons.home_outlined,
+                        activeIcon: Icons.home_rounded,
+                        label: AppLocalizations.of(context).home,
+                        onTap: onTap,
+                      ),
+                      _NavItem(
+                        index: 1,
+                        active: currentIndex == 1,
+                        icon: Icons.handyman_outlined,
+                        activeIcon: Icons.handyman_rounded,
+                        label: AppLocalizations.of(context).myJobs,
+                        onTap: onTap,
+                      ),
                       const Spacer(), // gap for the raised AI button
-                      _navItem(context, 2, Icons.chat_bubble_outline_rounded, Icons.chat_bubble_rounded, AppLocalizations.of(context).messages),
-                      _navItem(context, 3, Icons.person_outline_rounded, Icons.person_rounded, AppLocalizations.of(context).profile),
+                      _NavItem(
+                        index: 2,
+                        active: currentIndex == 2,
+                        icon: Icons.chat_bubble_outline_rounded,
+                        activeIcon: Icons.chat_bubble_rounded,
+                        label: AppLocalizations.of(context).messages,
+                        onTap: onTap,
+                      ),
+                      _NavItem(
+                        index: 3,
+                        active: currentIndex == 3,
+                        icon: Icons.person_outline_rounded,
+                        activeIcon: Icons.person_rounded,
+                        label: AppLocalizations.of(context).profile,
+                        onTap: onTap,
+                      ),
                     ],
                   ),
                 );
@@ -134,33 +164,89 @@ class _FloatingNavBar extends StatelessWidget {
     );
   }
 
-  Widget _navItem(BuildContext context, int index, IconData icon,
-      IconData activeIcon, String label) {
-    final bool active = index == currentIndex;
+}
+
+/// A single bottom-nav destination. No ink ripple/glow — just a clean color +
+/// icon swap on selection plus a subtle press-scale for tactile feedback.
+class _NavItem extends StatefulWidget {
+  const _NavItem({
+    required this.index,
+    required this.active,
+    required this.icon,
+    required this.activeIcon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final int index;
+  final bool active;
+  final IconData icon;
+  final IconData activeIcon;
+  final String label;
+  final ValueChanged<int> onTap;
+
+  @override
+  State<_NavItem> createState() => _NavItemState();
+}
+
+class _NavItemState extends State<_NavItem> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     // Dark: light-gray at 75% α on dark frosted pill ≈ 5:1.
     // Light: near-black secondary on white frosted pill ≈ 6.7:1.
     final Color inactiveColor = isDark
         ? AppColors.textSecondary.withValues(alpha: 0.75)
         : AppColors.textSecondaryLight;
+    final Color color = widget.active ? AppColors.primary : inactiveColor;
+
     return Expanded(
-      child: InkResponse(
-        onTap: () => onTap(index),
-        radius: 36,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(active ? activeIcon : icon,
-                size: 24,
-                color: active ? AppColors.primary : inactiveColor),
-            const SizedBox(height: 3),
-            Text(label,
-                style: TextStyle(
-                  fontSize: 10.5,
-                  fontWeight: active ? FontWeight.w700 : FontWeight.w500,
-                  color: active ? AppColors.primary : inactiveColor,
-                )),
-          ],
+      child: Semantics(
+        button: true,
+        selected: widget.active,
+        label: widget.label,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTapDown: (_) => setState(() => _pressed = true),
+          onTapCancel: () => setState(() => _pressed = false),
+          onTap: () {
+            setState(() => _pressed = false);
+            widget.onTap(widget.index);
+          },
+          child: AnimatedScale(
+            scale: _pressed ? 0.88 : 1.0,
+            duration: const Duration(milliseconds: 120),
+            curve: Curves.easeOut,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  transitionBuilder: (child, anim) =>
+                      ScaleTransition(scale: anim, child: child),
+                  child: Icon(
+                    widget.active ? widget.activeIcon : widget.icon,
+                    key: ValueKey<bool>(widget.active),
+                    size: 24,
+                    color: color,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                AnimatedDefaultTextStyle(
+                  duration: const Duration(milliseconds: 200),
+                  style: TextStyle(
+                    fontSize: 10.5,
+                    fontWeight:
+                        widget.active ? FontWeight.w700 : FontWeight.w500,
+                    color: color,
+                  ),
+                  child: Text(widget.label),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -231,7 +317,7 @@ class _AiButtonState extends State<_AiButton>
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'Ask the AI assistant',
+      label: AppLocalizations.of(context).askTheAiAssistant,
       child: GestureDetector(
         onTap: _handleTap,
         child: AnimatedBuilder(

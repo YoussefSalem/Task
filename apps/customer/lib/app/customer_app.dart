@@ -26,6 +26,9 @@ class CustomerApp extends ConsumerWidget {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: themeMode,
+      // Instant theme switch — the frosted-glass + gradient surfaces are
+      // expensive to crossfade, which made the default animation feel sluggish.
+      themeAnimationDuration: Duration.zero,
       routerConfig: router,
       locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
