@@ -11,6 +11,7 @@ import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:task_design/task_design.dart';
 import 'package:web/web.dart' as web;
 
+import '../address/address_repository.dart';
 import '../booking/booking_state.dart';
 import 'location_provider.dart';
 
@@ -131,9 +132,9 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(context)
         ..clearSnackBars()
-        ..showSnackBar(const SnackBar(
+        ..showSnackBar(SnackBar(
           content:
-              Text('Could not detect location. Check browser permissions.'),
+              Text(AppLocalizations.of(context).couldNotDetectLocation),
         ));
     } finally {
       if (mounted) setState(() => _detecting = false);
@@ -257,11 +258,13 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
               text: text,
               bottomPadding: mq.padding.bottom,
               onConfirm: _confirmLocation,
-              savedAddresses: kSavedAddresses,
+              savedAddresses:
+                  ref.watch(savedAddressesProvider).valueOrNull ??
+                      const <SavedAddress>[],
               onSavedTap: (SavedAddress a) {
                 ref
                     .read(locationProvider.notifier)
-                    .setFromSaved(a.label, a.line);
+                    .setFromSavedCoords(a.label, a.line, a.lat, a.lng);
                 context.pop();
               },
             ),
@@ -379,7 +382,7 @@ class _InteractiveMap extends StatelessWidget {
 <body>
 <div id="map"></div>
 <div id="search-wrap">
-  <input id="search-input" type="text" placeholder="Search for an address..." autocomplete="off"/>
+  <input id="search-input" type="text" placeholder="${AppLocalizations.of(context).searchForAddress}" autocomplete="off"/>
   <svg id="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:rgba(255,255,255,0.7)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
   <button id="clear-btn" type="button">&#x2715;</button>
 </div>
@@ -640,7 +643,7 @@ class _BottomPanel extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Service location',
+                    Text(AppLocalizations.of(context).serviceLocation,
                         style: text.labelSmall?.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w700,
@@ -660,7 +663,7 @@ class _BottomPanel extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              Text('Finding address...',
+                              Text(AppLocalizations.of(context).findingAddress,
                                   style: text.bodySmall?.copyWith(
                                     color: AppColors.textSecondary
                                         .withValues(alpha: 0.5),
@@ -668,7 +671,7 @@ class _BottomPanel extends StatelessWidget {
                             ],
                           )
                         : Text(
-                            address.isNotEmpty ? address : 'Move the map to set location',
+                            address.isNotEmpty ? address : AppLocalizations.of(context).moveMapToSet,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: text.bodyMedium?.copyWith(
@@ -754,7 +757,7 @@ class _BottomPanel extends StatelessWidget {
                       const Icon(Icons.check_circle_rounded,
                           color: Colors.white, size: 20),
                       const SizedBox(width: 10),
-                      Text('Set service location',
+                      Text(AppLocalizations.of(context).setServiceLocation,
                           style: text.titleSmall?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,

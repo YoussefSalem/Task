@@ -3325,6 +3325,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not set'**
   String get notSet;
+
+  /// No description provided for @noSavedAddressesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved addresses yet. Add one to reuse it later.'**
+  String get noSavedAddressesYet;
 }
 
 class _AppLocalizationsDelegate

@@ -38,6 +38,10 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme text = Theme.of(context).textTheme;
 
+    // One-shot browser geolocation on first entry — defaults the active
+    // location to where the user is; they can change it via the location bar.
+    ref.watch(locationBootstrapProvider);
+
     void startCategory(JobCategory c) {
       ref.read(jobDraftProvider.notifier).startCategory(c);
       context.push(JobCreateStubScreen.routePath);

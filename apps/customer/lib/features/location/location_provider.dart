@@ -1,8 +1,12 @@
 import 'dart:convert';
 
+import 'package:customer/features/localization/locale_controller.dart';
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+
+import 'geolocation.dart';
 
 const String _mapsKey = 'AIzaSyBkGqJxUaSwTtMdLG6HEArY2Ca_VO0yZKE';
 
@@ -23,18 +27,39 @@ class UserLocation {
       );
 }
 
-const UserLocation _defaultLocation = UserLocation(
-  label: 'Home',
-  address: 'Maadi, Cairo',
-  lat: 29.9602,
-  lng: 31.2569,
-);
+UserLocation _defaultLocation(AppLocalizations l) => UserLocation(
+      label: l.addrHome,
+      address: l.locDefaultAddress,
+      lat: 29.9602,
+      lng: 31.2569,
+    );
 
 class LocationNotifier extends StateNotifier<UserLocation> {
-  LocationNotifier() : super(_defaultLocation);
+  LocationNotifier(this._l) : super(_defaultLocation(_l));
+
+  final AppLocalizations _l;
 
   void setFromSaved(String label, String line) {
     state = UserLocation(label: label, address: line);
+  }
+
+  /// Switch the active location to a saved address (keeps its coordinates).
+  void setFromSavedCoords(String label, String line, double? lat, double? lng) {
+    state = UserLocation(label: label, address: line, lat: lat, lng: lng);
+  }
+
+  /// Best-effort browser geolocation, used to default the active location to
+  /// where the user actually is on first sign-in. Web-only; no-op elsewhere and
+  /// silently keeps the current location if permission is denied/unavailable.
+  Future<void> detectFromBrowser() async {
+    if (!kIsWeb) return;
+    try {
+      await detectCurrentLocation((double lat, double lng) {
+        setFromCoords(lat, lng);
+      });
+    } catch (_) {
+      // Permission denied / timeout — keep the existing location.
+    }
   }
 
   void setFromCoords(double lat, double lng) {
@@ -44,8 +69,8 @@ class LocationNotifier extends StateNotifier<UserLocation> {
 
   void setFromPinDrop(double lat, double lng, String address) {
     state = UserLocation(
-      label: 'Pin drop',
-      address: address.isNotEmpty ? address : 'Custom location',
+      label: _l.locPinDrop,
+      address: address.isNotEmpty ? address : _l.locCustom,
       lat: lat,
       lng: lng,
     );
@@ -55,7 +80,7 @@ class LocationNotifier extends StateNotifier<UserLocation> {
     try {
       final uri = Uri.parse(
         'https://maps.googleapis.com/maps/api/geocode/json'
-        '?latlng=$lat,$lng&key=$_mapsKey&language=en',
+        '?latlng=$lat,$lng&key=$_mapsKey&language=${_l.localeName}',
       );
       final resp = await http.get(uri);
       if (resp.statusCode != 200) return;
@@ -81,5 +106,12 @@ class LocationNotifier extends StateNotifier<UserLocation> {
 
 final locationProvider =
     StateNotifierProvider<LocationNotifier, UserLocation>(
-  (ref) => LocationNotifier(),
+  (ref) => LocationNotifier(lookupAppLocalizations(ref.watch(localeControllerProvider))),
 );
+
+/// Triggers a one-shot browser geolocation the first time it's watched after a
+/// user is signed in, defaulting the active location to where they are. Watched
+/// from the Home screen; FutureProvider caches so it runs once per session.
+final locationBootstrapProvider = FutureProvider<void>((ref) async {
+  await ref.read(locationProvider.notifier).detectFromBrowser();
+});

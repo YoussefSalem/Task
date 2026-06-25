@@ -1,3 +1,4 @@
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,16 +7,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 enum PaymentMethod { card, wallet, instapay }
 
 extension PaymentMethodX on PaymentMethod {
-  String get label => switch (this) {
-        PaymentMethod.card => 'Card',
-        PaymentMethod.wallet => 'Vodafone Cash',
-        PaymentMethod.instapay => 'InstaPay',
+  String label(AppLocalizations l) => switch (this) {
+        PaymentMethod.card => l.payCard,
+        PaymentMethod.wallet => l.payWallet,
+        PaymentMethod.instapay => l.payInstapay,
       };
 
-  String get sub => switch (this) {
-        PaymentMethod.card => 'Visa, Mastercard, Meeza · via Paymob',
-        PaymentMethod.wallet => 'Pay from your mobile wallet',
-        PaymentMethod.instapay => 'Instant bank transfer · confirmed by team',
+  String sub(AppLocalizations l) => switch (this) {
+        PaymentMethod.card => l.payCardSub,
+        PaymentMethod.wallet => l.payWalletSub,
+        PaymentMethod.instapay => l.payInstapaySub,
       };
 
   IconData get icon => switch (this) {
@@ -25,35 +26,49 @@ extension PaymentMethodX on PaymentMethod {
       };
 }
 
+/// Icon families a saved address can use. Stored as a string in Firestore and
+/// mapped back to an [IconData] for display, since [IconData] isn't directly
+/// serializable.
+enum AddressIconKind { home, work, other, friend, gym, school }
+
+extension AddressIconKindX on AddressIconKind {
+  IconData get icon => switch (this) {
+        AddressIconKind.home => Icons.home_rounded,
+        AddressIconKind.work => Icons.work_rounded,
+        AddressIconKind.other => Icons.location_on_rounded,
+        AddressIconKind.friend => Icons.person_rounded,
+        AddressIconKind.gym => Icons.fitness_center_rounded,
+        AddressIconKind.school => Icons.school_rounded,
+      };
+
+  static AddressIconKind fromName(Object? name) {
+    for (final AddressIconKind k in AddressIconKind.values) {
+      if (k.name == name) return k;
+    }
+    return AddressIconKind.other;
+  }
+}
+
 @immutable
 class SavedAddress {
   const SavedAddress({
     required this.id,
     required this.label,
     required this.line,
-    required this.icon,
+    this.iconKind = AddressIconKind.other,
+    this.lat,
+    this.lng,
   });
 
   final String id;
   final String label;
   final String line;
-  final IconData icon;
-}
+  final AddressIconKind iconKind;
+  final double? lat;
+  final double? lng;
 
-const List<SavedAddress> kSavedAddresses = <SavedAddress>[
-  SavedAddress(
-    id: 'home',
-    label: 'Home',
-    line: '14 Road 9, Maadi · Floor 3, Apt 6',
-    icon: Icons.home_rounded,
-  ),
-  SavedAddress(
-    id: 'work',
-    label: 'Work',
-    line: 'Smart Village, Building B12 · Reception',
-    icon: Icons.work_rounded,
-  ),
-];
+  IconData get icon => iconKind.icon;
+}
 
 /// Simulated Task wallet balance in EGP.
 /// In production this would come from a Firestore user-doc stream.
@@ -63,11 +78,11 @@ final walletCreditProvider = StateProvider<int>((ref) => 125);
 enum JobStage { searching, accepted, enRoute, inProgress, completed }
 
 extension JobStageX on JobStage {
-  String get title => switch (this) {
-        JobStage.searching => 'Finding your pro',
-        JobStage.accepted => 'Pro assigned',
-        JobStage.enRoute => 'On the way',
-        JobStage.inProgress => 'Work in progress',
-        JobStage.completed => 'Job complete',
+  String title(AppLocalizations l) => switch (this) {
+        JobStage.searching => l.stageSearching,
+        JobStage.accepted => l.stageAccepted,
+        JobStage.enRoute => l.stageEnRoute,
+        JobStage.inProgress => l.stageInProgress,
+        JobStage.completed => l.stageCompleted,
       };
 }

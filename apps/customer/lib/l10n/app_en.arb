@@ -537,5 +537,6 @@
   "callRetry": "Try again",
   "callError": "Could not connect.",
   "personalDetails": "Personal details",
-  "notSet": "Not set"
+  "notSet": "Not set",
+  "noSavedAddressesYet": "No saved addresses yet. Add one to reuse it later."
 }

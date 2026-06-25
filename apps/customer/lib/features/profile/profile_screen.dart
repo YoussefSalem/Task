@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
 
 import '../auth/auth_controller.dart';
+import '../address/address_repository.dart';
 import '../booking/booking_state.dart';
 import '../localization/language_switcher.dart';
 import '../settings/theme_controller.dart';
@@ -246,7 +247,8 @@ class ProfileScreen extends ConsumerWidget {
         isDark ? const Color(0x14FFFFFF) : const Color(0x14000000);
 
     final AppLocalizations loc = AppLocalizations.of(context);
-    final List<SavedAddress> addresses = savedAddresses(loc);
+    final List<SavedAddress> addresses =
+        ref.watch(savedAddressesProvider).valueOrNull ?? const <SavedAddress>[];
     final String addressSummary =
         addresses.map((SavedAddress a) => a.label).join(', ');
     final List<(IconData, String, String)> items = <(IconData, String, String)>[

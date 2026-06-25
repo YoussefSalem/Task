@@ -1711,4 +1711,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notSet => 'Not set';
+
+  @override
+  String get noSavedAddressesYet =>
+      'No saved addresses yet. Add one to reuse it later.';
 }

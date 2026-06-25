@@ -1702,4 +1702,8 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get notSet => 'غير محدد';
+
+  @override
+  String get noSavedAddressesYet =>
+      'لا توجد عناوين محفوظة بعد. أضف عنوانًا لاستخدامه لاحقًا.';
 }
