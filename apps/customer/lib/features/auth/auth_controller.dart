@@ -143,6 +143,15 @@ class AuthController {
     }
   }
 
+  /// Signs the user out of Firebase. After this the [authStateProvider] stream
+  /// emits null, so the splash/router lands on sign-in. No-op in mock mode.
+  Future<void> signOut() async {
+    if (_looksOffline) return;
+    try {
+      await _auth.signOut();
+    } catch (_) {}
+  }
+
   Future<AuthOutcome> signInWithGoogle() =>
       _oauth(GoogleAuthProvider(), 'Google');
 

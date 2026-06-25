@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
 
+import '../auth/auth_controller.dart';
 import '../booking/booking_state.dart';
 import '../localization/language_switcher.dart';
 import '../settings/theme_controller.dart';
@@ -53,7 +54,10 @@ class ProfileScreen extends ConsumerWidget {
               _menu(context, text, ref),
               const SizedBox(height: AppSpacing.xl),
               OutlinedButton.icon(
-                onPressed: () => context.go('/'),
+                onPressed: () async {
+                  await ref.read(authControllerProvider).signOut();
+                  if (context.mounted) context.go('/');
+                },
                 icon: const Icon(Icons.logout_rounded),
                 label: Text(AppLocalizations.of(context).signOut),
                 style: OutlinedButton.styleFrom(
