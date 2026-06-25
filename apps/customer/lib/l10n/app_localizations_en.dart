@@ -728,11 +728,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get whatNeedsFixing => '?What needs fixing';
+  String get whatNeedsFixing => 'What needs fixing?';
 
   @override
   String get describeItInYourWords =>
-      'Describe it in your words — I\'ll line up the right pro. You decide the price';
+      'Describe it in your words — I\'ll line up the right pro. You decide the price.';
 
   @override
   String get kitchenSinkIsBlocked => '...Kitchen sink is blocked';
@@ -915,4 +915,794 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pleaseSelectYourBirthday => 'Please select your birthday.';
+
+  @override
+  String get badgePro => 'PRO';
+
+  @override
+  String get badgeExpert => 'EXPERT';
+
+  @override
+  String get badgePlatinum => 'PLATINUM';
+
+  @override
+  String get techNameMohamed => 'Mohamed Ali';
+
+  @override
+  String get techNameSara => 'Sara Hassan';
+
+  @override
+  String get techNameKarim => 'Karim Fouad';
+
+  @override
+  String get specialtyPlumbing => 'Plumbing Specialist';
+
+  @override
+  String get specialtyElectrical => 'Electrical Expert';
+
+  @override
+  String get specialtyAc => 'AC Technician';
+
+  @override
+  String jobsCountLabel(Object count) {
+    return '$count+ Jobs';
+  }
+
+  @override
+  String get payCard => 'Card';
+
+  @override
+  String get payWallet => 'Vodafone Cash';
+
+  @override
+  String get payInstapay => 'InstaPay';
+
+  @override
+  String get payCardSub => 'Visa, Mastercard, Meeza · via Paymob';
+
+  @override
+  String get payWalletSub => 'Pay from your mobile wallet';
+
+  @override
+  String get payInstapaySub => 'Instant bank transfer · confirmed by team';
+
+  @override
+  String get addrHome => 'Home';
+
+  @override
+  String get addrWork => 'Work';
+
+  @override
+  String get addrHomeLine => '14 Road 9, Maadi · Floor 3, Apt 6';
+
+  @override
+  String get addrWorkLine => 'Smart Village, Building B12 · Reception';
+
+  @override
+  String get stageSearching => 'Finding your pro';
+
+  @override
+  String get stageAccepted => 'Pro assigned';
+
+  @override
+  String get stageEnRoute => 'On the way';
+
+  @override
+  String get stageInProgress => 'Work in progress';
+
+  @override
+  String get stageCompleted => 'Job complete';
+
+  @override
+  String get locDefaultAddress => 'Maadi, Cairo';
+
+  @override
+  String get locPinDrop => 'Pin drop';
+
+  @override
+  String get locCustom => 'Custom location';
+
+  @override
+  String get locNasrCity => 'Nasr City, Cairo';
+
+  @override
+  String get locSheikhZayed => 'Sheikh Zayed, Giza';
+
+  @override
+  String get techNameKhaled => 'Khaled Mansour';
+
+  @override
+  String get techNameSayed => 'Sayed Abdel-Rahman';
+
+  @override
+  String get techNameMostafa => 'Mostafa Eid';
+
+  @override
+  String get etaCanStart40 => 'Can start in 40 min';
+
+  @override
+  String get etaThisEvening => 'Available this evening';
+
+  @override
+  String get etaCanStart25 => 'Can start in 25 min';
+
+  @override
+  String get jobSeed1Title => 'Leaking kitchen sink';
+
+  @override
+  String get jobSeed1Desc =>
+      'Steady drip under the sink, water pooling in the cabinet.';
+
+  @override
+  String get jobSeed2Title => 'AC not cooling';
+
+  @override
+  String get jobSeed2Desc => 'Split unit runs but blows warm air.';
+
+  @override
+  String get jobSeed3Title => 'Replace tripping breaker';
+
+  @override
+  String get jobSeed3Desc => 'Main breaker trips when the heater runs.';
+
+  @override
+  String get catPainter => 'Painter';
+
+  @override
+  String get catSatellite => 'Satellite';
+
+  @override
+  String get catSmartHome => 'Smart Home';
+
+  @override
+  String get catTilesHandyman => 'Tiles Handyman';
+
+  @override
+  String get catPlaster => 'Plaster';
+
+  @override
+  String get catSmith => 'Smith';
+
+  @override
+  String get catParquet => 'Parquet';
+
+  @override
+  String get catGypsumWorks => 'Gypsum Works';
+
+  @override
+  String get catGypsumBoard => 'Gypsum Board';
+
+  @override
+  String get catMarbleGranite => 'Marble & Granite';
+
+  @override
+  String get catAlumetal => 'Alumetal';
+
+  @override
+  String get catGlassCecurit => 'Glass & Cecurit';
+
+  @override
+  String get catCurtainsUpholstery => 'Curtains & Upholstery';
+
+  @override
+  String get catWoodPainter => 'Wood Painter';
+
+  @override
+  String get catMovingServices => 'Moving Services';
+
+  @override
+  String get catPuCornices => 'PU Cornices';
+
+  @override
+  String get catMaterialWinch => 'Material Winch';
+
+  @override
+  String get catAppliancesMaintenance => 'Appliances Maintenance';
+
+  @override
+  String get catSwimmingPool => 'Swimming Pool Maintenance';
+
+  @override
+  String get catPestControl => 'Pest Control';
+
+  @override
+  String get statusSearching => 'Searching';
+
+  @override
+  String get statusPendingScheduled => 'Scheduled';
+
+  @override
+  String get statusBiddingActive => 'Receiving offers';
+
+  @override
+  String get statusAccepted => 'Accepted';
+
+  @override
+  String get statusEnRoute => 'On the way';
+
+  @override
+  String get statusInProgress => 'In progress';
+
+  @override
+  String get statusPausedForApproval => 'Awaiting approval';
+
+  @override
+  String get statusCompleted => 'Completed';
+
+  @override
+  String get statusDisputed => 'Disputed';
+
+  @override
+  String get statusCancelled => 'Cancelled';
+
+  @override
+  String get demoUserName => 'Ahmed';
+
+  @override
+  String get yourProfile => 'Your profile';
+
+  @override
+  String get powerKeepsTripping => 'Power keeps tripping…';
+
+  @override
+  String get needDeepCleanWeekend => 'Need a deep clean this weekend…';
+
+  @override
+  String get summerAcCheckup => 'Summer AC Check-up';
+
+  @override
+  String get badgeLimited => 'LIMITED';
+
+  @override
+  String get outletInstall => 'Outlet Install';
+
+  @override
+  String get fullHomeClean => 'Full Home Clean';
+
+  @override
+  String get roomRepaint => 'Room Repaint';
+
+  @override
+  String get egpPerHour => 'EGP/hr';
+
+  @override
+  String get searchingForPros => 'Searching for pros…';
+
+  @override
+  String get tapToReviewHire => 'Tap to review and hire a technician';
+
+  @override
+  String get tapToViewProgress => 'Tap to view live search progress';
+
+  @override
+  String get stepConfirmed => 'Confirmed';
+
+  @override
+  String get stepWorking => 'Working';
+
+  @override
+  String get searchingWithin3km => 'Searching within 3 km…';
+
+  @override
+  String get wideningTo6km => 'Widening to 6 km…';
+
+  @override
+  String get reachingNearbyPros => 'Reaching nearby pros…';
+
+  @override
+  String get yourJob => 'your job';
+
+  @override
+  String get proAssignedExcl => 'Pro assigned!';
+
+  @override
+  String get proHeadingToYou => 'Khaled is 1.8 km away and heading to you.';
+
+  @override
+  String get trackYourPro => 'Track your pro';
+
+  @override
+  String get proKhaledInitials => 'KM';
+
+  @override
+  String get jobsWord => 'jobs';
+
+  @override
+  String get verified => 'Verified';
+
+  @override
+  String get hireAndTrack => 'Hire & track';
+
+  @override
+  String upToFiveProsBid(Object job) {
+    return 'Up to 5 pros bid privately for your $job. No one sees the others\' price.';
+  }
+
+  @override
+  String get jobWord => 'job';
+
+  @override
+  String offersReceivedCount(Object count) {
+    return '$count offers received';
+  }
+
+  @override
+  String get sealed => 'Sealed';
+
+  @override
+  String get lowest => 'Lowest';
+
+  @override
+  String prosFoundNearby(Object count) {
+    return '$count pros found nearby';
+  }
+
+  @override
+  String get waitingForOffers => 'Waiting for offers…';
+
+  @override
+  String get scanningYourArea => 'Scanning your area — usually under a minute';
+
+  @override
+  String get sendingJobDetails => 'Sending your job details to them now';
+
+  @override
+  String get prosReviewing => 'Pros are reviewing your request';
+
+  @override
+  String get openingYourOffers => 'Opening your offers…';
+
+  @override
+  String get stopSearchQ => 'Stop search?';
+
+  @override
+  String get stopSearchBody =>
+      'Your request stays active and technicians can still send offers.\n\nYou\'ll get a notification when offers arrive. To fully stop, cancel the request.';
+
+  @override
+  String get liveSearch => 'Live search';
+
+  @override
+  String get youCanExitNote =>
+      'You can exit — your request stays active. We\'ll notify you when offers arrive.';
+
+  @override
+  String get stopSearch => 'Stop search';
+
+  @override
+  String viewOffersCount(Object count) {
+    return 'View $count offers';
+  }
+
+  @override
+  String get phaseSearching => 'Searching';
+
+  @override
+  String get phaseFound => 'Found';
+
+  @override
+  String get phaseWaiting => 'Waiting';
+
+  @override
+  String get phaseOffers => 'Offers';
+
+  @override
+  String offersCountShort(Object count) {
+    return '$count offers';
+  }
+
+  @override
+  String jobsDoneCount(Object count) {
+    return '$count jobs done';
+  }
+
+  @override
+  String get selectedLabel => 'Selected';
+
+  @override
+  String get selectOffer => 'Select offer';
+
+  @override
+  String get inAppVoipCall => 'In-app VoIP call';
+
+  @override
+  String get startCall => 'Start call';
+
+  @override
+  String get goBackToOffers => 'Go back to offers';
+
+  @override
+  String get bookingConfirmedSub =>
+      'We\'ve locked in your pro. You\'ll get a reminder before they arrive.';
+
+  @override
+  String get payAndFinish => 'Pay & finish';
+
+  @override
+  String get reviewAndPay => 'Review & pay';
+
+  @override
+  String get serviceLabel => 'Service';
+
+  @override
+  String get titleLabel => 'Title';
+
+  @override
+  String get jobTotal => 'Job total';
+
+  @override
+  String get taskCreditApplied => 'Task credit applied';
+
+  @override
+  String get youPay => 'You pay';
+
+  @override
+  String get free => 'Free';
+
+  @override
+  String get taskCreditCovers =>
+      'Your Task credit fully covers this order — no additional payment needed.';
+
+  @override
+  String payAmount(Object amount) {
+    return 'Pay $amount EGP';
+  }
+
+  @override
+  String taskCreditAppliedAmount(Object amount) {
+    return '$amount EGP Task credit applied';
+  }
+
+  @override
+  String get walletTitle => 'Wallet';
+
+  @override
+  String get recentActivity => 'Recent activity';
+
+  @override
+  String get topUp => 'Top up';
+
+  @override
+  String get sendAction => 'Send';
+
+  @override
+  String featureArrivesWithPayments(Object feature) {
+    return '$feature arrives with payments.';
+  }
+
+  @override
+  String get walletTopUp => 'Wallet top-up';
+
+  @override
+  String get referralCredit => 'Referral credit';
+
+  @override
+  String get txnToday240 => 'Today · 2:40 PM';
+
+  @override
+  String get txnYesterday => 'Yesterday';
+
+  @override
+  String get txnMar18 => 'Mar 18 · 6:15 PM';
+
+  @override
+  String get txnMar15 => 'Mar 15';
+
+  @override
+  String get tagOnTime => 'On time';
+
+  @override
+  String get tagTidyWork => 'Tidy work';
+
+  @override
+  String get tagSkilled => 'Skilled';
+
+  @override
+  String get tagGreatCommunication => 'Great communication';
+
+  @override
+  String howWasYour(Object service) {
+    return 'How was your $service?';
+  }
+
+  @override
+  String get serviceWord => 'service';
+
+  @override
+  String withPro(Object name) {
+    return 'with $name';
+  }
+
+  @override
+  String get submitReview => 'Submit review';
+
+  @override
+  String get reviewSubmitted => 'Review submitted!';
+
+  @override
+  String thanksForRating(Object name) {
+    return 'Thanks for rating $name.\nYour feedback helps the whole community.';
+  }
+
+  @override
+  String redirectingIn(Object seconds) {
+    return 'Redirecting in $seconds s…';
+  }
+
+  @override
+  String etaMinutes(Object minutes) {
+    return 'ETA $minutes min';
+  }
+
+  @override
+  String get homeService => 'Home service';
+
+  @override
+  String get headingToAddress => 'Heading to your address';
+
+  @override
+  String get workingOnJob => 'Working on the job';
+
+  @override
+  String get jobCompleted => 'Job completed';
+
+  @override
+  String featureOpensComms(Object feature) {
+    return '$feature opens in the comms phase.';
+  }
+
+  @override
+  String get pinOnMap => 'Pin on map';
+
+  @override
+  String get specializedServices => 'Specialized Services';
+
+  @override
+  String get maintenanceGroup => 'Maintenance';
+
+  @override
+  String get takeAPhoto => 'Take a photo';
+
+  @override
+  String get recordAVideo => 'Record a video';
+
+  @override
+  String get describeProblemHint =>
+      'e.g. Living-room lights keep flickering when I turn on the AC...';
+
+  @override
+  String get publishJob => 'Publish job';
+
+  @override
+  String get chatMsgHello =>
+      'Hello! I reviewed your job. I can arrive within 30 minutes.';
+
+  @override
+  String get chatMsgQuote =>
+      'My quote includes all materials. Any specific brand preference?';
+
+  @override
+  String get chatMsgReply =>
+      'Got it! I\'ll bring everything needed. See you soon.';
+
+  @override
+  String get chatTime341 => '3:41 PM';
+
+  @override
+  String get online => 'Online';
+
+  @override
+  String get messageHint => 'Message…';
+
+  @override
+  String get suggestionAcLeaking => 'My AC is leaking water';
+
+  @override
+  String get suggestionPowerTripping => 'Power keeps tripping';
+
+  @override
+  String get suggestionDeepClean => 'Need a deep clean this weekend';
+
+  @override
+  String get taskAssistant => 'Task Assistant';
+
+  @override
+  String get newRequest => 'New request';
+
+  @override
+  String get replyYesToPost => 'Reply yes to post, or no to change…';
+
+  @override
+  String get requestPosted => 'Request posted';
+
+  @override
+  String get messageAssistant => 'Message the assistant…';
+
+  @override
+  String get assistantGreeting =>
+      'Hi! I\'m your Task assistant. Tell me what needs fixing and I\'ll write a clear summary for the right pro. You decide the price.';
+
+  @override
+  String get assistantAlreadyLive =>
+      'Your request is already live with technicians. Tap \"New request\" below to start another one.';
+
+  @override
+  String get assistantPriceAsk =>
+      'Great — I\'ve got everything I need. What would you like to pay for this service, in EGP?';
+
+  @override
+  String get assistantNoPriceCaught =>
+      'I didn\'t catch a price there. About how much would you like to pay, in EGP? For example \"400\".';
+
+  @override
+  String get assistantSomethingMissing =>
+      'Something\'s missing from the request — let\'s go over it again. What\'s the problem?';
+
+  @override
+  String get assistantPosted =>
+      'Done — your request is now live for technicians to review. You\'ll start getting offers shortly.';
+
+  @override
+  String get assistantWhatToChange =>
+      'No problem. What would you like to change? Tell me a new price, or describe anything about the job you want to adjust.';
+
+  @override
+  String get assistantJustConfirm =>
+      'Just to confirm — should I post this for technicians? Reply \"yes\" to post, or \"no\" to change something.';
+
+  @override
+  String assistantConfirm(Object cat, Object price, Object title) {
+    return 'Here\'s your request:\n\n• $cat — $title\n• You pay: EGP $price\n\nShall I post this for technicians to review? Reply \"yes\" to post, or \"no\" to change something.';
+  }
+
+  @override
+  String get assistantMockAskMore =>
+      'Tell me what\'s going wrong — for example a leak, an AC that won\'t cool, or power that keeps tripping — and where in your home it is.';
+
+  @override
+  String assistantMockGotIt(Object category) {
+    return 'Got it — this looks like a $category job. I\'ve put together a summary for technicians below. Set the price you want to pay and publish when you are ready.';
+  }
+
+  @override
+  String get assistantError =>
+      'I had trouble reaching the assistant just now — please try sending that again.';
+
+  @override
+  String get demoProfileName => 'Nour Adel';
+
+  @override
+  String get demoProfileInitials => 'NA';
+
+  @override
+  String featureArrivesLater(Object feature) {
+    return '$feature arrives in a later phase.';
+  }
+
+  @override
+  String get noPastJobs => 'No past jobs yet';
+
+  @override
+  String get requestNewCode => 'Request a new code, please.';
+
+  @override
+  String get invalidPhone => 'That phone number looks invalid.';
+
+  @override
+  String get incorrectCode => 'That code is incorrect.';
+
+  @override
+  String get tooManyAttempts => 'Too many attempts. Try again later.';
+
+  @override
+  String get signInCancelled => 'Sign-in was cancelled.';
+
+  @override
+  String get genericAuthError => 'Something went wrong. Please try again.';
+
+  @override
+  String sentCodeTo(Object phone) {
+    return 'We sent a 6-digit code to $phone.';
+  }
+
+  @override
+  String resendCodeIn(Object time) {
+    return 'Resend code in $time';
+  }
+
+  @override
+  String get verifyAction => 'Verify';
+
+  @override
+  String get signInFailed => 'Sign-in failed.';
+
+  @override
+  String get moreCountriesSoon =>
+      'More countries arrive with international launch.';
+
+  @override
+  String get privacyOpensLater => 'Privacy Policy opens in a later phase.';
+
+  @override
+  String get termsOpensLater => 'Terms of Service opens in a later phase.';
+
+  @override
+  String get requiredField => 'Required';
+
+  @override
+  String get profileSubtitle =>
+      'A few details so technicians know who they\'re helping.';
+
+  @override
+  String get hintFirstName => 'Ahmed';
+
+  @override
+  String get hintLastName => 'Hassan';
+
+  @override
+  String get selectYourBirthday => 'Select your birthday';
+
+  @override
+  String get searchForAddress => 'Search for an address...';
+
+  @override
+  String get serviceLocation => 'Service location';
+
+  @override
+  String get moveMapToSet => 'Move the map to set location';
+
+  @override
+  String get setServiceLocation => 'Set service location';
+
+  @override
+  String get postedSuccessBody =>
+      'Your request is live — technicians are reviewing it now and will send you offers shortly.';
+
+  @override
+  String get takingYouHome => 'Taking you home…';
+
+  @override
+  String get fillAllFields => 'Please fill all required fields.';
+
+  @override
+  String get addressLabel => 'Address label';
+
+  @override
+  String get addressLabelHint => 'e.g., Home, Work, Friend\'s place';
+
+  @override
+  String get addressDetails => 'Address details';
+
+  @override
+  String get addressDetailsHint => 'e.g., 14 Road 9, Maadi · Floor 3, Apt 6';
+
+  @override
+  String get selectIcon => 'Select an icon';
+
+  @override
+  String get callConnecting => 'Connecting…';
+
+  @override
+  String get callRinging => 'Ringing…';
+
+  @override
+  String get callEnded => 'Call ended';
+
+  @override
+  String get callMute => 'Mute';
+
+  @override
+  String get callUnmute => 'Unmute';
+
+  @override
+  String get callSpeaker => 'Speaker';
+
+  @override
+  String get callEarpiece => 'Earpiece';
+
+  @override
+  String get callRetry => 'Try again';
+
+  @override
+  String get callError => 'Could not connect.';
 }

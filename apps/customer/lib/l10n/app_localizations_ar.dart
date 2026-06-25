@@ -725,11 +725,11 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get whatNeedsFixing => '؟إيه اللي محتاج إصلاح';
+  String get whatNeedsFixing => 'إيه اللي محتاج إصلاح؟';
 
   @override
   String get describeItInYourWords =>
-      'اكتب بكلامك — هجيبلك الفني اللي يناسبك. أنت اللي تحط السعر';
+      'قول لي التفاصيل — هجدد الفني المناسب. وانت اللي تحدّد السعر.';
 
   @override
   String get kitchenSinkIsBlocked => '...حوض المطبخ مسدود';
@@ -912,4 +912,788 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pleaseSelectYourBirthday => 'من فضلك اختار تاريخ ميلادك.';
+
+  @override
+  String get badgePro => 'محترف';
+
+  @override
+  String get badgeExpert => 'خبير';
+
+  @override
+  String get badgePlatinum => 'بلاتيني';
+
+  @override
+  String get techNameMohamed => 'محمد علي';
+
+  @override
+  String get techNameSara => 'سارة حسن';
+
+  @override
+  String get techNameKarim => 'كريم فؤاد';
+
+  @override
+  String get specialtyPlumbing => 'أخصائي سباكة';
+
+  @override
+  String get specialtyElectrical => 'خبير كهرباء';
+
+  @override
+  String get specialtyAc => 'فني تكييف';
+
+  @override
+  String jobsCountLabel(Object count) {
+    return '$count+ شغلانة';
+  }
+
+  @override
+  String get payCard => 'بطاقة';
+
+  @override
+  String get payWallet => 'فودافون كاش';
+
+  @override
+  String get payInstapay => 'إنستاباي';
+
+  @override
+  String get payCardSub => 'فيزا، ماستركارد، ميزة · عن طريق Paymob';
+
+  @override
+  String get payWalletSub => 'ادفع من محفظتك على الموبايل';
+
+  @override
+  String get payInstapaySub => 'تحويل بنكي فوري · بيتأكد من الفريق';
+
+  @override
+  String get addrHome => 'البيت';
+
+  @override
+  String get addrWork => 'الشغل';
+
+  @override
+  String get addrHomeLine => '14 شارع 9، المعادي · الدور 3، شقة 6';
+
+  @override
+  String get addrWorkLine => 'القرية الذكية، مبنى B12 · الاستقبال';
+
+  @override
+  String get stageSearching => 'بندوّر على فني مناسب';
+
+  @override
+  String get stageAccepted => 'اتعيّن الفني';
+
+  @override
+  String get stageEnRoute => 'في الطريق';
+
+  @override
+  String get stageInProgress => 'الشغل بيتعمل';
+
+  @override
+  String get stageCompleted => 'الشغلانة خلصت';
+
+  @override
+  String get locDefaultAddress => 'المعادي، القاهرة';
+
+  @override
+  String get locPinDrop => 'تحديد على الخريطة';
+
+  @override
+  String get locCustom => 'موقع مخصص';
+
+  @override
+  String get locNasrCity => 'مدينة نصر، القاهرة';
+
+  @override
+  String get locSheikhZayed => 'الشيخ زايد، الجيزة';
+
+  @override
+  String get techNameKhaled => 'خالد منصور';
+
+  @override
+  String get techNameSayed => 'سيد عبد الرحمن';
+
+  @override
+  String get techNameMostafa => 'مصطفى عيد';
+
+  @override
+  String get etaCanStart40 => 'يقدر يبدأ خلال 40 دقيقة';
+
+  @override
+  String get etaThisEvening => 'متاح بليل النهاردة';
+
+  @override
+  String get etaCanStart25 => 'يقدر يبدأ خلال 25 دقيقة';
+
+  @override
+  String get jobSeed1Title => 'حوض المطبخ بينقّط';
+
+  @override
+  String get jobSeed1Desc =>
+      'تنقيط مستمر تحت الحوض، والمية بتتجمّع في الدولاب.';
+
+  @override
+  String get jobSeed2Title => 'التكييف مش بيبرّد';
+
+  @override
+  String get jobSeed2Desc => 'الوحدة شغالة بس بتطلّع هوا سخن.';
+
+  @override
+  String get jobSeed3Title => 'تغيير قاطع كهرباء بيفصل';
+
+  @override
+  String get jobSeed3Desc => 'القاطع الرئيسي بيفصل لما السخان يشتغل.';
+
+  @override
+  String get catPainter => 'نقّاش';
+
+  @override
+  String get catSatellite => 'دش';
+
+  @override
+  String get catSmartHome => 'بيت ذكي';
+
+  @override
+  String get catTilesHandyman => 'معلّم بلاط';
+
+  @override
+  String get catPlaster => 'محارة';
+
+  @override
+  String get catSmith => 'حدّاد';
+
+  @override
+  String get catParquet => 'باركيه';
+
+  @override
+  String get catGypsumWorks => 'أعمال جبس';
+
+  @override
+  String get catGypsumBoard => 'جبس بورد';
+
+  @override
+  String get catMarbleGranite => 'رخام وجرانيت';
+
+  @override
+  String get catAlumetal => 'ألوميتال';
+
+  @override
+  String get catGlassCecurit => 'زجاج وسيكوريت';
+
+  @override
+  String get catCurtainsUpholstery => 'ستائر ومفروشات';
+
+  @override
+  String get catWoodPainter => 'دهان أخشاب';
+
+  @override
+  String get catMovingServices => 'خدمات نقل';
+
+  @override
+  String get catPuCornices => 'كرانيش PU';
+
+  @override
+  String get catMaterialWinch => 'ونش مواد';
+
+  @override
+  String get catAppliancesMaintenance => 'صيانة أجهزة';
+
+  @override
+  String get catSwimmingPool => 'صيانة حمامات سباحة';
+
+  @override
+  String get catPestControl => 'مكافحة حشرات';
+
+  @override
+  String get statusSearching => 'بندوّر';
+
+  @override
+  String get statusPendingScheduled => 'محجوز بموعد';
+
+  @override
+  String get statusBiddingActive => 'بيستقبل عروض';
+
+  @override
+  String get statusAccepted => 'اتقبل';
+
+  @override
+  String get statusEnRoute => 'في الطريق';
+
+  @override
+  String get statusInProgress => 'بيتنفّذ';
+
+  @override
+  String get statusPausedForApproval => 'مستني موافقتك';
+
+  @override
+  String get statusCompleted => 'اتخلص';
+
+  @override
+  String get statusDisputed => 'فيه خلاف';
+
+  @override
+  String get statusCancelled => 'اتلغى';
+
+  @override
+  String get demoUserName => 'أحمد';
+
+  @override
+  String get yourProfile => 'ملفك الشخصي';
+
+  @override
+  String get powerKeepsTripping => 'الكهربا بتفصل على طول…';
+
+  @override
+  String get needDeepCleanWeekend => 'محتاج تنظيف شامل الويك إند…';
+
+  @override
+  String get summerAcCheckup => 'صيانة تكييف الصيف';
+
+  @override
+  String get badgeLimited => 'محدود';
+
+  @override
+  String get outletInstall => 'تركيب فيشة';
+
+  @override
+  String get fullHomeClean => 'تنظيف شامل للبيت';
+
+  @override
+  String get roomRepaint => 'دهان غرفة';
+
+  @override
+  String get egpPerHour => 'جنيه/ساعة';
+
+  @override
+  String get searchingForPros => 'بندوّر على فنيين…';
+
+  @override
+  String get tapToReviewHire => 'اضغط لمراجعة العروض وتعيين فني';
+
+  @override
+  String get tapToViewProgress => 'اضغط لمتابعة البحث المباشر';
+
+  @override
+  String get stepConfirmed => 'اتأكد';
+
+  @override
+  String get stepWorking => 'بيشتغل';
+
+  @override
+  String get searchingWithin3km => 'بندوّر في نطاق 3 كم…';
+
+  @override
+  String get wideningTo6km => 'بنوسّع لـ 6 كم…';
+
+  @override
+  String get reachingNearbyPros => 'بنوصل لفنيين قريبين…';
+
+  @override
+  String get yourJob => 'شغلانتك';
+
+  @override
+  String get proAssignedExcl => 'اتعيّن الفني!';
+
+  @override
+  String get proHeadingToYou => 'خالد على بعد 1.8 كم وجاي ليك.';
+
+  @override
+  String get trackYourPro => 'تابع الفني';
+
+  @override
+  String get proKhaledInitials => 'خم';
+
+  @override
+  String get jobsWord => 'شغلانة';
+
+  @override
+  String get verified => 'موثّق';
+
+  @override
+  String get hireAndTrack => 'عيّن وتابع';
+
+  @override
+  String upToFiveProsBid(Object job) {
+    return 'لحد 5 فنيين بيقدّموا عروض سرية على $job. محدش بيشوف سعر التاني.';
+  }
+
+  @override
+  String get jobWord => 'شغلانة';
+
+  @override
+  String offersReceivedCount(Object count) {
+    return '$count عروض وصلت';
+  }
+
+  @override
+  String get sealed => 'مغلق';
+
+  @override
+  String get lowest => 'الأقل';
+
+  @override
+  String prosFoundNearby(Object count) {
+    return 'لقينا $count فنيين قريبين';
+  }
+
+  @override
+  String get waitingForOffers => 'مستني العروض…';
+
+  @override
+  String get scanningYourArea => 'بنمسح منطقتك — عادة أقل من دقيقة';
+
+  @override
+  String get sendingJobDetails => 'بنبعت تفاصيل شغلانتك لهم دلوقتي';
+
+  @override
+  String get prosReviewing => 'الفنيين بيراجعوا طلبك';
+
+  @override
+  String get openingYourOffers => 'بنفتح عروضك…';
+
+  @override
+  String get stopSearchQ => 'توقّف البحث؟';
+
+  @override
+  String get stopSearchBody =>
+      'طلبك هيفضل نشيط والفنيين لسه يقدروا يبعتوا عروض.\n\nهيوصلك إشعار لما العروض تيجي. عشان توقّف خالص، الغِ الطلب.';
+
+  @override
+  String get liveSearch => 'بحث مباشر';
+
+  @override
+  String get youCanExitNote =>
+      'تقدر تخرج — طلبك هيفضل نشيط. هنبلّغك لما العروض تيجي.';
+
+  @override
+  String get stopSearch => 'وقّف البحث';
+
+  @override
+  String viewOffersCount(Object count) {
+    return 'شوف $count عروض';
+  }
+
+  @override
+  String get phaseSearching => 'بندوّر';
+
+  @override
+  String get phaseFound => 'لقينا';
+
+  @override
+  String get phaseWaiting => 'بنستنى';
+
+  @override
+  String get phaseOffers => 'عروض';
+
+  @override
+  String offersCountShort(Object count) {
+    return '$count عروض';
+  }
+
+  @override
+  String jobsDoneCount(Object count) {
+    return '$count شغلانة خلصت';
+  }
+
+  @override
+  String get selectedLabel => 'اتختار';
+
+  @override
+  String get selectOffer => 'اختار العرض';
+
+  @override
+  String get inAppVoipCall => 'مكالمة داخل التطبيق';
+
+  @override
+  String get startCall => 'ابدأ المكالمة';
+
+  @override
+  String get goBackToOffers => 'ارجع للعروض';
+
+  @override
+  String get bookingConfirmedSub => 'ثبّتنا الفني بتاعك. هنفكّرك قبل ما يوصل.';
+
+  @override
+  String get payAndFinish => 'ادفع وخلّص';
+
+  @override
+  String get reviewAndPay => 'راجع وادفع';
+
+  @override
+  String get serviceLabel => 'الخدمة';
+
+  @override
+  String get titleLabel => 'العنوان';
+
+  @override
+  String get jobTotal => 'إجمالي الشغلانة';
+
+  @override
+  String get taskCreditApplied => 'اتطبّق رصيد Task';
+
+  @override
+  String get youPay => 'اللي هتدفعه';
+
+  @override
+  String get free => 'مجانًا';
+
+  @override
+  String get taskCreditCovers =>
+      'رصيد Task بيغطي الطلب بالكامل — مش محتاج تدفع زيادة.';
+
+  @override
+  String payAmount(Object amount) {
+    return 'ادفع $amount جنيه';
+  }
+
+  @override
+  String taskCreditAppliedAmount(Object amount) {
+    return 'اتطبّق $amount جنيه رصيد Task';
+  }
+
+  @override
+  String get walletTitle => 'المحفظة';
+
+  @override
+  String get recentActivity => 'آخر العمليات';
+
+  @override
+  String get topUp => 'اشحن';
+
+  @override
+  String get sendAction => 'حوّل';
+
+  @override
+  String featureArrivesWithPayments(Object feature) {
+    return '$feature هيكون متاح مع المدفوعات.';
+  }
+
+  @override
+  String get walletTopUp => 'شحن المحفظة';
+
+  @override
+  String get referralCredit => 'رصيد إحالة';
+
+  @override
+  String get txnToday240 => 'النهاردة · 2:40 م';
+
+  @override
+  String get txnYesterday => 'إمبارح';
+
+  @override
+  String get txnMar18 => '18 مارس · 6:15 م';
+
+  @override
+  String get txnMar15 => '15 مارس';
+
+  @override
+  String get tagOnTime => 'في الميعاد';
+
+  @override
+  String get tagTidyWork => 'شغل نضيف';
+
+  @override
+  String get tagSkilled => 'ماهر';
+
+  @override
+  String get tagGreatCommunication => 'تواصل ممتاز';
+
+  @override
+  String howWasYour(Object service) {
+    return 'إزاي كانت $service؟';
+  }
+
+  @override
+  String get serviceWord => 'الخدمة';
+
+  @override
+  String withPro(Object name) {
+    return 'مع $name';
+  }
+
+  @override
+  String get submitReview => 'ابعت التقييم';
+
+  @override
+  String get reviewSubmitted => 'اتبعت التقييم!';
+
+  @override
+  String thanksForRating(Object name) {
+    return 'شكرًا لتقييمك $name.\nرأيك بيساعد المجتمع كله.';
+  }
+
+  @override
+  String redirectingIn(Object seconds) {
+    return 'هنحوّلك خلال $seconds ث…';
+  }
+
+  @override
+  String etaMinutes(Object minutes) {
+    return 'بيوصل خلال $minutes دقيقة';
+  }
+
+  @override
+  String get homeService => 'خدمة منزلية';
+
+  @override
+  String get headingToAddress => 'في الطريق لعنوانك';
+
+  @override
+  String get workingOnJob => 'بيشتغل في الشغلانة';
+
+  @override
+  String get jobCompleted => 'الشغلانة خلصت';
+
+  @override
+  String featureOpensComms(Object feature) {
+    return '$feature هيتفعّل في مرحلة التواصل.';
+  }
+
+  @override
+  String get pinOnMap => 'حدّد على الخريطة';
+
+  @override
+  String get specializedServices => 'خدمات متخصصة';
+
+  @override
+  String get maintenanceGroup => 'الصيانة';
+
+  @override
+  String get takeAPhoto => 'صوّر بالكاميرا';
+
+  @override
+  String get recordAVideo => 'سجّل فيديو';
+
+  @override
+  String get describeProblemHint =>
+      'مثلاً: نور الأوضة بيرفرف لما أشغّل التكييف...';
+
+  @override
+  String get publishJob => 'انشر الشغلانة';
+
+  @override
+  String get chatMsgHello => 'أهلاً! راجعت شغلانتك. أقدر أوصل خلال 30 دقيقة.';
+
+  @override
+  String get chatMsgQuote => 'عرضي شامل كل الخامات. عايز ماركة معيّنة؟';
+
+  @override
+  String get chatMsgReply => 'تمام! هجيب كل اللي محتاجينه. أشوفك قريب.';
+
+  @override
+  String get chatTime341 => '3:41 م';
+
+  @override
+  String get online => 'متصل';
+
+  @override
+  String get messageHint => 'اكتب رسالة…';
+
+  @override
+  String get suggestionAcLeaking => 'التكييف بتاعي بينقّط مية';
+
+  @override
+  String get suggestionPowerTripping => 'الكهربا بتفصل على طول';
+
+  @override
+  String get suggestionDeepClean => 'محتاج تنظيف شامل الويك إند';
+
+  @override
+  String get taskAssistant => 'مساعد Task';
+
+  @override
+  String get newRequest => 'طلب جديد';
+
+  @override
+  String get replyYesToPost => 'رد بـ نعم تنشر، أو لا تعدّل…';
+
+  @override
+  String get requestPosted => 'الطلب اتنشر';
+
+  @override
+  String get messageAssistant => 'اكتب للمساعد…';
+
+  @override
+  String get assistantGreeting =>
+      'أهلاً! أنا مساعد Task. قول لي إيه اللي محتاج تصليح وأنا هكتب ملخص واضح للفني المناسب. وانت اللي تحدّد السعر.';
+
+  @override
+  String get assistantAlreadyLive =>
+      'طلبك بالفعل منشور للفنيين. اضغط \"طلب جديد\" تحت عشان تبدأ واحد تاني.';
+
+  @override
+  String get assistantPriceAsk =>
+      'تمام — عندي كل اللي محتاجه. عايز تدفع كام للخدمة دي بالجنيه؟';
+
+  @override
+  String get assistantNoPriceCaught =>
+      'ما فهمتش السعر. عايز تدفع تقريبًا كام بالجنيه؟ مثلاً \"400\".';
+
+  @override
+  String get assistantSomethingMissing =>
+      'في حاجة ناقصة في الطلب — يلا نراجعه تاني. إيه المشكلة؟';
+
+  @override
+  String get assistantPosted =>
+      'تمام — طلبك دلوقتي منشور للفنيين يراجعوه. هتبدأ توصلك عروض قريب.';
+
+  @override
+  String get assistantWhatToChange =>
+      'ولا يهمك. عايز تغيّر إيه؟ قول لي سعر جديد، أو وصّف أي حاجة في الشغلانة عايز تعدّلها.';
+
+  @override
+  String get assistantJustConfirm =>
+      'للتأكيد بس — أنشر ده للفنيين؟ رد \"نعم\" تنشر، أو \"لا\" تعدّل حاجة.';
+
+  @override
+  String assistantConfirm(Object cat, Object price, Object title) {
+    return 'ده طلبك:\n\n• $cat — $title\n• اللي هتدفعه: $price جنيه\n\nأنشره للفنيين يراجعوه؟ رد \"نعم\" تنشر، أو \"لا\" تعدّل حاجة.';
+  }
+
+  @override
+  String get assistantMockAskMore =>
+      'قول لي إيه اللي حصل — مثلاً تسريب، تكييف مش بيبرّد، أو كهربا بتفصل — وفين بالظبط في البيت.';
+
+  @override
+  String assistantMockGotIt(Object category) {
+    return 'تمام — دي شكلها شغلانة $category. جهّزت ملخص للفنيين تحت. حدّد السعر اللي عايز تدفعه وانشر لما تكون جاهز.';
+  }
+
+  @override
+  String get assistantError =>
+      'حصلت مشكلة في الوصول للمساعد دلوقتي — جرّب تبعت تاني.';
+
+  @override
+  String get demoProfileName => 'نور عادل';
+
+  @override
+  String get demoProfileInitials => 'نع';
+
+  @override
+  String featureArrivesLater(Object feature) {
+    return '$feature هيكون متاح في مرحلة لاحقة.';
+  }
+
+  @override
+  String get noPastJobs => 'ما فيش شغلانات سابقة لسه';
+
+  @override
+  String get requestNewCode => 'اطلب كود جديد من فضلك.';
+
+  @override
+  String get invalidPhone => 'رقم التليفون ده شكله غلط.';
+
+  @override
+  String get incorrectCode => 'الكود ده غلط.';
+
+  @override
+  String get tooManyAttempts => 'محاولات كتير. جرّب تاني بعدين.';
+
+  @override
+  String get signInCancelled => 'اتلغى تسجيل الدخول.';
+
+  @override
+  String get genericAuthError => 'في مشكلة. جرّب تاني من فضلك.';
+
+  @override
+  String sentCodeTo(Object phone) {
+    return 'بعتنا كود من 6 أرقام لـ $phone.';
+  }
+
+  @override
+  String resendCodeIn(Object time) {
+    return 'إعادة إرسال الكود خلال $time';
+  }
+
+  @override
+  String get verifyAction => 'تأكيد';
+
+  @override
+  String get signInFailed => 'فشل تسجيل الدخول.';
+
+  @override
+  String get moreCountriesSoon => 'دول تانية هتتضاف مع الإطلاق العالمي.';
+
+  @override
+  String get privacyOpensLater => 'سياسة الخصوصية هتتفتح في مرحلة لاحقة.';
+
+  @override
+  String get termsOpensLater => 'شروط الاستخدام هتتفتح في مرحلة لاحقة.';
+
+  @override
+  String get requiredField => 'مطلوب';
+
+  @override
+  String get profileSubtitle => 'شوية تفاصيل عشان الفنيين يعرفوا بيساعدوا مين.';
+
+  @override
+  String get hintFirstName => 'أحمد';
+
+  @override
+  String get hintLastName => 'حسن';
+
+  @override
+  String get selectYourBirthday => 'اختار تاريخ ميلادك';
+
+  @override
+  String get searchForAddress => 'ابحث عن عنوان...';
+
+  @override
+  String get serviceLocation => 'موقع الخدمة';
+
+  @override
+  String get moveMapToSet => 'حرّك الخريطة لتحديد الموقع';
+
+  @override
+  String get setServiceLocation => 'حدّد موقع الخدمة';
+
+  @override
+  String get postedSuccessBody =>
+      'طلبك دلوقتي منشور — الفنيين بيراجعوه وهيبعتولك عروض قريب.';
+
+  @override
+  String get takingYouHome => 'بنوديك للصفحة الرئيسية…';
+
+  @override
+  String get fillAllFields => 'من فضلك ملّي كل الحقول المطلوبة.';
+
+  @override
+  String get addressLabel => 'اسم العنوان';
+
+  @override
+  String get addressLabelHint => 'مثال: البيت، الشغل، عند الصديق';
+
+  @override
+  String get addressDetails => 'تفاصيل العنوان';
+
+  @override
+  String get addressDetailsHint => 'مثال: 14 الطريق 9 المعادي · الدور 3 شقة 6';
+
+  @override
+  String get selectIcon => 'اختار رمز';
+
+  @override
+  String get callConnecting => 'جاري الاتصال…';
+
+  @override
+  String get callRinging => 'يرن…';
+
+  @override
+  String get callEnded => 'انتهت المكالمة';
+
+  @override
+  String get callMute => 'كتم';
+
+  @override
+  String get callUnmute => 'إلغاء الكتم';
+
+  @override
+  String get callSpeaker => 'مكبر الصوت';
+
+  @override
+  String get callEarpiece => 'سماعة الأذن';
+
+  @override
+  String get callRetry => 'حاول مجدداً';
+
+  @override
+  String get callError => 'تعذّر الاتصال.';
 }

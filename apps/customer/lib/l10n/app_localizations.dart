@@ -1505,13 +1505,13 @@ abstract class AppLocalizations {
   /// No description provided for @whatNeedsFixing.
   ///
   /// In en, this message translates to:
-  /// **'?What needs fixing'**
+  /// **'What needs fixing?'**
   String get whatNeedsFixing;
 
   /// No description provided for @describeItInYourWords.
   ///
   /// In en, this message translates to:
-  /// **'Describe it in your words — I\'ll line up the right pro. You decide the price'**
+  /// **'Describe it in your words — I\'ll line up the right pro. You decide the price.'**
   String get describeItInYourWords;
 
   /// No description provided for @kitchenSinkIsBlocked.
@@ -1861,6 +1861,1458 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please select your birthday.'**
   String get pleaseSelectYourBirthday;
+
+  /// No description provided for @badgePro.
+  ///
+  /// In en, this message translates to:
+  /// **'PRO'**
+  String get badgePro;
+
+  /// No description provided for @badgeExpert.
+  ///
+  /// In en, this message translates to:
+  /// **'EXPERT'**
+  String get badgeExpert;
+
+  /// No description provided for @badgePlatinum.
+  ///
+  /// In en, this message translates to:
+  /// **'PLATINUM'**
+  String get badgePlatinum;
+
+  /// No description provided for @techNameMohamed.
+  ///
+  /// In en, this message translates to:
+  /// **'Mohamed Ali'**
+  String get techNameMohamed;
+
+  /// No description provided for @techNameSara.
+  ///
+  /// In en, this message translates to:
+  /// **'Sara Hassan'**
+  String get techNameSara;
+
+  /// No description provided for @techNameKarim.
+  ///
+  /// In en, this message translates to:
+  /// **'Karim Fouad'**
+  String get techNameKarim;
+
+  /// No description provided for @specialtyPlumbing.
+  ///
+  /// In en, this message translates to:
+  /// **'Plumbing Specialist'**
+  String get specialtyPlumbing;
+
+  /// No description provided for @specialtyElectrical.
+  ///
+  /// In en, this message translates to:
+  /// **'Electrical Expert'**
+  String get specialtyElectrical;
+
+  /// No description provided for @specialtyAc.
+  ///
+  /// In en, this message translates to:
+  /// **'AC Technician'**
+  String get specialtyAc;
+
+  /// No description provided for @jobsCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}+ Jobs'**
+  String jobsCountLabel(Object count);
+
+  /// No description provided for @payCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Card'**
+  String get payCard;
+
+  /// No description provided for @payWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Vodafone Cash'**
+  String get payWallet;
+
+  /// No description provided for @payInstapay.
+  ///
+  /// In en, this message translates to:
+  /// **'InstaPay'**
+  String get payInstapay;
+
+  /// No description provided for @payCardSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Visa, Mastercard, Meeza · via Paymob'**
+  String get payCardSub;
+
+  /// No description provided for @payWalletSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay from your mobile wallet'**
+  String get payWalletSub;
+
+  /// No description provided for @payInstapaySub.
+  ///
+  /// In en, this message translates to:
+  /// **'Instant bank transfer · confirmed by team'**
+  String get payInstapaySub;
+
+  /// No description provided for @addrHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get addrHome;
+
+  /// No description provided for @addrWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Work'**
+  String get addrWork;
+
+  /// No description provided for @addrHomeLine.
+  ///
+  /// In en, this message translates to:
+  /// **'14 Road 9, Maadi · Floor 3, Apt 6'**
+  String get addrHomeLine;
+
+  /// No description provided for @addrWorkLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Village, Building B12 · Reception'**
+  String get addrWorkLine;
+
+  /// No description provided for @stageSearching.
+  ///
+  /// In en, this message translates to:
+  /// **'Finding your pro'**
+  String get stageSearching;
+
+  /// No description provided for @stageAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro assigned'**
+  String get stageAccepted;
+
+  /// No description provided for @stageEnRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'On the way'**
+  String get stageEnRoute;
+
+  /// No description provided for @stageInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Work in progress'**
+  String get stageInProgress;
+
+  /// No description provided for @stageCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Job complete'**
+  String get stageCompleted;
+
+  /// No description provided for @locDefaultAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Maadi, Cairo'**
+  String get locDefaultAddress;
+
+  /// No description provided for @locPinDrop.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin drop'**
+  String get locPinDrop;
+
+  /// No description provided for @locCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom location'**
+  String get locCustom;
+
+  /// No description provided for @locNasrCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Nasr City, Cairo'**
+  String get locNasrCity;
+
+  /// No description provided for @locSheikhZayed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sheikh Zayed, Giza'**
+  String get locSheikhZayed;
+
+  /// No description provided for @techNameKhaled.
+  ///
+  /// In en, this message translates to:
+  /// **'Khaled Mansour'**
+  String get techNameKhaled;
+
+  /// No description provided for @techNameSayed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sayed Abdel-Rahman'**
+  String get techNameSayed;
+
+  /// No description provided for @techNameMostafa.
+  ///
+  /// In en, this message translates to:
+  /// **'Mostafa Eid'**
+  String get techNameMostafa;
+
+  /// No description provided for @etaCanStart40.
+  ///
+  /// In en, this message translates to:
+  /// **'Can start in 40 min'**
+  String get etaCanStart40;
+
+  /// No description provided for @etaThisEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Available this evening'**
+  String get etaThisEvening;
+
+  /// No description provided for @etaCanStart25.
+  ///
+  /// In en, this message translates to:
+  /// **'Can start in 25 min'**
+  String get etaCanStart25;
+
+  /// No description provided for @jobSeed1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaking kitchen sink'**
+  String get jobSeed1Title;
+
+  /// No description provided for @jobSeed1Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Steady drip under the sink, water pooling in the cabinet.'**
+  String get jobSeed1Desc;
+
+  /// No description provided for @jobSeed2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'AC not cooling'**
+  String get jobSeed2Title;
+
+  /// No description provided for @jobSeed2Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Split unit runs but blows warm air.'**
+  String get jobSeed2Desc;
+
+  /// No description provided for @jobSeed3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace tripping breaker'**
+  String get jobSeed3Title;
+
+  /// No description provided for @jobSeed3Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Main breaker trips when the heater runs.'**
+  String get jobSeed3Desc;
+
+  /// No description provided for @catPainter.
+  ///
+  /// In en, this message translates to:
+  /// **'Painter'**
+  String get catPainter;
+
+  /// No description provided for @catSatellite.
+  ///
+  /// In en, this message translates to:
+  /// **'Satellite'**
+  String get catSatellite;
+
+  /// No description provided for @catSmartHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Home'**
+  String get catSmartHome;
+
+  /// No description provided for @catTilesHandyman.
+  ///
+  /// In en, this message translates to:
+  /// **'Tiles Handyman'**
+  String get catTilesHandyman;
+
+  /// No description provided for @catPlaster.
+  ///
+  /// In en, this message translates to:
+  /// **'Plaster'**
+  String get catPlaster;
+
+  /// No description provided for @catSmith.
+  ///
+  /// In en, this message translates to:
+  /// **'Smith'**
+  String get catSmith;
+
+  /// No description provided for @catParquet.
+  ///
+  /// In en, this message translates to:
+  /// **'Parquet'**
+  String get catParquet;
+
+  /// No description provided for @catGypsumWorks.
+  ///
+  /// In en, this message translates to:
+  /// **'Gypsum Works'**
+  String get catGypsumWorks;
+
+  /// No description provided for @catGypsumBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Gypsum Board'**
+  String get catGypsumBoard;
+
+  /// No description provided for @catMarbleGranite.
+  ///
+  /// In en, this message translates to:
+  /// **'Marble & Granite'**
+  String get catMarbleGranite;
+
+  /// No description provided for @catAlumetal.
+  ///
+  /// In en, this message translates to:
+  /// **'Alumetal'**
+  String get catAlumetal;
+
+  /// No description provided for @catGlassCecurit.
+  ///
+  /// In en, this message translates to:
+  /// **'Glass & Cecurit'**
+  String get catGlassCecurit;
+
+  /// No description provided for @catCurtainsUpholstery.
+  ///
+  /// In en, this message translates to:
+  /// **'Curtains & Upholstery'**
+  String get catCurtainsUpholstery;
+
+  /// No description provided for @catWoodPainter.
+  ///
+  /// In en, this message translates to:
+  /// **'Wood Painter'**
+  String get catWoodPainter;
+
+  /// No description provided for @catMovingServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving Services'**
+  String get catMovingServices;
+
+  /// No description provided for @catPuCornices.
+  ///
+  /// In en, this message translates to:
+  /// **'PU Cornices'**
+  String get catPuCornices;
+
+  /// No description provided for @catMaterialWinch.
+  ///
+  /// In en, this message translates to:
+  /// **'Material Winch'**
+  String get catMaterialWinch;
+
+  /// No description provided for @catAppliancesMaintenance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appliances Maintenance'**
+  String get catAppliancesMaintenance;
+
+  /// No description provided for @catSwimmingPool.
+  ///
+  /// In en, this message translates to:
+  /// **'Swimming Pool Maintenance'**
+  String get catSwimmingPool;
+
+  /// No description provided for @catPestControl.
+  ///
+  /// In en, this message translates to:
+  /// **'Pest Control'**
+  String get catPestControl;
+
+  /// No description provided for @statusSearching.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching'**
+  String get statusSearching;
+
+  /// No description provided for @statusPendingScheduled.
+  ///
+  /// In en, this message translates to:
+  /// **'Scheduled'**
+  String get statusPendingScheduled;
+
+  /// No description provided for @statusBiddingActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Receiving offers'**
+  String get statusBiddingActive;
+
+  /// No description provided for @statusAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get statusAccepted;
+
+  /// No description provided for @statusEnRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'On the way'**
+  String get statusEnRoute;
+
+  /// No description provided for @statusInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get statusInProgress;
+
+  /// No description provided for @statusPausedForApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting approval'**
+  String get statusPausedForApproval;
+
+  /// No description provided for @statusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get statusCompleted;
+
+  /// No description provided for @statusDisputed.
+  ///
+  /// In en, this message translates to:
+  /// **'Disputed'**
+  String get statusDisputed;
+
+  /// No description provided for @statusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get statusCancelled;
+
+  /// No description provided for @demoUserName.
+  ///
+  /// In en, this message translates to:
+  /// **'Ahmed'**
+  String get demoUserName;
+
+  /// No description provided for @yourProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile'**
+  String get yourProfile;
+
+  /// No description provided for @powerKeepsTripping.
+  ///
+  /// In en, this message translates to:
+  /// **'Power keeps tripping…'**
+  String get powerKeepsTripping;
+
+  /// No description provided for @needDeepCleanWeekend.
+  ///
+  /// In en, this message translates to:
+  /// **'Need a deep clean this weekend…'**
+  String get needDeepCleanWeekend;
+
+  /// No description provided for @summerAcCheckup.
+  ///
+  /// In en, this message translates to:
+  /// **'Summer AC Check-up'**
+  String get summerAcCheckup;
+
+  /// No description provided for @badgeLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'LIMITED'**
+  String get badgeLimited;
+
+  /// No description provided for @outletInstall.
+  ///
+  /// In en, this message translates to:
+  /// **'Outlet Install'**
+  String get outletInstall;
+
+  /// No description provided for @fullHomeClean.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Home Clean'**
+  String get fullHomeClean;
+
+  /// No description provided for @roomRepaint.
+  ///
+  /// In en, this message translates to:
+  /// **'Room Repaint'**
+  String get roomRepaint;
+
+  /// No description provided for @egpPerHour.
+  ///
+  /// In en, this message translates to:
+  /// **'EGP/hr'**
+  String get egpPerHour;
+
+  /// No description provided for @searchingForPros.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching for pros…'**
+  String get searchingForPros;
+
+  /// No description provided for @tapToReviewHire.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to review and hire a technician'**
+  String get tapToReviewHire;
+
+  /// No description provided for @tapToViewProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to view live search progress'**
+  String get tapToViewProgress;
+
+  /// No description provided for @stepConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get stepConfirmed;
+
+  /// No description provided for @stepWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'Working'**
+  String get stepWorking;
+
+  /// No description provided for @searchingWithin3km.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching within 3 km…'**
+  String get searchingWithin3km;
+
+  /// No description provided for @wideningTo6km.
+  ///
+  /// In en, this message translates to:
+  /// **'Widening to 6 km…'**
+  String get wideningTo6km;
+
+  /// No description provided for @reachingNearbyPros.
+  ///
+  /// In en, this message translates to:
+  /// **'Reaching nearby pros…'**
+  String get reachingNearbyPros;
+
+  /// No description provided for @yourJob.
+  ///
+  /// In en, this message translates to:
+  /// **'your job'**
+  String get yourJob;
+
+  /// No description provided for @proAssignedExcl.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro assigned!'**
+  String get proAssignedExcl;
+
+  /// No description provided for @proHeadingToYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Khaled is 1.8 km away and heading to you.'**
+  String get proHeadingToYou;
+
+  /// No description provided for @trackYourPro.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your pro'**
+  String get trackYourPro;
+
+  /// No description provided for @proKhaledInitials.
+  ///
+  /// In en, this message translates to:
+  /// **'KM'**
+  String get proKhaledInitials;
+
+  /// No description provided for @jobsWord.
+  ///
+  /// In en, this message translates to:
+  /// **'jobs'**
+  String get jobsWord;
+
+  /// No description provided for @verified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get verified;
+
+  /// No description provided for @hireAndTrack.
+  ///
+  /// In en, this message translates to:
+  /// **'Hire & track'**
+  String get hireAndTrack;
+
+  /// No description provided for @upToFiveProsBid.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 5 pros bid privately for your {job}. No one sees the others\' price.'**
+  String upToFiveProsBid(Object job);
+
+  /// No description provided for @jobWord.
+  ///
+  /// In en, this message translates to:
+  /// **'job'**
+  String get jobWord;
+
+  /// No description provided for @offersReceivedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} offers received'**
+  String offersReceivedCount(Object count);
+
+  /// No description provided for @sealed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sealed'**
+  String get sealed;
+
+  /// No description provided for @lowest.
+  ///
+  /// In en, this message translates to:
+  /// **'Lowest'**
+  String get lowest;
+
+  /// No description provided for @prosFoundNearby.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} pros found nearby'**
+  String prosFoundNearby(Object count);
+
+  /// No description provided for @waitingForOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for offers…'**
+  String get waitingForOffers;
+
+  /// No description provided for @scanningYourArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning your area — usually under a minute'**
+  String get scanningYourArea;
+
+  /// No description provided for @sendingJobDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending your job details to them now'**
+  String get sendingJobDetails;
+
+  /// No description provided for @prosReviewing.
+  ///
+  /// In en, this message translates to:
+  /// **'Pros are reviewing your request'**
+  String get prosReviewing;
+
+  /// No description provided for @openingYourOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening your offers…'**
+  String get openingYourOffers;
+
+  /// No description provided for @stopSearchQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop search?'**
+  String get stopSearchQ;
+
+  /// No description provided for @stopSearchBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request stays active and technicians can still send offers.\n\nYou\'ll get a notification when offers arrive. To fully stop, cancel the request.'**
+  String get stopSearchBody;
+
+  /// No description provided for @liveSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Live search'**
+  String get liveSearch;
+
+  /// No description provided for @youCanExitNote.
+  ///
+  /// In en, this message translates to:
+  /// **'You can exit — your request stays active. We\'ll notify you when offers arrive.'**
+  String get youCanExitNote;
+
+  /// No description provided for @stopSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop search'**
+  String get stopSearch;
+
+  /// No description provided for @viewOffersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'View {count} offers'**
+  String viewOffersCount(Object count);
+
+  /// No description provided for @phaseSearching.
+  ///
+  /// In en, this message translates to:
+  /// **'Searching'**
+  String get phaseSearching;
+
+  /// No description provided for @phaseFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found'**
+  String get phaseFound;
+
+  /// No description provided for @phaseWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting'**
+  String get phaseWaiting;
+
+  /// No description provided for @phaseOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get phaseOffers;
+
+  /// No description provided for @offersCountShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} offers'**
+  String offersCountShort(Object count);
+
+  /// No description provided for @jobsDoneCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} jobs done'**
+  String jobsDoneCount(Object count);
+
+  /// No description provided for @selectedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get selectedLabel;
+
+  /// No description provided for @selectOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Select offer'**
+  String get selectOffer;
+
+  /// No description provided for @inAppVoipCall.
+  ///
+  /// In en, this message translates to:
+  /// **'In-app VoIP call'**
+  String get inAppVoipCall;
+
+  /// No description provided for @startCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Start call'**
+  String get startCall;
+
+  /// No description provided for @goBackToOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back to offers'**
+  String get goBackToOffers;
+
+  /// No description provided for @bookingConfirmedSub.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ve locked in your pro. You\'ll get a reminder before they arrive.'**
+  String get bookingConfirmedSub;
+
+  /// No description provided for @payAndFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay & finish'**
+  String get payAndFinish;
+
+  /// No description provided for @reviewAndPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Review & pay'**
+  String get reviewAndPay;
+
+  /// No description provided for @serviceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Service'**
+  String get serviceLabel;
+
+  /// No description provided for @titleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get titleLabel;
+
+  /// No description provided for @jobTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Job total'**
+  String get jobTotal;
+
+  /// No description provided for @taskCreditApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Task credit applied'**
+  String get taskCreditApplied;
+
+  /// No description provided for @youPay.
+  ///
+  /// In en, this message translates to:
+  /// **'You pay'**
+  String get youPay;
+
+  /// No description provided for @free.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get free;
+
+  /// No description provided for @taskCreditCovers.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Task credit fully covers this order — no additional payment needed.'**
+  String get taskCreditCovers;
+
+  /// No description provided for @payAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay {amount} EGP'**
+  String payAmount(Object amount);
+
+  /// No description provided for @taskCreditAppliedAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} EGP Task credit applied'**
+  String taskCreditAppliedAmount(Object amount);
+
+  /// No description provided for @walletTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet'**
+  String get walletTitle;
+
+  /// No description provided for @recentActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent activity'**
+  String get recentActivity;
+
+  /// No description provided for @topUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Top up'**
+  String get topUp;
+
+  /// No description provided for @sendAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get sendAction;
+
+  /// No description provided for @featureArrivesWithPayments.
+  ///
+  /// In en, this message translates to:
+  /// **'{feature} arrives with payments.'**
+  String featureArrivesWithPayments(Object feature);
+
+  /// No description provided for @walletTopUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet top-up'**
+  String get walletTopUp;
+
+  /// No description provided for @referralCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'Referral credit'**
+  String get referralCredit;
+
+  /// No description provided for @txnToday240.
+  ///
+  /// In en, this message translates to:
+  /// **'Today · 2:40 PM'**
+  String get txnToday240;
+
+  /// No description provided for @txnYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get txnYesterday;
+
+  /// No description provided for @txnMar18.
+  ///
+  /// In en, this message translates to:
+  /// **'Mar 18 · 6:15 PM'**
+  String get txnMar18;
+
+  /// No description provided for @txnMar15.
+  ///
+  /// In en, this message translates to:
+  /// **'Mar 15'**
+  String get txnMar15;
+
+  /// No description provided for @tagOnTime.
+  ///
+  /// In en, this message translates to:
+  /// **'On time'**
+  String get tagOnTime;
+
+  /// No description provided for @tagTidyWork.
+  ///
+  /// In en, this message translates to:
+  /// **'Tidy work'**
+  String get tagTidyWork;
+
+  /// No description provided for @tagSkilled.
+  ///
+  /// In en, this message translates to:
+  /// **'Skilled'**
+  String get tagSkilled;
+
+  /// No description provided for @tagGreatCommunication.
+  ///
+  /// In en, this message translates to:
+  /// **'Great communication'**
+  String get tagGreatCommunication;
+
+  /// No description provided for @howWasYour.
+  ///
+  /// In en, this message translates to:
+  /// **'How was your {service}?'**
+  String howWasYour(Object service);
+
+  /// No description provided for @serviceWord.
+  ///
+  /// In en, this message translates to:
+  /// **'service'**
+  String get serviceWord;
+
+  /// No description provided for @withPro.
+  ///
+  /// In en, this message translates to:
+  /// **'with {name}'**
+  String withPro(Object name);
+
+  /// No description provided for @submitReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit review'**
+  String get submitReview;
+
+  /// No description provided for @reviewSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Review submitted!'**
+  String get reviewSubmitted;
+
+  /// No description provided for @thanksForRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for rating {name}.\nYour feedback helps the whole community.'**
+  String thanksForRating(Object name);
+
+  /// No description provided for @redirectingIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Redirecting in {seconds} s…'**
+  String redirectingIn(Object seconds);
+
+  /// No description provided for @etaMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'ETA {minutes} min'**
+  String etaMinutes(Object minutes);
+
+  /// No description provided for @homeService.
+  ///
+  /// In en, this message translates to:
+  /// **'Home service'**
+  String get homeService;
+
+  /// No description provided for @headingToAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Heading to your address'**
+  String get headingToAddress;
+
+  /// No description provided for @workingOnJob.
+  ///
+  /// In en, this message translates to:
+  /// **'Working on the job'**
+  String get workingOnJob;
+
+  /// No description provided for @jobCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Job completed'**
+  String get jobCompleted;
+
+  /// No description provided for @featureOpensComms.
+  ///
+  /// In en, this message translates to:
+  /// **'{feature} opens in the comms phase.'**
+  String featureOpensComms(Object feature);
+
+  /// No description provided for @pinOnMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin on map'**
+  String get pinOnMap;
+
+  /// No description provided for @specializedServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Specialized Services'**
+  String get specializedServices;
+
+  /// No description provided for @maintenanceGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintenance'**
+  String get maintenanceGroup;
+
+  /// No description provided for @takeAPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get takeAPhoto;
+
+  /// No description provided for @recordAVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Record a video'**
+  String get recordAVideo;
+
+  /// No description provided for @describeProblemHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Living-room lights keep flickering when I turn on the AC...'**
+  String get describeProblemHint;
+
+  /// No description provided for @publishJob.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish job'**
+  String get publishJob;
+
+  /// No description provided for @chatMsgHello.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello! I reviewed your job. I can arrive within 30 minutes.'**
+  String get chatMsgHello;
+
+  /// No description provided for @chatMsgQuote.
+  ///
+  /// In en, this message translates to:
+  /// **'My quote includes all materials. Any specific brand preference?'**
+  String get chatMsgQuote;
+
+  /// No description provided for @chatMsgReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it! I\'ll bring everything needed. See you soon.'**
+  String get chatMsgReply;
+
+  /// No description provided for @chatTime341.
+  ///
+  /// In en, this message translates to:
+  /// **'3:41 PM'**
+  String get chatTime341;
+
+  /// No description provided for @online.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get online;
+
+  /// No description provided for @messageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Message…'**
+  String get messageHint;
+
+  /// No description provided for @suggestionAcLeaking.
+  ///
+  /// In en, this message translates to:
+  /// **'My AC is leaking water'**
+  String get suggestionAcLeaking;
+
+  /// No description provided for @suggestionPowerTripping.
+  ///
+  /// In en, this message translates to:
+  /// **'Power keeps tripping'**
+  String get suggestionPowerTripping;
+
+  /// No description provided for @suggestionDeepClean.
+  ///
+  /// In en, this message translates to:
+  /// **'Need a deep clean this weekend'**
+  String get suggestionDeepClean;
+
+  /// No description provided for @taskAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Assistant'**
+  String get taskAssistant;
+
+  /// No description provided for @newRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'New request'**
+  String get newRequest;
+
+  /// No description provided for @replyYesToPost.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply yes to post, or no to change…'**
+  String get replyYesToPost;
+
+  /// No description provided for @requestPosted.
+  ///
+  /// In en, this message translates to:
+  /// **'Request posted'**
+  String get requestPosted;
+
+  /// No description provided for @messageAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'Message the assistant…'**
+  String get messageAssistant;
+
+  /// No description provided for @assistantGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hi! I\'m your Task assistant. Tell me what needs fixing and I\'ll write a clear summary for the right pro. You decide the price.'**
+  String get assistantGreeting;
+
+  /// No description provided for @assistantAlreadyLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request is already live with technicians. Tap \"New request\" below to start another one.'**
+  String get assistantAlreadyLive;
+
+  /// No description provided for @assistantPriceAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Great — I\'ve got everything I need. What would you like to pay for this service, in EGP?'**
+  String get assistantPriceAsk;
+
+  /// No description provided for @assistantNoPriceCaught.
+  ///
+  /// In en, this message translates to:
+  /// **'I didn\'t catch a price there. About how much would you like to pay, in EGP? For example \"400\".'**
+  String get assistantNoPriceCaught;
+
+  /// No description provided for @assistantSomethingMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Something\'s missing from the request — let\'s go over it again. What\'s the problem?'**
+  String get assistantSomethingMissing;
+
+  /// No description provided for @assistantPosted.
+  ///
+  /// In en, this message translates to:
+  /// **'Done — your request is now live for technicians to review. You\'ll start getting offers shortly.'**
+  String get assistantPosted;
+
+  /// No description provided for @assistantWhatToChange.
+  ///
+  /// In en, this message translates to:
+  /// **'No problem. What would you like to change? Tell me a new price, or describe anything about the job you want to adjust.'**
+  String get assistantWhatToChange;
+
+  /// No description provided for @assistantJustConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Just to confirm — should I post this for technicians? Reply \"yes\" to post, or \"no\" to change something.'**
+  String get assistantJustConfirm;
+
+  /// No description provided for @assistantConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Here\'s your request:\n\n• {cat} — {title}\n• You pay: EGP {price}\n\nShall I post this for technicians to review? Reply \"yes\" to post, or \"no\" to change something.'**
+  String assistantConfirm(Object cat, Object price, Object title);
+
+  /// No description provided for @assistantMockAskMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell me what\'s going wrong — for example a leak, an AC that won\'t cool, or power that keeps tripping — and where in your home it is.'**
+  String get assistantMockAskMore;
+
+  /// No description provided for @assistantMockGotIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it — this looks like a {category} job. I\'ve put together a summary for technicians below. Set the price you want to pay and publish when you are ready.'**
+  String assistantMockGotIt(Object category);
+
+  /// No description provided for @assistantError.
+  ///
+  /// In en, this message translates to:
+  /// **'I had trouble reaching the assistant just now — please try sending that again.'**
+  String get assistantError;
+
+  /// No description provided for @demoProfileName.
+  ///
+  /// In en, this message translates to:
+  /// **'Nour Adel'**
+  String get demoProfileName;
+
+  /// No description provided for @demoProfileInitials.
+  ///
+  /// In en, this message translates to:
+  /// **'NA'**
+  String get demoProfileInitials;
+
+  /// No description provided for @featureArrivesLater.
+  ///
+  /// In en, this message translates to:
+  /// **'{feature} arrives in a later phase.'**
+  String featureArrivesLater(Object feature);
+
+  /// No description provided for @noPastJobs.
+  ///
+  /// In en, this message translates to:
+  /// **'No past jobs yet'**
+  String get noPastJobs;
+
+  /// No description provided for @requestNewCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Request a new code, please.'**
+  String get requestNewCode;
+
+  /// No description provided for @invalidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'That phone number looks invalid.'**
+  String get invalidPhone;
+
+  /// No description provided for @incorrectCode.
+  ///
+  /// In en, this message translates to:
+  /// **'That code is incorrect.'**
+  String get incorrectCode;
+
+  /// No description provided for @tooManyAttempts.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Try again later.'**
+  String get tooManyAttempts;
+
+  /// No description provided for @signInCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign-in was cancelled.'**
+  String get signInCancelled;
+
+  /// No description provided for @genericAuthError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get genericAuthError;
+
+  /// No description provided for @sentCodeTo.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a 6-digit code to {phone}.'**
+  String sentCodeTo(Object phone);
+
+  /// No description provided for @resendCodeIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code in {time}'**
+  String resendCodeIn(Object time);
+
+  /// No description provided for @verifyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get verifyAction;
+
+  /// No description provided for @signInFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign-in failed.'**
+  String get signInFailed;
+
+  /// No description provided for @moreCountriesSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'More countries arrive with international launch.'**
+  String get moreCountriesSoon;
+
+  /// No description provided for @privacyOpensLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy opens in a later phase.'**
+  String get privacyOpensLater;
+
+  /// No description provided for @termsOpensLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service opens in a later phase.'**
+  String get termsOpensLater;
+
+  /// No description provided for @requiredField.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get requiredField;
+
+  /// No description provided for @profileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A few details so technicians know who they\'re helping.'**
+  String get profileSubtitle;
+
+  /// No description provided for @hintFirstName.
+  ///
+  /// In en, this message translates to:
+  /// **'Ahmed'**
+  String get hintFirstName;
+
+  /// No description provided for @hintLastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hassan'**
+  String get hintLastName;
+
+  /// No description provided for @selectYourBirthday.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your birthday'**
+  String get selectYourBirthday;
+
+  /// No description provided for @searchForAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for an address...'**
+  String get searchForAddress;
+
+  /// No description provided for @serviceLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Service location'**
+  String get serviceLocation;
+
+  /// No description provided for @moveMapToSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Move the map to set location'**
+  String get moveMapToSet;
+
+  /// No description provided for @setServiceLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Set service location'**
+  String get setServiceLocation;
+
+  /// No description provided for @postedSuccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request is live — technicians are reviewing it now and will send you offers shortly.'**
+  String get postedSuccessBody;
+
+  /// No description provided for @takingYouHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Taking you home…'**
+  String get takingYouHome;
+
+  /// No description provided for @fillAllFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill all required fields.'**
+  String get fillAllFields;
+
+  /// No description provided for @addressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Address label'**
+  String get addressLabel;
+
+  /// No description provided for @addressLabelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Home, Work, Friend\'s place'**
+  String get addressLabelHint;
+
+  /// No description provided for @addressDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Address details'**
+  String get addressDetails;
+
+  /// No description provided for @addressDetailsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., 14 Road 9, Maadi · Floor 3, Apt 6'**
+  String get addressDetailsHint;
+
+  /// No description provided for @selectIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Select an icon'**
+  String get selectIcon;
+
+  /// No description provided for @callConnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting…'**
+  String get callConnecting;
+
+  /// No description provided for @callRinging.
+  ///
+  /// In en, this message translates to:
+  /// **'Ringing…'**
+  String get callRinging;
+
+  /// No description provided for @callEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Call ended'**
+  String get callEnded;
+
+  /// No description provided for @callMute.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute'**
+  String get callMute;
+
+  /// No description provided for @callUnmute.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmute'**
+  String get callUnmute;
+
+  /// No description provided for @callSpeaker.
+  ///
+  /// In en, this message translates to:
+  /// **'Speaker'**
+  String get callSpeaker;
+
+  /// No description provided for @callEarpiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Earpiece'**
+  String get callEarpiece;
+
+  /// No description provided for @callRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get callRetry;
+
+  /// No description provided for @callError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect.'**
+  String get callError;
 }
 
 class _AppLocalizationsDelegate
