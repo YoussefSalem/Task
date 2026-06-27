@@ -130,6 +130,9 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
           await completer.future.timeout(const Duration(seconds: 20));
       final lat = pos.coords.latitude.toDouble();
       final lng = pos.coords.longitude.toDouble();
+      final accuracy = pos.coords.accuracy.toDouble();
+      web.console.log(
+          'Geolocation: $lat, $lng  (accuracy ±${accuracy.round()} m)'.toJS);
       if (!mounted) return;
       setState(() {
         _pinLat = lat;
@@ -137,6 +140,14 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
         _addressLoading = true;
       });
       _panMapTo(lat, lng);
+      if (accuracy > 500) {
+        ScaffoldMessenger.of(context)
+          ..clearSnackBars()
+          ..showSnackBar(SnackBar(
+            content: Text(
+                'Approximate location (±${accuracy.round()} m). Drag the map to fine-tune.'),
+          ));
+      }
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context)
