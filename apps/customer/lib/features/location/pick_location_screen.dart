@@ -126,8 +126,12 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
       final lat = pos.coords.latitude.toDouble();
       final lng = pos.coords.longitude.toDouble();
       if (!mounted) return;
-      ref.read(locationProvider.notifier).setFromCoords(lat, lng);
-      context.pop();
+      setState(() {
+        _pinLat = lat;
+        _pinLng = lng;
+        _addressLoading = true;
+      });
+      _panMapTo(lat, lng);
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context)
@@ -139,6 +143,14 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
     } finally {
       if (mounted) setState(() => _detecting = false);
     }
+  }
+
+  void _panMapTo(double lat, double lng) {
+    final iframe =
+        web.document.querySelector('iframe') as web.HTMLIFrameElement?;
+    if (iframe == null) return;
+    final msg = jsonEncode({'type': 'panTo', 'lat': lat, 'lng': lng});
+    iframe.contentWindow?.postMessage(msg.toJS, '*'.toJS);
   }
 
   @override
@@ -456,6 +468,12 @@ function initMap(){
       post({type:"geocodeResult",address:shortenAddr(best.formatted_address)});
     });
   }
+  window.addEventListener("message",function(e){
+    try{
+      var d=JSON.parse(e.data);
+      if(d.type==="panTo"){map.panTo({lat:d.lat,lng:d.lng});map.setZoom(17);}
+    }catch(ex){}
+  });
   map.addListener("dragstart",function(){post({type:"dragStart"});});
   map.addListener("dragend",function(){post({type:"dragEnd"});});
   map.addListener("idle",function(){
