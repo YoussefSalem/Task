@@ -82,20 +82,37 @@ service cloud.firestore {
       // owns the thread is the document id. (30-day TTL cleanup handled by a
       // scheduled function.)
       match /threads/{technicianId} {
-        function isParticipant() {
+        // For read/update/delete: check fields stored in the thread doc itself so
+        // collection-group queries work (a get() on jobId would fail because the
+        // wildcard is unresolved at collection-group evaluation time).
+        function isThreadParticipant() {
           return isSignedIn() && (
-            request.auth.uid == technicianId
-            || get(/databases/$(database)/documents/jobs/$(jobId)).data.customer_id == request.auth.uid
+            resource.data.customer_id == request.auth.uid
+            || resource.data.technician_id == request.auth.uid
             || isAdmin()
           );
         }
 
-        // Thread metadata (last message, read cursors, typing stamps) is written
-        // by either participant.
-        allow read, write: if isParticipant();
+        // For creates: the doc doesn't exist yet, so use request.resource.data.
+        function canCreateThread() {
+          return isSignedIn() && (
+            request.resource.data.customer_id == request.auth.uid
+            || request.resource.data.technician_id == request.auth.uid
+            || isAdmin()
+          );
+        }
+
+        allow read, update, delete: if isThreadParticipant();
+        allow create: if canCreateThread();
 
         match /messages/{messageId} {
-          allow read, create: if isParticipant();
+          // Messages live under a known (jobId, technicianId) path so a get()
+          // on the parent job document is safe here (no wildcard ambiguity).
+          allow read, create: if isSignedIn() && (
+            request.auth.uid == technicianId
+            || get(/databases/$(database)/documents/jobs/$(jobId)).data.customer_id == request.auth.uid
+            || isAdmin()
+          );
           allow update, delete: if isAdmin();
         }
       }
