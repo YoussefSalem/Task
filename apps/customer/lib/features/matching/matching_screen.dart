@@ -1,13 +1,11 @@
 import 'package:customer/l10n/app_localizations.dart';
 import 'dart:math' as math;
-import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
 import 'package:task_domain/task_domain.dart';
-import 'package:web/web.dart' as web;
 
 import '../location/location_provider.dart';
 import '../marketplace/marketplace_providers.dart';
@@ -159,6 +157,9 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
           l.stopSearchBody,
           style: const TextStyle(height: 1.5),
         ),
+        // Flat actions only: nesting a Row inside AlertDialog.actions (an
+        // OverflowBar) feeds the inner FilledButton unbounded width and throws
+        // "BoxConstraints forces an infinite width", so the dialog never paints.
         actionsAlignment: MainAxisAlignment.spaceBetween,
         actions: [
           TextButton(
@@ -166,24 +167,18 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             child: Text(l.cancelRequest,
                 style: TextStyle(color: Colors.red.shade400, fontWeight: FontWeight.w600)),
           ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: Text(l.stay),
-              ),
-              const SizedBox(width: 4),
-              FilledButton(
-                onPressed: () => Navigator.pop(ctx, _ExitChoice.exit),
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
-                child: Text(l.goHome),
-              ),
-            ],
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(l.stay),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, _ExitChoice.exit),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+            ),
+            child: Text(l.goHome),
           ),
         ],
       ),
@@ -402,13 +397,15 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
 enum _ExitChoice { exit, cancel }
 
 // ---------------------------------------------------------------------------
-// Map layer — a stylized, painted city map backdrop.
+// Map layer — a real Google Static Maps image painted into the Flutter canvas.
 //
-// Replaces the previous Google Maps iframe: on Flutter web an HtmlElementView
-// iframe is a real DOM element that captures pointer events natively, so taps
-// on the back button / bottom panel never reached Flutter (IgnorePointer can't
-// fix it). A painted backdrop removes the iframe entirely, is consistent with
-// the job-tracking map, and is far cheaper to render.
+// Deliberately NOT an HtmlElementView iframe: on Flutter web a platform-view
+// iframe is a real DOM element that swallows pointer events for everything
+// drawn over it, so taps on the back button / bottom panel never reached
+// Flutter (pointer-events:none and IgnorePointer don't fix it). A network
+// image has no DOM platform view, so taps fall straight through to the Flutter
+// controls above. The painted map shows underneath while the image loads or if
+// the Static Maps API is unavailable, and is consistent with job-tracking.
 // ---------------------------------------------------------------------------
 class _MapLayer extends StatelessWidget {
   const _MapLayer({required this.lat, required this.lng, required this.isDark});
@@ -418,31 +415,31 @@ class _MapLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String viewType = 'radar-map-$lat-$lng';
-    final String embedUrl = 'https://www.google.com/maps/embed/v1/place'
-        '?key=$_mapsKey&q=$lat,$lng&zoom=15&maptype=roadmap';
-
-    ui_web.platformViewRegistry.registerViewFactory(viewType, (int id) {
-      final web.HTMLIFrameElement iframe =
-          web.document.createElement('iframe') as web.HTMLIFrameElement
-            ..src = embedUrl
-            ..style.border = 'none'
-            ..style.width = '100%'
-            ..style.height = '100%'
-            ..loading = 'lazy';
-      // Non-interactive: the map is a fixed backdrop centered on the user's
-      // location. Disabling pointer events also lets taps fall through to the
-      // Flutter back button + panel above it.
-      iframe.style.setProperty('pointer-events', 'none');
-      return iframe;
-    });
+    // %7C is the '|' separating the marker style from its coordinates.
+    final String staticUrl = 'https://maps.googleapis.com/maps/api/staticmap'
+        '?center=$lat,$lng'
+        '&zoom=15'
+        '&size=640x640'
+        '&scale=2'
+        '&maptype=roadmap'
+        '&markers=color:0xEF4444%7C$lat,$lng'
+        '&key=$_mapsKey';
 
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        // Painted map shows underneath while the iframe loads / if it's blocked.
+        // Painted map shows underneath while the image loads / if it fails.
         _PaintedMap(isDark: isDark),
-        HtmlElementView(viewType: viewType),
+        Image.network(
+          staticUrl,
+          fit: BoxFit.cover,
+          gaplessPlayback: true,
+          // Keep only the painted map if Static Maps is unreachable/disabled.
+          errorBuilder: (_, _, _) => const SizedBox.shrink(),
+          // Avoid a flash of the placeholder colour before the first frame.
+          frameBuilder: (context, child, frame, wasSync) =>
+              (wasSync || frame != null) ? child : const SizedBox.shrink(),
+        ),
       ],
     );
   }
