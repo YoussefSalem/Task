@@ -121,6 +121,7 @@
   "continueWithGoogle": "ادخل مع Google",
   "couldNotAccessMedia": "ما قدرت أدخل للصور.",
   "couldNotDetectLocation": "ما قدرت أعرف المكان. شيّك صلاحيات الموقع.",
+  "couldNotPublishJob": "ما قدرتش أنشر الطلب. شيّك النت وحاول تاني.",
   "couldNotResendCode": "ما قدرت أرسل الكود مرة تانية.",
   "couldNotSendCode": "ما قدرت أرسل الكود.",
   "couldYouTellMeMore": "تقول لي أكتر عن المشكلة؟",

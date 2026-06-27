@@ -380,6 +380,9 @@ class AppLocalizationsAr extends AppLocalizations {
       'ما قدرت أعرف المكان. شيّك صلاحيات الموقع.';
 
   @override
+  String get couldNotPublishJob => 'ما قدرتش أنشر الطلب. شيّك النت وحاول تاني.';
+
+  @override
   String get couldNotResendCode => 'ما قدرت أرسل الكود مرة تانية.';
 
   @override

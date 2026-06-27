@@ -384,6 +384,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not detect location. Check browser permissions.';
 
   @override
+  String get couldNotPublishJob =>
+      'Could not publish the job. Check your connection and try again.';
+
+  @override
   String get couldNotResendCode => 'Could not resend the code.';
 
   @override

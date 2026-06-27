@@ -824,6 +824,12 @@ abstract class AppLocalizations {
   /// **'Could not detect location. Check browser permissions.'**
   String get couldNotDetectLocation;
 
+  /// No description provided for @couldNotPublishJob.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not publish the job. Check your connection and try again.'**
+  String get couldNotPublishJob;
+
   /// No description provided for @couldNotResendCode.
   ///
   /// In en, this message translates to:

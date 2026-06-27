@@ -160,9 +160,23 @@ class _JobCreateStubScreenState extends ConsumerState<JobCreateStubScreen>
       return;
     }
     setState(() => _publishing = true);
-    final job = await ref.read(jobMarketplaceRepositoryProvider).publish(draft);
-    if (!mounted) return;
-    context.go('${MatchingScreen.routePath}?jobId=${job.id}');
+    try {
+      final job = await ref
+          .read(jobMarketplaceRepositoryProvider)
+          .publish(draft)
+          .timeout(const Duration(seconds: 20));
+      if (!mounted) return;
+      context.go('${MatchingScreen.routePath}?jobId=${job.id}');
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _publishing = false);
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context).couldNotPublishJob),
+          behavior: SnackBarBehavior.floating,
+        ));
+    }
   }
 
   @override

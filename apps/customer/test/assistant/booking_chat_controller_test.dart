@@ -44,6 +44,9 @@ class _FailingRepository implements JobMarketplaceRepository {
 
   @override
   Future<void> cancelJob(String jobId) async {}
+
+  @override
+  Future<void> submitReview(String jobId, Review review) async {}
 }
 
 void main() {

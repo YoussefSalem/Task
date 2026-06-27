@@ -1,5 +1,6 @@
 // apps/customer/lib/features/assistant/assistant_providers.dart
 import 'package:customer/l10n/app_localizations.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:task_domain/task_domain.dart';
@@ -170,10 +171,11 @@ class BookingChatController extends Notifier<ChatState> {
             .publish(draft)
             .timeout(const Duration(seconds: 15));
         await _notifyPosted();
-      } catch (_) {
+      } catch (e, st) {
         // Publish threw (e.g. rejected write, signed out) or never reached the
         // backend (timeout). Recover: drop the typing indicator, keep the draft
         // and stay on confirm so the customer can reply "yes" to retry.
+        debugPrint('[assistant] publish failed: $e\n$st');
         state = state.copyWith(typing: false);
         _appendAssistant(_l.assistantPostFailed);
         return;
@@ -252,7 +254,10 @@ class BookingChatController extends Notifier<ChatState> {
   String _confirmText(JobRequestDraft d) {
     final String cat =
         d.category != null ? categoryLabel(d.category!, _l) : _l.serviceWord;
-    return _l.assistantConfirm(cat, d.title, d.fixedPrice);
+    // gen-l10n orders these positional params alphabetically by placeholder
+    // name — (cat, price, title) — not in template order. Pass price then title
+    // to match, or the summary shows the price and description swapped.
+    return _l.assistantConfirm(cat, d.fixedPrice, d.title);
   }
 
   static bool _isYes(String v) {

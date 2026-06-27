@@ -121,6 +121,7 @@
   "continueWithGoogle": "Continue with Google",
   "couldNotAccessMedia": "Could not access media.",
   "couldNotDetectLocation": "Could not detect location. Check browser permissions.",
+  "couldNotPublishJob": "Could not publish the job. Check your connection and try again.",
   "couldNotResendCode": "Could not resend the code.",
   "couldNotSendCode": "Could not send the code.",
   "couldYouTellMeMore": "Could you tell me a bit more about the problem?",
