@@ -1,12 +1,14 @@
-import 'package:customer/l10n/app_localizations.dart';
 import 'dart:async';
 
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
+import 'package:task_domain/task_domain.dart';
 
 import '../marketplace/marketplace_providers.dart';
+import '../services/category_l10n.dart';
 
 /// ASAP dispatch: a live radar sweeps while we cascade outward through dispatch
 /// tiers (3 → 6 → … km, per the design spec), then a pro is assigned and the
@@ -27,30 +29,23 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
     duration: const Duration(milliseconds: 2200),
   )..repeat();
 
-  static const List<String> _tiers = <String>[
-    'Searching within 3 km…',
-    'Widening to 6 km…',
-    'Reaching nearby pros…',
-  ];
+  static const int _tierCount = 3;
+
+  List<String> _tiers(AppLocalizations l) => <String>[
+        l.searchingWithin3km,
+        l.wideningTo6km,
+        l.reachingNearbyPros,
+      ];
   int _tierIndex = 0;
   bool _found = false;
   Timer? _tierTimer;
-  Timer? _foundTimer;
 
   @override
   void initState() {
     super.initState();
-    final bool reduce =
-        WidgetsBinding.instance.platformDispatcher.accessibilityFeatures.disableAnimations;
     _tierTimer = Timer.periodic(const Duration(milliseconds: 1300), (Timer t) {
       if (!mounted) return;
-      setState(() => _tierIndex = (_tierIndex + 1) % _tiers.length);
-    });
-    _foundTimer = Timer(Duration(milliseconds: reduce ? 200 : 4200), () {
-      if (!mounted) return;
-      _tierTimer?.cancel();
-      _radar.stop();
-      setState(() => _found = true);
+      setState(() => _tierIndex = (_tierIndex + 1) % _tierCount);
     });
   }
 
@@ -58,14 +53,30 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
   void dispose() {
     _radar.dispose();
     _tierTimer?.cancel();
-    _foundTimer?.cancel();
     super.dispose();
+  }
+
+  void _syncFromJob(JobRequest? job) {
+    if (job == null || _found) return;
+    if (job.status == JobStatus.accepted ||
+        job.status == JobStatus.enRoute ||
+        job.status == JobStatus.inProgress) {
+      _tierTimer?.cancel();
+      _radar.stop();
+      setState(() => _found = true);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final String jobLabel =
-        ref.watch(jobDraftProvider).category?.displayLabel ?? 'your job';
+    final AppLocalizations l = AppLocalizations.of(context);
+    final jobs = ref.watch(myJobsProvider).valueOrNull ?? const <JobRequest>[];
+    final currentJob = jobs.isNotEmpty ? jobs.first : null;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _syncFromJob(currentJob);
+    });
+    final JobCategory? cat = ref.watch(jobDraftProvider).category;
+    final String jobLabel = cat != null ? categoryLabel(cat, l) : l.yourJob;
     final TextTheme text = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -95,7 +106,7 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
                   ),
                   const Spacer(flex: 1),
                   Text(
-                    _found ? 'Pro assigned!' : 'Finding your pro',
+                    _found ? l.proAssignedExcl : l.findingYourPro,
                     style: text.headlineSmall
                         ?.copyWith(fontWeight: FontWeight.w700),
                   ),
@@ -104,8 +115,8 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
                     duration: const Duration(milliseconds: 300),
                     child: Text(
                       _found
-                          ? 'Khaled is 1.8 km away and heading to you.'
-                          : _tiers[_tierIndex],
+                          ? l.proHeadingToYou
+                          : _tiers(l)[_tierIndex],
                       key: ValueKey<String>(_found ? 'done' : '$_tierIndex'),
                       textAlign: TextAlign.center,
                       style: text.titleMedium?.copyWith(
@@ -114,11 +125,11 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xl),
-                  if (_found) _proCard(text),
+                  if (_found) _proCard(text, l, currentJob),
                   const Spacer(flex: 2),
                   if (_found)
                     GlowButton(
-                      label: 'Track your pro',
+                      label: l.trackYourPro,
                       icon: Icons.navigation_rounded,
                       onPressed: () => context.pushReplacement('/job/live'),
                     )
@@ -134,7 +145,7 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
                               BorderRadius.circular(AppSpacing.radiusMd),
                         ),
                       ),
-                      child: const Text('Cancel search'),
+                      child: Text(l.cancelSearch),
                     ),
                   const SizedBox(height: AppSpacing.lg),
                 ],
@@ -146,7 +157,17 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
     );
   }
 
-  Widget _proCard(TextTheme text) {
+  Widget _proCard(TextTheme text, AppLocalizations l, JobRequest? job) {
+    final Offer? accepted = job?.acceptedOffer;
+    final String proName = accepted?.technicianName ?? l.techNameKhaled;
+    final String initials = proName
+        .split(' ')
+        .map((s) => s.isEmpty ? '' : s[0])
+        .take(2)
+        .join();
+    final double rating = accepted?.rating ?? 4.9;
+    final int jobsDone = accepted?.jobsDone ?? 0;
+
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
@@ -156,11 +177,11 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
       ),
       child: Row(
         children: <Widget>[
-          const CircleAvatar(
+          CircleAvatar(
             radius: 26,
             backgroundColor: AppColors.primary,
-            child: Text('KM',
-                style: TextStyle(
+            child: Text(initials,
+                style: const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.w700)),
           ),
           const SizedBox(width: AppSpacing.md),
@@ -168,7 +189,7 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Khaled Mansour',
+                Text(proName,
                     style:
                         text.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
                 Row(
@@ -176,7 +197,7 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
                     const Icon(Icons.star_rounded,
                         size: 15, color: AppColors.warning),
                     const SizedBox(width: 3),
-                    Text('4.9 · 1,284 jobs',
+                    Text('$rating · ${l.jobsDoneCount(jobsDone)}',
                         style: text.bodySmall?.copyWith(
                           color:
                               AppColors.textSecondary.withValues(alpha: 0.7),
@@ -186,8 +207,8 @@ class _AsapDispatchScreenState extends ConsumerState<AsapDispatchScreen>
               ],
             ),
           ),
-          const StatusPill(
-              label: 'Verified', tint: AppColors.success, icon: Icons.verified),
+          StatusPill(
+              label: l.verified, tint: AppColors.success, icon: Icons.verified),
         ],
       ),
     );

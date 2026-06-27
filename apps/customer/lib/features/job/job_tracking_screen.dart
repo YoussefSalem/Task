@@ -1,5 +1,4 @@
 import 'package:customer/l10n/app_localizations.dart';
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,54 +28,60 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
     duration: const Duration(seconds: 6),
   );
 
-  static const List<JobStage> _flow = <JobStage>[
-    JobStage.enRoute,
-    JobStage.inProgress,
-    JobStage.completed,
-  ];
-  int _stageIndex = 0;
-  final List<Timer> _timers = <Timer>[];
-
-  JobStage get _stage => _flow[_stageIndex];
-
   @override
   void initState() {
     super.initState();
     final bool reduce = WidgetsBinding
         .instance.platformDispatcher.accessibilityFeatures.disableAnimations;
     if (!reduce) _move.forward();
-    _timers.add(Timer(Duration(milliseconds: reduce ? 200 : 6000), () {
-      if (mounted) setState(() => _stageIndex = 1);
-    }));
-    _timers.add(Timer(Duration(milliseconds: reduce ? 400 : 11000), () {
-      if (mounted) setState(() => _stageIndex = 2);
-    }));
   }
 
   @override
   void dispose() {
     _move.dispose();
-    for (final Timer t in _timers) {
-      t.cancel();
-    }
     super.dispose();
   }
 
+  int _stageIndexFromStatus(JobStatus? status) => switch (status) {
+        JobStatus.enRoute => 0,
+        JobStatus.inProgress => 1,
+        JobStatus.completed => 2,
+        _ => 0,
+      };
+
+  JobStage _stageFromStatus(JobStatus? status) => switch (status) {
+        JobStatus.enRoute => JobStage.enRoute,
+        JobStatus.inProgress => JobStage.inProgress,
+        JobStatus.completed => JobStage.completed,
+        _ => JobStage.enRoute,
+      };
+
   @override
   Widget build(BuildContext context) {
-    final JobRequest? job =
-        ref.watch(myJobsProvider).valueOrNull?.isEmpty == false
-            ? ref.watch(myJobsProvider).valueOrNull!.first
-            : null;
+    final List<JobRequest> jobs =
+        ref.watch(myJobsProvider).valueOrNull ?? const <JobRequest>[];
+    final JobRequest? job = jobs.where((j) =>
+        j.status == JobStatus.accepted ||
+        j.status == JobStatus.enRoute ||
+        j.status == JobStatus.inProgress ||
+        j.status == JobStatus.completed).isEmpty
+        ? (jobs.isNotEmpty ? jobs.first : null)
+        : jobs.where((j) =>
+            j.status == JobStatus.accepted ||
+            j.status == JobStatus.enRoute ||
+            j.status == JobStatus.inProgress ||
+            j.status == JobStatus.completed).first;
+    final int stageIndex = _stageIndexFromStatus(job?.status);
+    final JobStage stage = _stageFromStatus(job?.status);
     final TextTheme text = Theme.of(context).textTheme;
-    final bool done = _stage == JobStage.completed;
+    final bool done = stage == JobStage.completed;
 
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
           Positioned.fill(
-            child: _Map(progress: _move, arrived: _stageIndex > 0),
+            child: _Map(progress: _move, arrived: stageIndex > 0),
           ),
           SafeArea(
             child: Align(
@@ -95,15 +100,16 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: _sheet(job, text, done),
+            child: _sheet(job, text, done, stage, stageIndex),
           ),
         ],
       ),
     );
   }
 
-  Widget _sheet(JobRequest? job, TextTheme text, bool done) {
+  Widget _sheet(JobRequest? job, TextTheme text, bool done, JobStage stage, int stageIndex) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations l = AppLocalizations.of(context);
     return Container(
       width: double.infinity,
       padding: EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.lg, AppSpacing.xl,
@@ -135,12 +141,12 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
           Row(
             children: <Widget>[
               Expanded(
-                child: Text(_stage.title,
+                child: Text(stage.title(l),
                     style: text.titleLarge
                         ?.copyWith(fontWeight: FontWeight.w700)),
               ),
               StatusPill(
-                label: done ? 'Done' : 'ETA 8 min',
+                label: done ? l.done : l.etaMinutes(8),
                 tint: done ? AppColors.success : AppColors.primary,
                 icon: done ? Icons.check_circle : Icons.schedule_rounded,
               ),
@@ -149,11 +155,11 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
           const SizedBox(height: AppSpacing.lg),
           _proRow(job, text),
           const SizedBox(height: AppSpacing.lg),
-          _timeline(text),
+          _timeline(text, stageIndex),
           const SizedBox(height: AppSpacing.lg),
           if (done)
             GlowButton(
-              label: 'Pay & finish',
+              label: l.payAndFinish,
               icon: Icons.check_rounded,
               onPressed: () => context.push('/book/payment?stage=settle'),
             )
@@ -161,11 +167,11 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
             Row(
               children: <Widget>[
                 Expanded(
-                  child: _ghostAction(Icons.chat_bubble_outline_rounded, 'Chat'),
+                  child: _ghostAction(Icons.chat_bubble_outline_rounded, l.chat),
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
-                  child: _ghostAction(Icons.call_rounded, 'Call'),
+                  child: _ghostAction(Icons.call_rounded, l.call),
                 ),
               ],
             ),
@@ -175,7 +181,8 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
   }
 
   Widget _proRow(JobRequest? job, TextTheme text) {
-    const String pro = 'Khaled Mansour';
+    final AppLocalizations l = AppLocalizations.of(context);
+    final String pro = job?.acceptedOffer?.technicianName ?? l.techNameKhaled;
     return Row(
       children: <Widget>[
         CircleAvatar(
@@ -195,7 +202,7 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
               Text(pro,
                   style:
                       text.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-              Text(job?.title ?? 'Home service',
+              Text(job?.title ?? l.homeService,
                   style: text.bodySmall?.copyWith(
                     color: Theme.of(context).brightness == Brightness.dark
                         ? AppColors.textSecondary.withValues(alpha: 0.65)
@@ -215,19 +222,20 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
     );
   }
 
-  Widget _timeline(TextTheme text) {
-    const List<(JobStage, String)> steps = <(JobStage, String)>[
-      (JobStage.enRoute, 'Heading to your address'),
-      (JobStage.inProgress, 'Working on the job'),
-      (JobStage.completed, 'Job completed'),
+  Widget _timeline(TextTheme text, int stageIndex) {
+    final AppLocalizations l = AppLocalizations.of(context);
+    final List<(JobStage, String)> steps = <(JobStage, String)>[
+      (JobStage.enRoute, l.headingToAddress),
+      (JobStage.inProgress, l.workingOnJob),
+      (JobStage.completed, l.jobCompleted),
     ];
     return Column(
       children: <Widget>[
         for (int i = 0; i < steps.length; i++)
           _timelineRow(
             steps[i].$2,
-            done: i < _stageIndex,
-            active: i == _stageIndex,
+            done: i < stageIndex,
+            active: i == stageIndex,
             last: i == steps.length - 1,
             text: text,
           ),
@@ -293,7 +301,7 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
       onPressed: () {
         ScaffoldMessenger.of(context)
           ..clearSnackBars()
-          ..showSnackBar(SnackBar(content: Text('$label opens in the comms phase.')));
+          ..showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).featureOpensComms(label))));
       },
       icon: Icon(icon, size: 18),
       label: Text(label),

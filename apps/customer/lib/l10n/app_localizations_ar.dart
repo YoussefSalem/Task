@@ -9,6 +9,43 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
+  String get editName => 'تعديل الاسم';
+
+  @override
+  String get nameUpdated => 'اتحدّث الاسم';
+
+  @override
+  String get birthdayUpdated => 'اتحدّث تاريخ الميلاد';
+
+  @override
+  String get addPhoneNumber => 'أضف رقم تليفون';
+
+  @override
+  String get changePhoneNumber => 'غيّر رقم التليفون';
+
+  @override
+  String get phoneNumberVerified => 'اتأكد رقم التليفون';
+
+  @override
+  String get verifyYourPhone => 'أكّد رقم تليفونك';
+
+  @override
+  String get confirmPhoneHint => 'هنبعتلك كود من 6 أرقام نتأكد إنه رقمك.';
+
+  @override
+  String get enterYourPhoneNumber => 'اكتب رقم تليفونك';
+
+  @override
+  String get couldNotVerifyPhone => 'تعذّر تأكيد رقمك. حاول تاني.';
+
+  @override
+  String get phoneNumberInUse => 'الرقم ده مربوط بحساب تاني بالفعل.';
+
+  @override
+  String get signInAgainToChangePhone =>
+      'لأمانك، سجّل دخولك تاني قبل ما تغيّر رقم تليفونك.';
+
+  @override
   String get tagline => 'خدمات البيت اللي تحتاجها فورا';
 
   @override
@@ -1488,6 +1525,50 @@ class AppLocalizationsAr extends AppLocalizations {
   String get messageHint => 'اكتب رسالة…';
 
   @override
+  String get typingIndicator => 'بيكتب…';
+
+  @override
+  String get seenLabel => 'تمت القراءة';
+
+  @override
+  String get chatSignedOut => 'سجّل الدخول عشان تراسل الفنيين.';
+
+  @override
+  String get chatLoadError => 'تعذّر تحميل المحادثة. اتأكد من الاتصال.';
+
+  @override
+  String get chatEmpty => 'ابعت تحية تبدأ المحادثة.';
+
+  @override
+  String get notificationsTitle => 'الإشعارات';
+
+  @override
+  String get notificationsEmpty => 'مفيش جديد دلوقتي.';
+
+  @override
+  String get notificationsMarkAll => 'تعليم الكل كمقروء';
+
+  @override
+  String get notifPostedTitle => 'تم نشر الطلب';
+
+  @override
+  String get notifPostedBody => 'بندوّر على الفني المناسب لشغلانتك.';
+
+  @override
+  String notifNewMessageTitle(String name) {
+    return 'رسالة جديدة من $name';
+  }
+
+  @override
+  String get notifHiredTitle => 'تم اختيارك';
+
+  @override
+  String get notifHiredBody => 'العميل قبل عرضك. اتحرك لما تكون جاهز.';
+
+  @override
+  String get customerWord => 'العميل';
+
+  @override
   String get suggestionAcLeaking => 'التكييف بتاعي بينقّط مية';
 
   @override
@@ -1542,6 +1623,10 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get assistantJustConfirm =>
       'للتأكيد بس — أنشر ده للفنيين؟ رد \"نعم\" تنشر، أو \"لا\" تعدّل حاجة.';
+
+  @override
+  String get assistantPostFailed =>
+      'آسف — ماقدرتش أنشر طلبك دلوقتي. اتأكد من الاتصال ورد \"نعم\" نجرّب تاني.';
 
   @override
   String assistantConfirm(Object cat, Object price, Object title) {
@@ -1706,4 +1791,56 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get noSavedAddressesYet =>
       'لا توجد عناوين محفوظة بعد. أضف عنوانًا لاستخدامه لاحقًا.';
+
+  @override
+  String get helpSupportIntro =>
+      'نحن هنا لمساعدتك. تواصل معنا مباشرة أو تصفّح الأسئلة الشائعة أدناه.';
+
+  @override
+  String get contactUs => 'تواصل معنا';
+
+  @override
+  String get contactEmail => 'البريد الإلكتروني';
+
+  @override
+  String get contactPhone => 'الهاتف';
+
+  @override
+  String copiedToClipboard(Object value) {
+    return 'تم نسخ $value';
+  }
+
+  @override
+  String get commonQuestions => 'الأسئلة الشائعة';
+
+  @override
+  String get faqBookingQ => 'كيف أحجز خدمة؟';
+
+  @override
+  String get faqBookingA =>
+      'افتح تبويب الرئيسية، اختر خدمة، حدّد عنوانك ثم أكّد. سنوصلك بفنّي قريب منك.';
+
+  @override
+  String get faqCancelQ => 'هل يمكنني إلغاء الحجز؟';
+
+  @override
+  String get faqCancelA =>
+      'نعم — افتح الحجز من تبويب مهامي واضغط إلغاء. تعتمد شروط الإلغاء على مرحلة تنفيذ المهمة.';
+
+  @override
+  String get faqPaymentQ => 'كيف تتم عملية الدفع؟';
+
+  @override
+  String get faqPaymentA =>
+      'ادفع نقدًا أو بالبطاقة بعد إتمام المهمة. يُحفظ الإيصال في سجل حجوزاتك.';
+
+  @override
+  String get privacyLastUpdated => 'آخر تحديث: يونيو 2026';
+
+  @override
+  String get privacyPlaceholderBadge => 'نص مؤقت — سيُستبدل لاحقًا';
+
+  @override
+  String get privacyPolicyBody =>
+      'هذا نص مؤقت لسياسة الخصوصية وسيتم استبداله بالنسخة النهائية قبل الإطلاق.\n\nنجمع المعلومات التي تزوّدنا بها — اسمك ورقم هاتفك وبريدك الإلكتروني وعناوينك المحفوظة وسجل حجوزاتك — لنوصلك بالفنّيين ونقدّم لك الخدمة. يُستخدم موقعك فقط للعثور على فنّيين قريبين وإظهار عنوان الخدمة.\n\nنحن لا نبيع بياناتك الشخصية أبدًا. نشاركها مع الفنّيين فقط بالقدر اللازم لإتمام الحجز، ومع مزوّدي الخدمات (مثل الدفع والمراسلة) الذين يساعدوننا في تشغيل التطبيق.\n\nتُخزَّن بياناتك بأمان ومرتبطة بحسابك. يمكنك تعديل ملفك الشخصي وحذف العناوين المحفوظة في أي وقت. لحذف حسابك أو طلب نسخة من بياناتك، تواصل مع الدعم.\n\nباستخدامك تطبيق Task فإنك توافق على هذه السياسة. وسنُعلمك هنا عند تغييرها.';
 }

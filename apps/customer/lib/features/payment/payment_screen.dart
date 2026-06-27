@@ -7,6 +7,7 @@ import 'package:task_domain/task_domain.dart' hide PaymentMethod;
 
 import '../booking/booking_state.dart';
 import '../marketplace/marketplace_providers.dart';
+import '../services/category_l10n.dart';
 
 /// Payment & review. `settle == true` after a finished job (pay the pro); else
 /// it authorizes a scheduled booking upfront. The summary and method picker are
@@ -62,6 +63,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
       builder: (BuildContext context) {
         final TextTheme text = Theme.of(context).textTheme;
         final bool isDark = Theme.of(context).brightness == Brightness.dark;
+        final AppLocalizations l = AppLocalizations.of(context);
         return Padding(
           padding: EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.xl,
               AppSpacing.xl, AppSpacing.xl + MediaQuery.of(context).padding.bottom),
@@ -79,11 +81,11 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                     color: AppColors.success, size: 40),
               ),
               const SizedBox(height: AppSpacing.lg),
-              Text('Booking confirmed',
+              Text(l.bookingConfirmed,
                   style:
                       text.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
               const SizedBox(height: AppSpacing.sm),
-              Text("We've locked in your pro. You'll get a reminder before they arrive.",
+              Text(l.bookingConfirmedSub,
                   textAlign: TextAlign.center,
                   style: text.bodyMedium?.copyWith(
                     color: isDark
@@ -93,7 +95,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                   )),
               const SizedBox(height: AppSpacing.xl),
               GlowButton(
-                label: 'Done',
+                label: l.done,
                 onPressed: () {
                   Navigator.of(context).pop();
                   context.go('/home');
@@ -111,6 +113,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     final JobRequestDraft draft = ref.watch(jobDraftProvider);
     final int walletBalance = ref.watch(walletCreditProvider);
     final TextTheme text = Theme.of(context).textTheme;
+    final AppLocalizations l = AppLocalizations.of(context);
     final int total = draft.fixedPrice;
     final int applied = _appliedCredit(walletBalance, total);
     final int remaining = total - applied;
@@ -119,7 +122,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(widget.settle ? 'Pay & finish' : 'Review & pay'),
+        title: Text(widget.settle ? l.payAndFinish : l.reviewAndPay),
       ),
       body: Stack(
         fit: StackFit.expand,
@@ -134,7 +137,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                 _summary(draft, text, applied: applied, remaining: remaining),
                 const SizedBox(height: AppSpacing.xl),
                 if (!fullyCovered) ...<Widget>[
-                  Text('Payment method',
+                  Text(l.paymentMethod,
                       style: text.titleMedium
                           ?.copyWith(fontWeight: FontWeight.w700)),
                   const SizedBox(height: AppSpacing.md),
@@ -171,6 +174,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     required int remaining,
   }) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations l = AppLocalizations.of(context);
     final Color divColor =
         isDark ? const Color(0x18FFFFFF) : const Color(0x12000000);
     final bool walletUsed = applied > 0;
@@ -184,22 +188,23 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
       ),
       child: Column(
         children: <Widget>[
-          _row(text, 'Service', draft.category?.displayLabel ?? ''),
-          _row(text, 'Title', draft.title),
+          _row(text, l.serviceLabel,
+              draft.category != null ? categoryLabel(draft.category!, l) : ''),
+          _row(text, l.titleLabel, draft.title),
           Divider(height: AppSpacing.xl, color: divColor),
 
           // Job total row
           Row(
             children: <Widget>[
               Expanded(
-                child: Text('Job total',
+                child: Text(l.jobTotal,
                     style: text.bodyMedium?.copyWith(
                       color: isDark
                           ? AppColors.textSecondary.withValues(alpha: 0.6)
                           : AppColors.textSecondaryLight,
                     )),
               ),
-              Text('${draft.fixedPrice} EGP',
+              Text('${draft.fixedPrice} ${l.egp}',
                   style: text.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
             ],
           ),
@@ -213,13 +218,13 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                     size: 15, color: AppColors.success),
                 const SizedBox(width: 6),
                 Expanded(
-                  child: Text('Task credit applied',
+                  child: Text(l.taskCreditApplied,
                       style: text.bodyMedium?.copyWith(
                         color: AppColors.success,
                         fontWeight: FontWeight.w600,
                       )),
                 ),
-                Text('−$applied EGP',
+                Text('−$applied ${l.egp}',
                     style: text.bodyMedium?.copyWith(
                       color: AppColors.success,
                       fontWeight: FontWeight.w700,
@@ -234,12 +239,12 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
             Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('You pay',
+                  child: Text(l.youPay,
                       style: text.titleMedium
                           ?.copyWith(fontWeight: FontWeight.w700)),
                 ),
                 Text(
-                  remaining == 0 ? 'Free' : '$remaining EGP',
+                  remaining == 0 ? l.free : '$remaining ${l.egp}',
                   style: text.titleLarge?.copyWith(
                     fontWeight: FontWeight.w800,
                     color: remaining == 0 ? AppColors.success : AppColors.primary,
@@ -253,11 +258,11 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
             Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('Total',
+                  child: Text(l.total,
                       style: text.titleMedium
                           ?.copyWith(fontWeight: FontWeight.w700)),
                 ),
-                Text('${draft.fixedPrice} EGP',
+                Text('${draft.fixedPrice} ${l.egp}',
                     style: text.titleLarge?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: AppColors.primary)),
@@ -286,7 +291,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Text(
-              'Your Task credit fully covers this order — no additional payment needed.',
+              AppLocalizations.of(context).taskCreditCovers,
               style: text.bodyMedium?.copyWith(
                 color: AppColors.success,
                 height: 1.4,
@@ -363,11 +368,11 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(m.label,
+                        Text(m.label(AppLocalizations.of(context)),
                             style: text.titleSmall
                                 ?.copyWith(fontWeight: FontWeight.w700)),
                         const SizedBox(height: 2),
-                        Text(m.sub,
+                        Text(m.sub(AppLocalizations.of(context)),
                             style: text.bodySmall?.copyWith(color: secondary)),
                       ],
                     ),
@@ -395,13 +400,14 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     required bool fullyCovered,
   }) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations l = AppLocalizations.of(context);
     final String action;
     if (fullyCovered) {
-      action = 'Confirm — credit only';
+      action = l.confirmCreditOnly;
     } else if (widget.settle) {
-      action = 'Pay $remaining EGP';
+      action = l.payAmount(remaining);
     } else {
-      action = 'Authorize $remaining EGP';
+      action = l.authorizeRemaining(remaining);
     }
 
     return Container(
@@ -429,7 +435,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                       size: 14, color: AppColors.success),
                   const SizedBox(width: 5),
                   Text(
-                    '$applied EGP Task credit applied',
+                    l.taskCreditAppliedAmount(applied),
                     style: text.labelSmall?.copyWith(
                       color: AppColors.success,
                       fontWeight: FontWeight.w600,

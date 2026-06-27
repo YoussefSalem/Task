@@ -1,9 +1,13 @@
 // apps/customer/lib/features/assistant/assistant_providers.dart
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:task_domain/task_domain.dart';
 
+import '../chat/chat_providers.dart';
+import '../localization/locale_controller.dart';
 import '../marketplace/marketplace_providers.dart';
+import '../services/category_l10n.dart';
 import 'assistant_service.dart';
 import 'groq_assistant_service.dart';
 import 'mock_assistant_service.dart';
@@ -19,10 +23,13 @@ final httpClientProvider = Provider<http.Client>((ref) {
 
 /// Real Groq service when a key is configured; offline mock otherwise.
 final assistantServiceProvider = Provider<AssistantService>((ref) {
-  if (_kGroqKey.isEmpty) return MockAssistantService();
+  final AppLocalizations l =
+      lookupAppLocalizations(ref.watch(localeControllerProvider));
+  if (_kGroqKey.isEmpty) return MockAssistantService(l);
   return GroqAssistantService(
     client: ref.watch(httpClientProvider),
     apiKey: _kGroqKey,
+    l: l,
   );
 });
 
@@ -72,18 +79,18 @@ class ChatState {
       );
 }
 
-const ChatMessage _greeting = ChatMessage(
-  "Hi! I'm your Task assistant. Tell me what needs fixing and I'll write a "
-  'clear summary for the right pro. You decide the price.',
-  fromUser: false,
-);
-
 /// Drives the assistant conversation and the gather → price → confirm → post
 /// flow. Information gathering is delegated to the AI; the deterministic price,
 /// confirmation and publish steps are handled here so they cannot misfire.
 class BookingChatController extends Notifier<ChatState> {
+  /// Localized strings in the active locale, for the deterministic copy this
+  /// controller generates (greeting, price/confirm prompts, post messages).
+  AppLocalizations get _l =>
+      lookupAppLocalizations(ref.read(localeControllerProvider));
+
   @override
-  ChatState build() => const ChatState(messages: <ChatMessage>[_greeting]);
+  ChatState build() => ChatState(
+      messages: <ChatMessage>[ChatMessage(_l.assistantGreeting, fromUser: false)]);
 
   Future<void> send(String text) async {
     final String value = text.trim();
@@ -96,10 +103,7 @@ class BookingChatController extends Notifier<ChatState> {
         await _handleConfirmReply(value);
       case ChatPhase.posted:
         _appendUser(value);
-        _appendAssistant(
-          'Your request is already live with technicians. Tap "New request" '
-          'below to start another one.',
-        );
+        _appendAssistant(_l.assistantAlreadyLive);
       case ChatPhase.gathering:
         await _handleGatherReply(value);
     }
@@ -121,7 +125,7 @@ class BookingChatController extends Notifier<ChatState> {
       messages: <ChatMessage>[
         ...withUser,
         ChatMessage(turn.reply, fromUser: false),
-        if (ready) const ChatMessage(_priceAsk, fromUser: false),
+        if (ready) ChatMessage(_l.assistantPriceAsk, fromUser: false),
       ],
       pendingDraft: ready ? turn.draft : state.pendingDraft,
       typing: false,
@@ -135,10 +139,7 @@ class BookingChatController extends Notifier<ChatState> {
     final int? price = _parsePrice(value);
     final JobRequestDraft? draft = state.pendingDraft;
     if (price == null || price <= 0 || draft == null) {
-      _appendAssistant(
-        "I didn't catch a price there. About how much would you like to pay, "
-        'in EGP? For example "400".',
-      );
+      _appendAssistant(_l.assistantNoPriceCaught);
       return;
     }
     final JobRequestDraft priced = draft.copyWith(fixedPrice: price);
@@ -159,41 +160,56 @@ class BookingChatController extends Notifier<ChatState> {
       final JobRequestDraft? draft = state.pendingDraft;
       if (draft == null || !draft.isValid) {
         state = state.copyWith(phase: ChatPhase.gathering);
-        _appendAssistant(
-          "Something's missing from the request — let's go over it again. "
-          "What's the problem?",
-        );
+        _appendAssistant(_l.assistantSomethingMissing);
         return;
       }
       state = state.copyWith(typing: true);
-      await ref.read(jobMarketplaceRepositoryProvider).publish(draft);
+      try {
+        await ref
+            .read(jobMarketplaceRepositoryProvider)
+            .publish(draft)
+            .timeout(const Duration(seconds: 15));
+        await _notifyPosted();
+      } catch (_) {
+        // Publish threw (e.g. rejected write, signed out) or never reached the
+        // backend (timeout). Recover: drop the typing indicator, keep the draft
+        // and stay on confirm so the customer can reply "yes" to retry.
+        state = state.copyWith(typing: false);
+        _appendAssistant(_l.assistantPostFailed);
+        return;
+      }
       state = state.copyWith(
         typing: false,
         clearPending: true,
         phase: ChatPhase.posted,
         messages: <ChatMessage>[
           ...state.messages,
-          const ChatMessage(
-            "Done — your request is now live for technicians to review. "
-            "You'll start getting offers shortly.",
-            fromUser: false,
-          ),
+          ChatMessage(_l.assistantPosted, fromUser: false),
         ],
       );
       return;
     }
     if (_isNo(value)) {
       state = state.copyWith(phase: ChatPhase.awaitingPrice);
-      _appendAssistant(
-        'No problem. What would you like to change? Tell me a new price, or '
-        'describe anything about the job you want to adjust.',
-      );
+      _appendAssistant(_l.assistantWhatToChange);
       return;
     }
-    _appendAssistant(
-      'Just to confirm — should I post this for technicians? Reply "yes" to '
-      'post, or "no" to change something.',
-    );
+    _appendAssistant(_l.assistantJustConfirm);
+  }
+
+  /// Drop a "request posted" entry into the customer's own feed so the bell
+  /// badge and notifications screen light up the moment a job goes live.
+  Future<void> _notifyPosted() async {
+    final String? uid = ref.read(currentUidProvider);
+    if (uid == null) return;
+    await ref.read(notificationRepositoryProvider).notify(
+          recipientUid: uid,
+          draft: NotificationDraft(
+            type: NotificationType.jobStatus,
+            title: _l.notifPostedTitle,
+            body: _l.notifPostedBody,
+          ),
+        );
   }
 
   // ── Public hooks kept for the price-card UI / tests ──────────────────────
@@ -233,11 +249,10 @@ class BookingChatController extends Notifier<ChatState> {
     return int.tryParse(m.group(0)!.replaceAll(',', ''));
   }
 
-  static String _confirmText(JobRequestDraft d) {
-    final String cat = d.category?.displayLabel ?? 'service';
-    return 'Here\'s your request:\n\n• $cat — ${d.title}\n• You pay: '
-        'EGP ${d.fixedPrice}\n\nShall I post this for technicians to review? '
-        'Reply "yes" to post, or "no" to change something.';
+  String _confirmText(JobRequestDraft d) {
+    final String cat =
+        d.category != null ? categoryLabel(d.category!, _l) : _l.serviceWord;
+    return _l.assistantConfirm(cat, d.title, d.fixedPrice);
   }
 
   static bool _isYes(String v) {
@@ -257,10 +272,6 @@ class BookingChatController extends Notifier<ChatState> {
     return no.any((String w) => t == w || t.contains(w));
   }
 }
-
-const String _priceAsk =
-    "Great — I've got everything I need. What would you like to pay for this "
-    'service, in EGP?';
 
 final bookingChatProvider =
     NotifierProvider<BookingChatController, ChatState>(BookingChatController.new);

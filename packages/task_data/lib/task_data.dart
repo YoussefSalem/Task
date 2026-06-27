@@ -6,3 +6,5 @@
 library;
 
 export 'src/mappers/enum_codecs.dart';
+export 'src/messaging/firestore_messaging_repository.dart';
+export 'src/messaging/firestore_notification_repository.dart';

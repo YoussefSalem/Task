@@ -6,9 +6,14 @@ import 'package:task_design/task_design.dart';
 
 import '../auth/auth_controller.dart';
 import '../address/address_repository.dart';
+import '../address/address_screen.dart';
 import '../booking/booking_state.dart';
+import '../bookings/booking_history_screen.dart';
+import '../legal/privacy_screen.dart';
+import '../support/help_support_screen.dart';
 import '../localization/language_switcher.dart';
 import '../settings/theme_controller.dart';
+import 'profile_edit.dart';
 import 'user_profile.dart';
 
 /// The Profile tab: identity header, wallet credit, and account menu. Most rows
@@ -33,41 +38,53 @@ class ProfileScreen extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(
                 AppSpacing.xl, AppSpacing.lg, AppSpacing.xl, 112),
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(AppLocalizations.of(context).profile,
-                        style: text.headlineSmall
-                            ?.copyWith(fontWeight: FontWeight.w700)),
-                  ),
-                  const LanguageSwitcher(),
-                ],
+              EntranceReveal(
+                index: 0,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(AppLocalizations.of(context).profile,
+                          style: text.headlineSmall
+                              ?.copyWith(fontWeight: FontWeight.w700)),
+                    ),
+                    const LanguageSwitcher(),
+                  ],
+                ),
               ),
               const SizedBox(height: AppSpacing.xl),
-              _identity(context, text, profile),
+              EntranceReveal(
+                index: 1,
+                child: _identity(context, text, profile, ref),
+              ),
               const SizedBox(height: AppSpacing.xl),
-              _personalDetails(context, text, profile),
+              EntranceReveal(
+                index: 2,
+                child: _personalDetails(context, text, profile, ref),
+              ),
               const SizedBox(height: AppSpacing.xl),
-              _walletCard(context, text, ref),
+              EntranceReveal(index: 3, child: _walletCard(context, text, ref)),
               const SizedBox(height: AppSpacing.xl),
-              _AppearanceSection(text: text),
+              EntranceReveal(index: 4, child: _AppearanceSection(text: text)),
               const SizedBox(height: AppSpacing.xl),
-              _menu(context, text, ref),
+              EntranceReveal(index: 5, child: _menu(context, text, ref)),
               const SizedBox(height: AppSpacing.xl),
-              OutlinedButton.icon(
-                onPressed: () async {
-                  await ref.read(authControllerProvider).signOut();
-                  if (context.mounted) context.go('/');
-                },
-                icon: const Icon(Icons.logout_rounded),
-                label: Text(AppLocalizations.of(context).signOut),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(52),
-                  foregroundColor: AppColors.error,
-                  side: BorderSide(
-                      color: AppColors.error.withValues(alpha: 0.5)),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+              EntranceReveal(
+                index: 6,
+                child: OutlinedButton.icon(
+                  onPressed: () async {
+                    await ref.read(authControllerProvider).signOut();
+                    if (context.mounted) context.go('/');
+                  },
+                  icon: const Icon(Icons.logout_rounded),
+                  label: Text(AppLocalizations.of(context).signOut),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(52),
+                    foregroundColor: AppColors.error,
+                    side: BorderSide(
+                        color: AppColors.error.withValues(alpha: 0.5)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+                    ),
                   ),
                 ),
               ),
@@ -78,7 +95,8 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _identity(BuildContext context, TextTheme text, UserProfile profile) {
+  Widget _identity(BuildContext context, TextTheme text, UserProfile profile,
+      WidgetRef ref) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final AppLocalizations l = AppLocalizations.of(context);
     final String name =
@@ -87,43 +105,73 @@ class ProfileScreen extends ConsumerWidget {
         profile.phone.isNotEmpty ? profile.phone : l.notSet;
     final String initials =
         profile.fullName.isNotEmpty ? profile.initials : l.demoProfileInitials;
-    return Row(
-      children: <Widget>[
-        CircleAvatar(
-          radius: 32,
-          backgroundColor: AppColors.primary,
-          child: Text(initials,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 22)),
-        ),
-        const SizedBox(width: AppSpacing.lg),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    final Color editTint = isDark
+        ? AppColors.textSecondary.withValues(alpha: 0.7)
+        : AppColors.textSecondaryLight;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => showEditNameSheet(context, ref, profile),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+          child: Row(
             children: <Widget>[
-              Text(name,
-                  style:
-                      text.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
-              const SizedBox(height: 2),
-              Text(phone,
-                  style: text.bodyMedium?.copyWith(
+              CircleAvatar(
+                radius: 32,
+                backgroundColor: AppColors.primary,
+                child: Text(initials,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 22)),
+              ),
+              const SizedBox(width: AppSpacing.lg),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(name,
+                        style: text.titleLarge
+                            ?.copyWith(fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 2),
+                    Text(phone,
+                        style: text.bodyMedium?.copyWith(
+                          color: isDark
+                              ? AppColors.textSecondary.withValues(alpha: 0.65)
+                              : AppColors.textSecondaryLight,
+                        )),
+                  ],
+                ),
+              ),
+              // Edit affordance — taps anywhere on the row open the name editor.
+              Semantics(
+                button: true,
+                label: l.editName,
+                child: Container(
+                  height: 36,
+                  width: 36,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
                     color: isDark
-                        ? AppColors.textSecondary.withValues(alpha: 0.65)
-                        : AppColors.textSecondaryLight,
-                  )),
+                        ? AppColors.surface.withValues(alpha: 0.5)
+                        : AppColors.primaryContainer,
+                  ),
+                  child: Icon(Icons.edit_rounded, size: 18, color: editTint),
+                ),
+              ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 
   /// Email + birthday card. Both fall back to "Not set" when the user signed in
   /// via a path that didn't collect them.
-  Widget _personalDetails(
-      BuildContext context, TextTheme text, UserProfile profile) {
+  Widget _personalDetails(BuildContext context, TextTheme text,
+      UserProfile profile, WidgetRef ref) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final AppLocalizations l = AppLocalizations.of(context);
     final Color dividerColor =
@@ -132,31 +180,53 @@ class ProfileScreen extends ConsumerWidget {
         ? AppColors.textSecondary.withValues(alpha: 0.55)
         : AppColors.textSecondaryLight;
 
+    final bool hasPhone = profile.phone.isNotEmpty;
+    final bool hasBirthday = profile.birthday != null;
     final String email = profile.email.isNotEmpty ? profile.email : l.notSet;
-    final String birthday = profile.birthday != null
-        ? _formatBirthday(profile.birthday!, l)
-        : l.notSet;
+    final String phone = hasPhone ? profile.phone : l.notSet;
+    final String birthday =
+        hasBirthday ? _formatBirthday(profile.birthday!, l) : l.notSet;
 
-    Widget row(IconData icon, String label, String value) => Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg, vertical: AppSpacing.md),
-          child: Row(
-            children: <Widget>[
-              Icon(icon, size: 20, color: AppColors.primary),
-              const SizedBox(width: AppSpacing.md),
-              Text(label,
-                  style: text.bodySmall?.copyWith(color: labelColor)),
-              const Spacer(),
-              Flexible(
-                child: Text(value,
-                    textAlign: TextAlign.end,
-                    overflow: TextOverflow.ellipsis,
-                    style: text.bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w600)),
+    // A detail row. When [onTap] is set the row is interactive and shows an
+    // affordance — a pencil to change an existing value, or a plus to add a
+    // missing one. Read-only rows (email) render without either.
+    Widget row(IconData icon, String label, String value,
+        {VoidCallback? onTap, bool unset = false}) {
+      final Widget content = Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg, vertical: AppSpacing.md),
+        child: Row(
+          children: <Widget>[
+            Icon(icon, size: 20, color: AppColors.primary),
+            const SizedBox(width: AppSpacing.md),
+            Text(label, style: text.bodySmall?.copyWith(color: labelColor)),
+            const SizedBox(width: AppSpacing.lg),
+            // Value fills the rest of the row and right-aligns, so every value
+            // lands flush against the same right margin regardless of length
+            // (a Spacer + Flexible would split the gap 50/50 instead).
+            Expanded(
+              child: Text(value,
+                  textAlign: TextAlign.end,
+                  overflow: TextOverflow.ellipsis,
+                  style: text.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+            ),
+            if (onTap != null) ...<Widget>[
+              const SizedBox(width: AppSpacing.sm),
+              Icon(
+                unset ? Icons.add_circle_outline_rounded : Icons.edit_rounded,
+                size: 18,
+                color: AppColors.primary,
               ),
             ],
-          ),
-        );
+          ],
+        ),
+      );
+      if (onTap == null) return content;
+      return Material(
+        color: Colors.transparent,
+        child: InkWell(onTap: onTap, child: content),
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,6 +241,7 @@ class ProfileScreen extends ConsumerWidget {
               )),
         ),
         Container(
+          clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             color: isDark
                 ? AppColors.surface.withValues(alpha: 0.5)
@@ -182,7 +253,22 @@ class ProfileScreen extends ConsumerWidget {
             children: <Widget>[
               row(Icons.email_rounded, l.emailAddress, email),
               Divider(height: 1, color: dividerColor),
-              row(Icons.cake_rounded, l.birthday, birthday),
+              row(
+                Icons.phone_rounded,
+                l.phoneNumberLabel,
+                phone,
+                unset: !hasPhone,
+                onTap: () => showPhoneSheet(context, ref, hasPhone: hasPhone),
+              ),
+              Divider(height: 1, color: dividerColor),
+              row(
+                Icons.cake_rounded,
+                l.birthday,
+                birthday,
+                unset: !hasBirthday,
+                onTap: () =>
+                    pickAndSaveBirthday(context, ref, profile.birthday),
+              ),
             ],
           ),
         ),
@@ -251,12 +337,35 @@ class ProfileScreen extends ConsumerWidget {
         ref.watch(savedAddressesProvider).valueOrNull ?? const <SavedAddress>[];
     final String addressSummary =
         addresses.map((SavedAddress a) => a.label).join(', ');
-    final List<(IconData, String, String)> items = <(IconData, String, String)>[
-      (Icons.location_on_rounded, loc.savedAddresses, addressSummary),
-      (Icons.credit_card_rounded, loc.paymentMethods, loc.cashCard),
-      (Icons.history_rounded, loc.bookingHistory, ''),
-      (Icons.headset_mic_rounded, loc.helpAndSupport, ''),
-      (Icons.shield_rounded, loc.privacyAndSecurity, ''),
+    // (icon, title, subtitle, onTap). A null onTap falls back to the
+    // "arrives later" snackbar — currently only Payment methods.
+    final List<(IconData, String, String, VoidCallback?)> items =
+        <(IconData, String, String, VoidCallback?)>[
+      (
+        Icons.location_on_rounded,
+        loc.savedAddresses,
+        addressSummary,
+        () => context.push(AddressScreen.routePath)
+      ),
+      (Icons.credit_card_rounded, loc.paymentMethods, loc.cashCard, null),
+      (
+        Icons.history_rounded,
+        loc.bookingHistory,
+        '',
+        () => context.push(BookingHistoryScreen.routePath)
+      ),
+      (
+        Icons.headset_mic_rounded,
+        loc.helpAndSupport,
+        '',
+        () => context.push(HelpSupportScreen.routePath)
+      ),
+      (
+        Icons.shield_rounded,
+        loc.privacyAndSecurity,
+        '',
+        () => context.push(PrivacyScreen.routePath)
+      ),
     ];
     return Container(
       decoration: BoxDecoration(
@@ -278,12 +387,13 @@ class ProfileScreen extends ConsumerWidget {
                   : Text(items[i].$3,
                       style: text.bodySmall?.copyWith(color: subtitleColor)),
               trailing: Icon(Icons.chevron_right_rounded, color: iconColor),
-              onTap: () {
-                ScaffoldMessenger.of(context)
-                  ..clearSnackBars()
-                  ..showSnackBar(SnackBar(
-                      content: Text(loc.featureArrivesLater(items[i].$2))));
-              },
+              onTap: items[i].$4 ??
+                  () {
+                    ScaffoldMessenger.of(context)
+                      ..clearSnackBars()
+                      ..showSnackBar(SnackBar(
+                          content: Text(loc.featureArrivesLater(items[i].$2))));
+                  },
             ),
             if (i < items.length - 1) Divider(height: 1, color: dividerColor),
           ],

@@ -1,5 +1,6 @@
 import '../entities/job_request.dart';
 import '../entities/job_request_draft.dart';
+import '../entities/review.dart';
 
 /// The seam between the marketplace UI and its data source. The prototype binds
 /// an in-memory mock; slice 4 swaps in a Firestore-backed implementation.
@@ -18,4 +19,7 @@ abstract interface class JobMarketplaceRepository {
 
   /// Customer cancels a posted job.
   Future<void> cancelJob(String jobId);
+
+  /// Customer submits a review after job completion.
+  Future<void> submitReview(String jobId, Review review);
 }

@@ -7,7 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
 import 'package:task_domain/task_domain.dart';
 
+import '../auth/auth_controller.dart';
 import '../marketplace/marketplace_providers.dart';
+import '../services/category_l10n.dart';
 
 /// Post-job rating. Stars, quick compliment chips, an optional note, then back
 /// home. Submitting resets the draft so the next booking starts clean.
@@ -25,14 +27,14 @@ class _RatingScreenState extends ConsumerState<RatingScreen> {
   final Set<String> _tags = <String>{};
   final TextEditingController _note = TextEditingController();
 
-  static const List<String> _options = <String>[
-    'On time',
-    'Tidy work',
-    'Friendly',
-    'Fair price',
-    'Skilled',
-    'Great communication',
-  ];
+  static List<String> _optionsFor(AppLocalizations l) => <String>[
+        l.tagOnTime,
+        l.tagTidyWork,
+        l.friendly,
+        l.fairPrice,
+        l.tagSkilled,
+        l.tagGreatCommunication,
+      ];
 
   @override
   void dispose() {
@@ -41,7 +43,30 @@ class _RatingScreenState extends ConsumerState<RatingScreen> {
   }
 
   Future<void> _submit() async {
+    final jobs = ref.read(myJobsProvider).valueOrNull ?? const <JobRequest>[];
+    final job = jobs.isNotEmpty ? jobs.first : null;
+    final uid = ref.read(authStateProvider).valueOrNull?.uid;
+    final techId = job?.acceptedOffer?.technicianId ?? '';
+    final proName = job?.acceptedOffer?.technicianName ??
+        AppLocalizations.of(context).techNameKhaled;
+
+    if (job != null && uid != null) {
+      final review = Review(
+        rating: _rating,
+        tags: _tags.toList(),
+        note: _note.text.trim(),
+        reviewerId: uid,
+        technicianId: techId,
+        createdAt: DateTime.now(),
+      );
+      await ref.read(jobMarketplaceRepositoryProvider).submitReview(
+            job.id,
+            review,
+          );
+    }
+
     ref.read(jobDraftProvider.notifier).reset();
+    if (!mounted) return;
     await showModalBottomSheet<void>(
       context: context,
       isDismissible: false,
@@ -49,7 +74,7 @@ class _RatingScreenState extends ConsumerState<RatingScreen> {
       backgroundColor: Colors.transparent,
       builder: (sheetCtx) => _ReviewSuccessSheet(
         rating: _rating,
-        proName: 'Khaled Mansour',
+        proName: proName,
         onDone: () {
           Navigator.of(sheetCtx).pop();
           context.go('/home');
@@ -65,7 +90,8 @@ class _RatingScreenState extends ConsumerState<RatingScreen> {
             ? ref.watch(myJobsProvider).valueOrNull!.first
             : null;
     final TextTheme text = Theme.of(context).textTheme;
-    const String pro = 'Khaled Mansour';
+    final AppLocalizations l = AppLocalizations.of(context);
+    final String pro = job?.acceptedOffer?.technicianName ?? l.techNameKhaled;
 
     return Scaffold(
       appBar: AppBar(
@@ -77,7 +103,7 @@ class _RatingScreenState extends ConsumerState<RatingScreen> {
               ref.read(jobDraftProvider.notifier).reset();
               context.go('/home');
             },
-            child: const Text('Skip'),
+            child: Text(l.skip),
           ),
         ],
       ),
@@ -105,12 +131,13 @@ class _RatingScreenState extends ConsumerState<RatingScreen> {
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 Text(
-                    'How was your ${job?.title.toLowerCase() ?? job?.category.displayLabel.toLowerCase() ?? 'service'}?',
+                    l.howWasYour(job?.title.toLowerCase() ??
+                        (job != null ? categoryLabel(job.category, l) : l.serviceWord)),
                     textAlign: TextAlign.center,
                     style:
                         text.headlineSmall?.copyWith(fontWeight: FontWeight.w700)),
                 const SizedBox(height: AppSpacing.sm),
-                Text('with $pro',
+                Text(l.withPro(pro),
                     textAlign: TextAlign.center,
                     style: text.titleMedium?.copyWith(
                       color: Theme.of(context).brightness == Brightness.dark
@@ -141,7 +168,7 @@ class _RatingScreenState extends ConsumerState<RatingScreen> {
                   spacing: AppSpacing.sm,
                   runSpacing: AppSpacing.sm,
                   alignment: WrapAlignment.center,
-                  children: _options.map((String tag) {
+                  children: _optionsFor(l).map((String tag) {
                     final bool on = _tags.contains(tag);
                     final bool isDark = Theme.of(context).brightness == Brightness.dark;
                     return GestureDetector(
@@ -183,12 +210,12 @@ class _RatingScreenState extends ConsumerState<RatingScreen> {
                   controller: _note,
                   minLines: 2,
                   maxLines: 4,
-                  decoration: const InputDecoration(
-                    hintText: 'Add a note (optional)',
+                  decoration: InputDecoration(
+                    hintText: l.addANote,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.xl),
-                GlowButton(label: 'Submit review', onPressed: _submit),
+                GlowButton(label: l.submitReview, onPressed: _submit),
               ],
             ),
           ),
@@ -259,6 +286,7 @@ class _ReviewSuccessSheetState extends State<_ReviewSuccessSheet>
   Widget build(BuildContext context) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final TextTheme text = Theme.of(context).textTheme;
+    final AppLocalizations l = AppLocalizations.of(context);
     final Color sheetColor =
         isDark ? AppColors.surface : AppColors.surfaceLight;
 
@@ -313,11 +341,11 @@ class _ReviewSuccessSheetState extends State<_ReviewSuccessSheet>
           ),
           const SizedBox(height: AppSpacing.lg),
 
-          Text('Review submitted!',
+          Text(l.reviewSubmitted,
               style: text.headlineSmall?.copyWith(fontWeight: FontWeight.w800)),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Thanks for rating ${widget.proName}.\nYour feedback helps the whole community.',
+            l.thanksForRating(widget.proName),
             textAlign: TextAlign.center,
             style: text.bodyMedium?.copyWith(
               color: isDark
@@ -351,7 +379,7 @@ class _ReviewSuccessSheetState extends State<_ReviewSuccessSheet>
 
           // Back to home button
           GlowButton(
-            label: 'Back to home',
+            label: l.backToHome,
             icon: Icons.home_rounded,
             onPressed: widget.onDone,
           ),
@@ -360,7 +388,7 @@ class _ReviewSuccessSheetState extends State<_ReviewSuccessSheet>
 
           // Countdown hint
           Text(
-            'Redirecting in $_secondsLeft s…',
+            l.redirectingIn(_secondsLeft),
             style: text.labelSmall?.copyWith(
               color: isDark
                   ? AppColors.textSecondary.withValues(alpha: 0.45)

@@ -8,7 +8,9 @@ import 'package:task_design/task_design.dart';
 import 'package:task_domain/task_domain.dart';
 
 import '../assistant/ai_chat_screen.dart';
+import '../chat/chat_providers.dart';
 import '../location/location_provider.dart';
+import '../notifications/notifications_screen.dart';
 import '../location/pick_location_screen.dart';
 import '../matching/matching_screen.dart';
 import '../offers/offers_screen.dart';
@@ -29,9 +31,14 @@ class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   static const List<JobCategory> _gridOrder = <JobCategory>[
-    JobCategory.plumbing, JobCategory.electrical, JobCategory.ac,
-    JobCategory.cleaning, JobCategory.carpentry, JobCategory.painting,
-    JobCategory.satelliteInstallation, JobCategory.smartHome,
+    JobCategory.plumbing,
+    JobCategory.electrical,
+    JobCategory.ac,
+    JobCategory.cleaning,
+    JobCategory.carpentry,
+    JobCategory.painting,
+    JobCategory.satelliteInstallation,
+    JobCategory.smartHome,
   ];
 
   @override
@@ -51,50 +58,82 @@ class HomeScreen extends ConsumerWidget {
       fit: StackFit.expand,
       children: <Widget>[
         const AmbientBackground(intensity: 0.13),
-        SafeArea(
-          bottom: false,
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(
-                AppSpacing.xl, AppSpacing.lg, AppSpacing.xl, _kBarClearance),
-            children: <Widget>[
-              _TopBar(text: text),
-              const SizedBox(height: AppSpacing.md),
-              const _LocationBar(),
-              const SizedBox(height: AppSpacing.md),
-              const ActiveJobCard(),
-              const _ActiveSearchCard(),
-              const SizedBox(height: AppSpacing.xl),
-              _AskAiHero(
-                onTap: () => context.push(AiChatScreen.routePath),
-                onSubmit: (msg) => context.push(AiChatScreen.routePath, extra: msg),
+        Column(
+          children: <Widget>[
+            // Location lives in a seamless header that bleeds up behind the
+            // status bar (no floating-card gap), so the top of the app reads as
+            // one continuous surface.
+            const _HomeHeader(),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.xl,
+                  AppSpacing.lg,
+                  AppSpacing.xl,
+                  _kBarClearance,
+                ),
+                children: <Widget>[
+                  EntranceReveal(index: 0, child: _TopBar(text: text)),
+                  const SizedBox(height: AppSpacing.md),
+                  const ActiveJobCard(),
+                  const _ActiveSearchCard(),
+                  const SizedBox(height: AppSpacing.xl),
+                  EntranceReveal(
+                    index: 2,
+                    child: _AskAiHero(
+                      onTap: () => context.push(AiChatScreen.routePath),
+                      onSubmit: (msg) =>
+                          context.push(AiChatScreen.routePath, extra: msg),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  const EntranceReveal(index: 3, child: _HeroBannerCarousel()),
+                  const SizedBox(height: AppSpacing.lg),
+                  const EntranceReveal(index: 4, child: _TrustStrip()),
+                  const SizedBox(height: AppSpacing.xxl),
+                  EntranceReveal(
+                    index: 5,
+                    child: _PopularServices(onTap: startCategory),
+                  ),
+                  const SizedBox(height: AppSpacing.xxl),
+                  EntranceReveal(
+                    index: 6,
+                    child: SectionHeader(
+                      title: AppLocalizations.of(context).services,
+                      actionLabel: AppLocalizations.of(context).browseAll,
+                      onAction: () => context.push(AllServicesScreen.routePath),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  EntranceReveal(
+                    index: 7,
+                    child: _CategoryGrid(
+                      order: _gridOrder,
+                      onTap: startCategory,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.xxl),
+                  EntranceReveal(
+                    index: 8,
+                    child: SectionHeader(
+                      title: AppLocalizations.of(context).topRatedNearYou,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  EntranceReveal(
+                    index: 9,
+                    child: _TopProsCarousel(
+                      onTap: (Technician t) => startCategory(t.category),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: AppSpacing.lg),
-              const _HeroBannerCarousel(),
-              const SizedBox(height: AppSpacing.lg),
-              const _TrustStrip(),
-              const SizedBox(height: AppSpacing.xxl),
-              _PopularServices(onTap: startCategory),
-              const SizedBox(height: AppSpacing.xxl),
-              SectionHeader(
-                title: AppLocalizations.of(context).services,
-                actionLabel: AppLocalizations.of(context).browseAll,
-                onAction: () => context.push(AllServicesScreen.routePath),
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              _CategoryGrid(order: _gridOrder, onTap: startCategory),
-              const SizedBox(height: AppSpacing.xxl),
-              SectionHeader(title: AppLocalizations.of(context).topRatedNearYou),
-              const SizedBox(height: AppSpacing.lg),
-              _TopProsCarousel(
-                onTap: (Technician t) => startCategory(t.category),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );
   }
-
 }
 
 /// Bottom padding so list content clears the floating nav bar. Mirrors
@@ -120,15 +159,17 @@ class _TopBar extends ConsumerWidget {
     return Row(
       children: <Widget>[
         Expanded(
-          child: Text(l.helloUsername(displayName),
-              style: text.headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.w800)),
+          child: Text(
+            l.helloUsername(displayName),
+            style: text.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+          ),
         ),
         _CircleButton(
           icon: Icons.notifications_none_rounded,
           label: l.notifications,
-          showDot: true,
-          onTap: () {},
+          showDot:
+              (ref.watch(unreadNotificationsProvider).valueOrNull ?? 0) > 0,
+          onTap: () => context.push(NotificationsScreen.routePath),
         ),
         const SizedBox(width: AppSpacing.sm),
         GestureDetector(
@@ -144,7 +185,10 @@ class _TopBar extends ConsumerWidget {
                 border: Border.all(color: AppColors.primary, width: 2),
               ),
               child: ClipOval(
-                child: _Avatar(seed: 'ahmed-user', initials: l.demoUserName.substring(0, 1)),
+                child: _Avatar(
+                  seed: 'ahmed-user',
+                  initials: l.demoUserName.substring(0, 1),
+                ),
               ),
             ),
           ),
@@ -192,11 +236,13 @@ class _CircleButton extends StatelessWidget {
             child: Stack(
               alignment: Alignment.center,
               children: <Widget>[
-                Icon(icon,
-                    size: 22,
-                    color: isDark
-                        ? AppColors.textSecondary
-                        : AppColors.textSecondaryLight),
+                Icon(
+                  icon,
+                  size: 22,
+                  color: isDark
+                      ? AppColors.textSecondary
+                      : AppColors.textSecondaryLight,
+                ),
                 if (showDot)
                   Positioned(
                     top: 12,
@@ -229,67 +275,98 @@ class _CircleButton extends StatelessWidget {
 // Location bar
 // ─────────────────────────────────────────────────────────────────────────
 
-class _LocationBar extends ConsumerWidget {
-  const _LocationBar();
+/// Seamless top header. A faint elevated band bleeds up behind the status bar
+/// (its gradient fades to transparent into the page), so the location selector
+/// sits right under the notch with no floating-card gap — the top of the app
+/// reads as one continuous surface.
+class _HomeHeader extends ConsumerWidget {
+  const _HomeHeader();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loc = ref.watch(locationProvider);
-    final text = Theme.of(context).textTheme;
-
+    final TextTheme text = Theme.of(context).textTheme;
+    final AppLocalizations l = AppLocalizations.of(context);
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final Color secondary =
-        isDark ? AppColors.textSecondary.withValues(alpha: 0.6) : AppColors.textSecondaryLight;
+    final double topInset = MediaQuery.paddingOf(context).top;
+    final Color secondary = isDark
+        ? AppColors.textSecondary.withValues(alpha: 0.6)
+        : AppColors.textSecondaryLight;
 
-    return GestureDetector(
-      onTap: () => context.push(PickLocationScreen.routePath),
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm + 2,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: isDark
+              ? const <Color>[Color(0xFF1B2233), Color(0x00141A28)]
+              : const <Color>[Color(0xFFFFFFFF), Color(0x00FFFFFF)],
         ),
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.surface.withValues(alpha: 0.45) : Colors.white,
-          borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-          border: Border.all(
-            color: isDark ? Colors.white.withValues(alpha: 0.07) : const Color(0x12000000),
-          ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.xl,
+          topInset + AppSpacing.sm,
+          AppSpacing.xl,
+          AppSpacing.md,
         ),
-        child: Row(
-          children: <Widget>[
-            Container(
-              height: 32,
-              width: 32,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.14),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(Icons.location_on_rounded,
-                  color: AppColors.primary, size: 18),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Semantics(
+          button: true,
+          label: l.serviceAt,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => context.push(PickLocationScreen.routePath),
+              borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+              child: Row(
                 children: <Widget>[
-                  Text(AppLocalizations.of(context).serviceAt,
-                      style: text.labelSmall?.copyWith(
-                        color: secondary,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.3,
-                      )),
-                  const SizedBox(height: 1),
-                  Text(loc.address,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: text.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      )),
+                  Container(
+                    height: 38,
+                    width: 38,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.16),
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                    child: const Icon(
+                      Icons.location_on_rounded,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          l.serviceAt,
+                          style: text.labelSmall?.copyWith(
+                            color: secondary,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                        const SizedBox(height: 1),
+                        Text(
+                          loc.address,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: text.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    size: 22,
+                    color: secondary,
+                  ),
                 ],
               ),
             ),
-            Icon(Icons.keyboard_arrow_down_rounded, size: 20, color: secondary),
-          ],
+          ),
         ),
       ),
     );
@@ -339,8 +416,11 @@ class _AskAiHero extends StatelessWidget {
               Positioned(
                 right: -18,
                 bottom: -24,
-                child: Icon(Icons.auto_awesome_rounded,
-                    size: 150, color: Colors.white.withValues(alpha: 0.10)),
+                child: Icon(
+                  Icons.auto_awesome_rounded,
+                  size: 150,
+                  color: Colors.white.withValues(alpha: 0.10),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(AppSpacing.xl),
@@ -362,27 +442,34 @@ class _AskAiHero extends StatelessWidget {
                                   color: Colors.white.withValues(alpha: 0.18),
                                   borderRadius: BorderRadius.circular(9),
                                 ),
-                                child: const Icon(Icons.auto_awesome_rounded,
-                                    color: Colors.white, size: 18),
+                                child: const Icon(
+                                  Icons.auto_awesome_rounded,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
                               ),
                               const SizedBox(width: AppSpacing.sm),
-                              Text(l.aiAssistant,
-                                  style: text.labelLarge?.copyWith(
-                                    color: Colors.white.withValues(alpha: 0.9),
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 0.2,
-                                  )),
+                              Text(
+                                l.aiAssistant,
+                                style: text.labelLarge?.copyWith(
+                                  color: Colors.white.withValues(alpha: 0.9),
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.2,
+                                ),
+                              ),
                               const Spacer(),
                               _PriceTag(text: text),
                             ],
                           ),
                           const SizedBox(height: AppSpacing.lg),
-                          Text(l.whatNeedsFixing,
-                              style: text.headlineSmall?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w800,
-                                height: 1.1,
-                              )),
+                          Text(
+                            l.whatNeedsFixing,
+                            style: text.headlineSmall?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                              height: 1.1,
+                            ),
+                          ),
                           const SizedBox(height: 6),
                           Text(
                             l.describeItInYourWords,
@@ -425,11 +512,13 @@ class _PriceTag extends StatelessWidget {
         children: <Widget>[
           const Icon(Icons.sell_rounded, size: 13, color: Colors.white),
           const SizedBox(width: 5),
-          Text(AppLocalizations.of(context).youSetThePrice,
-              style: text.labelSmall?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-              )),
+          Text(
+            AppLocalizations.of(context).youSetThePrice,
+            style: text.labelSmall?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ],
       ),
     );
@@ -449,7 +538,10 @@ class _FauxInputState extends State<_FauxInput>
     with SingleTickerProviderStateMixin {
   List<String> _examples = const <String>[''];
   int _i = 0;
-  int _charCount = 0;
+  // Per-tick character count lives in its own notifier so the typewriter only
+  // rebuilds the placeholder Text — not the whole field, gradient button, and
+  // shadows — on every ~30ms frame while idle.
+  final ValueNotifier<int> _charCount = ValueNotifier<int>(0);
   Timer? _typeTimer;
   Timer? _cycleTimer;
   bool _reduceMotion = false;
@@ -471,7 +563,7 @@ class _FauxInputState extends State<_FauxInput>
       _typeTimer?.cancel();
       _cycleTimer?.cancel();
     } else if (_ctrl.text.isEmpty && !_reduceMotion) {
-      _charCount = _examples[_i].length;
+      _charCount.value = _examples[_i].length;
       _startCycle();
     }
   }
@@ -487,13 +579,12 @@ class _FauxInputState extends State<_FauxInput>
       l.kitchenSinkIsBlocked,
     ];
     if (_i >= _examples.length) _i = 0;
-    _reduceMotion =
-        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    _reduceMotion = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
     if (!_focused) {
       _typeTimer?.cancel();
       _cycleTimer?.cancel();
       if (!_reduceMotion) {
-        _charCount = _examples[_i].length;
+        _charCount.value = _examples[_i].length;
         _startCycle();
       }
     }
@@ -510,15 +601,15 @@ class _FauxInputState extends State<_FauxInput>
     _typeTimer?.cancel();
     _typeTimer = Timer.periodic(const Duration(milliseconds: 24), (_) {
       if (!mounted || _focused) return;
-      if (_charCount > 0) {
-        setState(() => _charCount--);
+      if (_charCount.value > 0) {
+        _charCount.value--;
       } else {
         _typeTimer?.cancel();
         _i = (_i + 1) % _examples.length;
         _typeTimer = Timer.periodic(const Duration(milliseconds: 38), (_) {
           if (!mounted || _focused) return;
-          if (_charCount < _examples[_i].length) {
-            setState(() => _charCount++);
+          if (_charCount.value < _examples[_i].length) {
+            _charCount.value++;
           } else {
             _typeTimer?.cancel();
             _startCycle();
@@ -540,6 +631,7 @@ class _FauxInputState extends State<_FauxInput>
   void dispose() {
     _typeTimer?.cancel();
     _cycleTimer?.cancel();
+    _charCount.dispose();
     _ctrl.dispose();
     _focus.removeListener(_onFocusChange);
     _focus.dispose();
@@ -548,9 +640,6 @@ class _FauxInputState extends State<_FauxInput>
 
   @override
   Widget build(BuildContext context) {
-    final String placeholder = _reduceMotion
-        ? _examples[_i]
-        : _examples[_i].substring(0, _charCount);
     final bool showTypewriter = !_focused && _ctrl.text.isEmpty;
 
     return Container(
@@ -586,7 +675,9 @@ class _FauxInputState extends State<_FauxInput>
                     fontWeight: FontWeight.w500,
                   ),
                   decoration: InputDecoration(
-                    hintText: showTypewriter ? '' : AppLocalizations.of(context).describeYourProblem,
+                    hintText: showTypewriter
+                        ? ''
+                        : AppLocalizations.of(context).describeYourProblem,
                     hintStyle: widget.text.bodyMedium?.copyWith(
                       color: const Color(0xFF9CA3AF),
                       fontWeight: FontWeight.w400,
@@ -607,13 +698,21 @@ class _FauxInputState extends State<_FauxInput>
                     child: Row(
                       children: <Widget>[
                         Flexible(
-                          child: Text(
-                            placeholder,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: widget.text.bodyMedium?.copyWith(
-                              color: const Color(0xFF9CA3AF),
-                              fontWeight: FontWeight.w400,
+                          child: ValueListenableBuilder<int>(
+                            valueListenable: _charCount,
+                            builder: (context, count, _) => Text(
+                              _reduceMotion
+                                  ? _examples[_i]
+                                  : _examples[_i].substring(
+                                      0,
+                                      count.clamp(0, _examples[_i].length),
+                                    ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: widget.text.bodyMedium?.copyWith(
+                                color: const Color(0xFF9CA3AF),
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
                           ),
                         ),
@@ -646,8 +745,11 @@ class _FauxInputState extends State<_FauxInput>
                   ),
                 ],
               ),
-              child: const Icon(Icons.arrow_forward_rounded,
-                  color: Colors.white, size: 20),
+              child: const Icon(
+                Icons.arrow_forward_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
           ),
         ],
@@ -712,27 +814,27 @@ class _BannerData {
 }
 
 List<_BannerData> _bannersFor(AppLocalizations l) => <_BannerData>[
-      _BannerData(
-        headline: l.summerAcCheckup,
-        sub: l.bookFullAcService,
-        gradient: const [Color(0xFF0EA5E9), Color(0xFF0369A1)],
-        icon: Icons.ac_unit_rounded,
-        badge: l.badgeLimited,
-      ),
-      _BannerData(
-        headline: l.referAndEarn,
-        sub: l.shareYourCode,
-        gradient: const [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
-        icon: Icons.card_giftcard_rounded,
-        badge: l.newTag,
-      ),
-      _BannerData(
-        headline: l.ramadanDeepClean,
-        sub: l.professionalWholeHomeCleaning,
-        gradient: const [Color(0xFF10B981), Color(0xFF047857)],
-        icon: Icons.cleaning_services_rounded,
-      ),
-    ];
+  _BannerData(
+    headline: l.summerAcCheckup,
+    sub: l.bookFullAcService,
+    gradient: const [Color(0xFF0EA5E9), Color(0xFF0369A1)],
+    icon: Icons.ac_unit_rounded,
+    badge: l.badgeLimited,
+  ),
+  _BannerData(
+    headline: l.referAndEarn,
+    sub: l.shareYourCode,
+    gradient: const [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
+    icon: Icons.card_giftcard_rounded,
+    badge: l.newTag,
+  ),
+  _BannerData(
+    headline: l.ramadanDeepClean,
+    sub: l.professionalWholeHomeCleaning,
+    gradient: const [Color(0xFF10B981), Color(0xFF047857)],
+    icon: Icons.cleaning_services_rounded,
+  ),
+];
 
 class _HeroBannerCarousel extends StatefulWidget {
   const _HeroBannerCarousel();
@@ -758,9 +860,11 @@ class _HeroBannerCarouselState extends State<_HeroBannerCarousel> {
       _autoScroll = Timer.periodic(const Duration(seconds: 5), (_) {
         if (!mounted) return;
         final next = (_current + 1) % _banners.length;
-        _page.animateToPage(next,
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOut);
+        _page.animateToPage(
+          next,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+        );
       });
     }
   }
@@ -787,30 +891,32 @@ class _HeroBannerCarouselState extends State<_HeroBannerCarousel> {
           ),
         ),
         const SizedBox(height: AppSpacing.md),
-        Builder(builder: (context) {
-          final bool isDark = Theme.of(context).brightness == Brightness.dark;
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(_banners.length, (i) {
-              final active = i == _current;
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                curve: Curves.easeOut,
-                margin: const EdgeInsets.symmetric(horizontal: 3),
-                height: 6,
-                width: active ? 20 : 6,
-                decoration: BoxDecoration(
-                  color: active
-                      ? AppColors.primary
-                      : (isDark
-                          ? Colors.white.withValues(alpha: 0.18)
-                          : AppColors.primary.withValues(alpha: 0.22)),
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              );
-            }),
-          );
-        }),
+        Builder(
+          builder: (context) {
+            final bool isDark = Theme.of(context).brightness == Brightness.dark;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(_banners.length, (i) {
+                final active = i == _current;
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeOut,
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                  height: 6,
+                  width: active ? 20 : 6,
+                  decoration: BoxDecoration(
+                    color: active
+                        ? AppColors.primary
+                        : (isDark
+                              ? Colors.white.withValues(alpha: 0.18)
+                              : AppColors.primary.withValues(alpha: 0.22)),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                );
+              }),
+            );
+          },
+        ),
       ],
     );
   }
@@ -832,42 +938,53 @@ class _HeroBannerCarouselState extends State<_HeroBannerCarousel> {
           Positioned(
             right: -12,
             bottom: -16,
-            child: Icon(b.icon,
-                size: 100, color: Colors.white.withValues(alpha: 0.10)),
+            child: Icon(
+              b.icon,
+              size: 100,
+              color: Colors.white.withValues(alpha: 0.10),
+            ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               if (b.badge != null)
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
                   margin: const EdgeInsets.only(bottom: AppSpacing.sm),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.22),
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: Text(b.badge!,
-                      style: text.labelSmall?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.8,
-                        fontSize: 10,
-                      )),
+                  child: Text(
+                    b.badge!,
+                    style: text.labelSmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.8,
+                      fontSize: 10,
+                    ),
+                  ),
                 ),
-              Text(b.headline,
-                  style: text.titleMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                  )),
+              Text(
+                b.headline,
+                style: text.titleMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
               const SizedBox(height: 4),
-              Text(b.sub,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: text.bodySmall?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.82),
-                    height: 1.35,
-                  )),
+              Text(
+                b.sub,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: text.bodySmall?.copyWith(
+                  color: Colors.white.withValues(alpha: 0.82),
+                  height: 1.35,
+                ),
+              ),
             ],
           ),
         ],
@@ -893,24 +1010,35 @@ class _TrustStrip extends StatelessWidget {
         color: isDark ? AppColors.surface.withValues(alpha: 0.4) : Colors.white,
         borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
         border: Border.all(
-          color: isDark ? Colors.white.withValues(alpha: 0.06) : const Color(0x12000000),
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.06)
+              : const Color(0x12000000),
         ),
       ),
       child: Row(
         children: <Widget>[
           Expanded(
             child: _TrustStat(
-                value: '1,200+', label: l.verifiedPros, icon: Icons.verified_rounded),
+              value: '1,200+',
+              label: l.verifiedPros,
+              icon: Icons.verified_rounded,
+            ),
           ),
           const _StatDivider(),
           Expanded(
             child: _TrustStat(
-                value: '4.9', label: l.avgRating, icon: Icons.star_rounded),
+              value: '4.9',
+              label: l.avgRating,
+              icon: Icons.star_rounded,
+            ),
           ),
           const _StatDivider(),
           Expanded(
             child: _TrustStat(
-                value: '~30m', label: l.avgArrival, icon: Icons.bolt_rounded),
+              value: '~30m',
+              label: l.avgArrival,
+              icon: Icons.bolt_rounded,
+            ),
           ),
         ],
       ),
@@ -919,8 +1047,11 @@ class _TrustStrip extends StatelessWidget {
 }
 
 class _TrustStat extends StatelessWidget {
-  const _TrustStat(
-      {required this.value, required this.label, required this.icon});
+  const _TrustStat({
+    required this.value,
+    required this.label,
+    required this.icon,
+  });
   final String value;
   final String label;
   final IconData icon;
@@ -935,22 +1066,24 @@ class _TrustStat extends StatelessWidget {
           children: <Widget>[
             Icon(icon, size: 15, color: AppColors.primary),
             const SizedBox(width: 4),
-            Text(value,
-                style: text.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  fontFeatures: const <FontFeature>[
-                    FontFeature.tabularFigures()
-                  ],
-                )),
+            Text(
+              value,
+              style: text.titleMedium?.copyWith(
+                fontWeight: FontWeight.w800,
+                fontFeatures: const <FontFeature>[FontFeature.tabularFigures()],
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 2),
-        Text(label,
-            style: text.labelSmall?.copyWith(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? AppColors.textSecondary.withValues(alpha: 0.6)
-                  : AppColors.textSecondaryLight,
-            )),
+        Text(
+          label,
+          style: text.labelSmall?.copyWith(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? AppColors.textSecondary.withValues(alpha: 0.6)
+                : AppColors.textSecondaryLight,
+          ),
+        ),
       ],
     );
   }
@@ -964,7 +1097,9 @@ class _StatDivider extends StatelessWidget {
     return Container(
       height: 30,
       width: 1,
-      color: isDark ? Colors.white.withValues(alpha: 0.08) : const Color(0x14000000),
+      color: isDark
+          ? Colors.white.withValues(alpha: 0.08)
+          : const Color(0x14000000),
     );
   }
 }
@@ -988,37 +1123,37 @@ class _PopularItem {
 }
 
 List<_PopularItem> _popularItemsFor(AppLocalizations l) => <_PopularItem>[
-      _PopularItem(
-        category: JobCategory.ac,
-        label: l.acDeepClean,
-        price: l.from250Egp,
-        bookings: '2.4k ${l.booked}',
-      ),
-      _PopularItem(
-        category: JobCategory.plumbing,
-        label: l.leakRepair,
-        price: l.from150Egp,
-        bookings: '1.8k ${l.booked}',
-      ),
-      _PopularItem(
-        category: JobCategory.electrical,
-        label: l.outletInstall,
-        price: l.from120Egp,
-        bookings: '1.2k ${l.booked}',
-      ),
-      _PopularItem(
-        category: JobCategory.cleaning,
-        label: l.fullHomeClean,
-        price: l.from400Egp,
-        bookings: '3.1k ${l.booked}',
-      ),
-      _PopularItem(
-        category: JobCategory.painting,
-        label: l.roomRepaint,
-        price: l.from600Egp,
-        bookings: '900 ${l.booked}',
-      ),
-    ];
+  _PopularItem(
+    category: JobCategory.ac,
+    label: l.acDeepClean,
+    price: l.from250Egp,
+    bookings: '2.4k ${l.booked}',
+  ),
+  _PopularItem(
+    category: JobCategory.plumbing,
+    label: l.leakRepair,
+    price: l.from150Egp,
+    bookings: '1.8k ${l.booked}',
+  ),
+  _PopularItem(
+    category: JobCategory.electrical,
+    label: l.outletInstall,
+    price: l.from120Egp,
+    bookings: '1.2k ${l.booked}',
+  ),
+  _PopularItem(
+    category: JobCategory.cleaning,
+    label: l.fullHomeClean,
+    price: l.from400Egp,
+    bookings: '3.1k ${l.booked}',
+  ),
+  _PopularItem(
+    category: JobCategory.painting,
+    label: l.roomRepaint,
+    price: l.from600Egp,
+    bookings: '900 ${l.booked}',
+  ),
+];
 
 class _PopularServices extends StatelessWidget {
   const _PopularServices({required this.onTap});
@@ -1045,7 +1180,8 @@ class _PopularServices extends StatelessWidget {
             itemBuilder: (context, i) {
               final item = items[i];
               final tint = categoryTint(item.category);
-              final bool isDark = Theme.of(context).brightness == Brightness.dark;
+              final bool isDark =
+                  Theme.of(context).brightness == Brightness.dark;
               return GestureDetector(
                 onTap: () => onTap(item.category),
                 child: Container(
@@ -1072,30 +1208,39 @@ class _PopularServices extends StatelessWidget {
                           color: tint.withValues(alpha: isDark ? 0.14 : 0.12),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Icon(categoryIcon(item.category),
-                            color: tint, size: 18),
+                        child: Icon(
+                          categoryIcon(item.category),
+                          color: tint,
+                          size: 18,
+                        ),
                       ),
                       const SizedBox(height: AppSpacing.sm),
-                      Text(item.label,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: text.labelLarge?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          )),
+                      Text(
+                        item.label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: text.labelLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                       const Spacer(),
-                      Text(item.price,
-                          style: text.labelSmall?.copyWith(
-                            color: tint,
-                            fontWeight: FontWeight.w700,
-                          )),
+                      Text(
+                        item.price,
+                        style: text.labelSmall?.copyWith(
+                          color: tint,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                       const SizedBox(height: 2),
-                      Text(item.bookings,
-                          style: text.labelSmall?.copyWith(
-                            color: isDark
-                                ? AppColors.textSecondary.withValues(alpha: 0.5)
-                                : AppColors.textSecondaryLight,
-                            fontSize: 10,
-                          )),
+                      Text(
+                        item.bookings,
+                        style: text.labelSmall?.copyWith(
+                          color: isDark
+                              ? AppColors.textSecondary.withValues(alpha: 0.5)
+                              : AppColors.textSecondaryLight,
+                          fontSize: 10,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -1128,13 +1273,15 @@ class _CategoryGrid extends StatelessWidget {
       crossAxisSpacing: AppSpacing.md,
       childAspectRatio: 0.78,
       children: order
-          .map((JobCategory c) => _CategoryTile(
-                label: categoryLabel(c, l),
-                fullLabel: categoryLabel(c, l),
-                icon: categoryIcon(c),
-                tint: categoryTint(c),
-                onTap: () => onTap(c),
-              ))
+          .map(
+            (JobCategory c) => _CategoryTile(
+              label: categoryLabel(c, l),
+              fullLabel: categoryLabel(c, l),
+              icon: categoryIcon(c),
+              tint: categoryTint(c),
+              onTap: () => onTap(c),
+            ),
+          )
           .toList(),
     );
   }
@@ -1164,12 +1311,12 @@ class _CategoryTile extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-          border: isDark
-              ? null
-              : Border.all(color: const Color(0x12000000)),
+          border: isDark ? null : Border.all(color: const Color(0x12000000)),
         ),
         child: Material(
-          color: isDark ? AppColors.surface.withValues(alpha: 0.45) : Colors.white,
+          color: isDark
+              ? AppColors.surface.withValues(alpha: 0.45)
+              : Colors.white,
           borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
@@ -1183,21 +1330,25 @@ class _CategoryTile extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: tint.withValues(alpha: isDark ? 0.16 : 0.12),
                     borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
-                    border: Border.all(color: tint.withValues(alpha: isDark ? 0.28 : 0.35)),
+                    border: Border.all(
+                      color: tint.withValues(alpha: isDark ? 0.28 : 0.35),
+                    ),
                   ),
                   child: Icon(icon, color: tint, size: 24),
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 2),
-                  child: Text(label,
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: text.labelSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        height: 1.1,
-                      )),
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: text.labelSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      height: 1.1,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -1247,7 +1398,8 @@ class _ProCard extends StatelessWidget {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Semantics(
       button: true,
-      label: '${tech.name}, ${tech.specialty}, rated '
+      label:
+          '${tech.name}, ${tech.specialty}, rated '
           '${tech.rating.toStringAsFixed(1)}',
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -1255,108 +1407,131 @@ class _ProCard extends StatelessWidget {
           border: isDark ? null : Border.all(color: const Color(0x12000000)),
         ),
         child: Material(
-        color: isDark ? AppColors.surface.withValues(alpha: 0.55) : Colors.white,
-        borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: Container(
-            width: 200,
-            padding: const EdgeInsets.all(AppSpacing.md),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(AppSpacing.radiusMd),
-                          child: SizedBox(
-                            height: 52,
-                            width: 52,
-                            child: _Avatar(
+          color: isDark
+              ? AppColors.surface.withValues(alpha: 0.55)
+              : Colors.white,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            child: Container(
+              width: 200,
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Stack(
+                        children: <Widget>[
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              AppSpacing.radiusMd,
+                            ),
+                            child: SizedBox(
+                              height: 52,
+                              width: 52,
+                              child: _Avatar(
                                 seed: tech.id,
                                 initials: tech.initials,
-                                url: tech.photoUrl),
-                          ),
-                        ),
-                        Positioned(
-                          right: 1,
-                          bottom: 1,
-                          child: Container(
-                            height: 14,
-                            width: 14,
-                            decoration: BoxDecoration(
-                              color: AppColors.success,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: isDark ? AppColors.surface : Colors.white,
-                                width: 2,
+                                url: tech.photoUrl,
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppColors.warning.withValues(alpha: 0.14),
-                        borderRadius: BorderRadius.circular(999),
+                          Positioned(
+                            right: 1,
+                            bottom: 1,
+                            child: Container(
+                              height: 14,
+                              width: 14,
+                              decoration: BoxDecoration(
+                                color: AppColors.success,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: isDark
+                                      ? AppColors.surface
+                                      : Colors.white,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          const Icon(Icons.star_rounded,
-                              size: 13, color: AppColors.warning),
-                          const SizedBox(width: 3),
-                          Text(tech.rating.toStringAsFixed(1),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.warning.withValues(alpha: 0.14),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            const Icon(
+                              Icons.star_rounded,
+                              size: 13,
+                              color: AppColors.warning,
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              tech.rating.toStringAsFixed(1),
                               style: text.labelSmall?.copyWith(
                                 color: AppColors.warning,
                                 fontWeight: FontWeight.w800,
-                              )),
-                        ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.md),
-                Text(tech.name,
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Text(
+                    tech.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style:
-                        text.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
-                const SizedBox(height: 2),
-                Text(tech.specialty,
+                    style: text.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    tech.specialty,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: text.bodySmall?.copyWith(
                       color: isDark
                           ? AppColors.textSecondary.withValues(alpha: 0.65)
                           : AppColors.textSecondaryLight,
-                    )),
-                const Spacer(),
-                Row(
-                  children: <Widget>[
-                    StatusPill(label: tech.badge.label(AppLocalizations.of(context)), tint: tech.badge.tint),
-                    const Spacer(),
-                    Text('${tech.hourlyRate} ${AppLocalizations.of(context).egpPerHour}',
+                    ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: <Widget>[
+                      StatusPill(
+                        label: tech.badge.label(AppLocalizations.of(context)),
+                        tint: tech.badge.tint,
+                      ),
+                      const Spacer(),
+                      Text(
+                        '${tech.hourlyRate} ${AppLocalizations.of(context).egpPerHour}',
                         style: text.labelMedium?.copyWith(
                           fontWeight: FontWeight.w700,
                           fontFeatures: const <FontFeature>[
-                            FontFeature.tabularFigures()
+                            FontFeature.tabularFigures(),
                           ],
-                        )),
-                  ],
-                ),
-              ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
         ),
       ),
     );
@@ -1406,7 +1581,9 @@ class _ActiveSearchCard extends ConsumerWidget {
           child: Row(
             children: <Widget>[
               // Pulsing dot
-              _PulsingDot(color: hasOffers ? AppColors.success : AppColors.primary),
+              _PulsingDot(
+                color: hasOffers ? AppColors.success : AppColors.primary,
+              ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: Column(
@@ -1416,14 +1593,14 @@ class _ActiveSearchCard extends ConsumerWidget {
                       hasOffers ? l.offersReceived : l.searchingForPros,
                       style: text.titleSmall?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: hasOffers ? AppColors.success : AppColors.primary,
+                        color: hasOffers
+                            ? AppColors.success
+                            : AppColors.primary,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      hasOffers
-                          ? l.tapToReviewHire
-                          : l.tapToViewProgress,
+                      hasOffers ? l.tapToReviewHire : l.tapToViewProgress,
                       style: text.bodySmall?.copyWith(
                         color: isDark
                             ? AppColors.textSecondary.withValues(alpha: 0.7)
@@ -1533,11 +1710,13 @@ class _Avatar extends StatelessWidget {
     final Widget fallback = ColoredBox(
       color: bg,
       child: Center(
-        child: Text(initials,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                )),
+        child: Text(
+          initials,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
       ),
     );
     if (url == null) return fallback;

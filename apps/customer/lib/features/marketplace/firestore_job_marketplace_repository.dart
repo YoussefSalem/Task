@@ -100,6 +100,18 @@ class FirestoreJobMarketplaceRepository implements JobMarketplaceRepository {
     });
   }
 
+  @override
+  Future<void> submitReview(String jobId, Review review) async {
+    await _jobs.doc(jobId).collection('reviews').doc(review.reviewerId).set(<String, dynamic>{
+      'rating': review.rating,
+      'tags': review.tags,
+      'note': review.note,
+      'reviewer_id': review.reviewerId,
+      'technician_id': review.technicianId,
+      'created_at': FieldValue.serverTimestamp(),
+    });
+  }
+
   // --- serialization -------------------------------------------------------
 
   Map<String, dynamic> _jobToMap(JobRequest j) => <String, dynamic>{
@@ -214,4 +226,7 @@ class EmptyJobMarketplaceRepository implements JobMarketplaceRepository {
 
   @override
   Future<void> cancelJob(String jobId) async {}
+
+  @override
+  Future<void> submitReview(String jobId, Review review) async {}
 }

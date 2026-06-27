@@ -88,7 +88,10 @@
       "Bash(ls .agents/)",
       "Bash(tail -15 .gitignore)",
       "Bash(ls apps/customer/.gitignore)",
-      "Bash(xargs grep -l \"ssistant\\\\|groq\\\\|Groq\")"
+      "Bash(xargs grep -l \"ssistant\\\\|groq\\\\|Groq\")",
+      "Bash(flutter run *)",
+      "Bash(flutter gen-l10n *)",
+      "Bash(del /f \"C:\\\\Users\\\\youss\\\\Documents\\\\Task App\\\\apps\\\\customer\\\\lib\\\\l10n.yaml\")"
     ]
   }
 }

@@ -29,6 +29,16 @@ service cloud.firestore {
       allow create: if isSelf(userId);
       allow update: if isSelf(userId) || isAdmin();
       allow delete: if isAdmin();
+
+      // In-app notification feed. There is no Cloud Function fan-out yet, so any
+      // signed-in user may drop a notification into another user's feed (the
+      // acting client writes it). Only the owner reads or mutates their feed.
+      // Tightening create to server-only happens when fan-out moves to Functions.
+      match /notifications/{notificationId} {
+        allow read: if isSelf(userId);
+        allow create: if isSignedIn();
+        allow update, delete: if isSelf(userId);
+      }
     }
 
     // --- addresses ---
@@ -43,9 +53,12 @@ service cloud.firestore {
       // Reads refined per phase (job owner / assigned technician / admin).
       allow read: if isSignedIn();
       allow create: if isSelf(request.resource.data.customer_id);
-      // State transitions are driven server-side by Cloud Functions in later
-      // phases; client writes are locked down then.
-      allow update: if isSignedIn();
+      // Job owner can update their own job (accept, counter, cancel, etc).
+      // Technician can only advance stage. Admin unrestricted.
+      allow update: if isAdmin()
+        || isSelf(resource.data.customer_id)
+        || (isSignedIn() && role() == 'technician' &&
+            request.resource.data.status in ['enRoute', 'inProgress', 'completed']);
       allow delete: if isAdmin();
 
       // Sealed bids: a technician writes only their own quote (doc id == uid)
@@ -64,9 +77,33 @@ service cloud.firestore {
         allow write: if isSignedIn() && role() == 'technician';
       }
 
-      // In-app chat (30-day TTL cleanup handled by a scheduled function).
-      match /chat/{messageId} {
-        allow read, create: if isSignedIn();
+      // Per-(job, technician) chat threads. A customer holds a separate
+      // conversation with each technician bidding on the job; the technician who
+      // owns the thread is the document id. (30-day TTL cleanup handled by a
+      // scheduled function.)
+      match /threads/{technicianId} {
+        function isParticipant() {
+          return isSignedIn() && (
+            request.auth.uid == technicianId
+            || get(/databases/$(database)/documents/jobs/$(jobId)).data.customer_id == request.auth.uid
+            || isAdmin()
+          );
+        }
+
+        // Thread metadata (last message, read cursors, typing stamps) is written
+        // by either participant.
+        allow read, write: if isParticipant();
+
+        match /messages/{messageId} {
+          allow read, create: if isParticipant();
+          allow update, delete: if isAdmin();
+        }
+      }
+
+      // Post-job reviews. Only the reviewer creates; everyone reads.
+      match /reviews/{reviewerId} {
+        allow create: if isSelf(reviewerId);
+        allow read: if isSignedIn();
         allow update, delete: if isAdmin();
       }
     }

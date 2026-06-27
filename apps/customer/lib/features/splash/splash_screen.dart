@@ -1,12 +1,11 @@
-import 'package:customer/l10n/app_localizations.dart';
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:customer/features/auth/auth_controller.dart';
 import 'package:customer/features/auth/sign_in_screen.dart';
 import 'package:customer/features/home/home_shell.dart';
 import 'package:customer/features/localization/language_switcher.dart';
 import 'package:customer/l10n/app_localizations.dart';
-import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +91,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   bool _started = false; // one-time startup guard (reduced-motion known in build)
   bool _dwellDone = false;
   bool _navigated = false;
-  Offset _parallax = Offset.zero;
+  // Pointer parallax lives in its own notifier so hover never rebuilds the
+  // (expensive) masked-logo tree — only the wrapping Transform listens.
+  final ValueNotifier<Offset> _parallax = ValueNotifier<Offset>(Offset.zero);
   Timer? _dwellTimer;
 
   void _start(bool reduceMotion) {
@@ -133,13 +134,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _shimmer.dispose();
     _orbit.dispose();
     _exit.dispose();
+    _parallax.dispose();
     super.dispose();
   }
 
   void _onPointerHover(PointerHoverEvent event, Size size) {
     final dx = (event.localPosition.dx - size.width / 2) / size.width;
     final dy = (event.localPosition.dy - size.height / 2) / size.height;
-    setState(() => _parallax = Offset(dx * 14, dy * 14));
+    _parallax.value = Offset(dx * 14, dy * 14);
   }
 
   @override
@@ -275,14 +277,23 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Widget _buildBrand(bool reduceMotion) {
     const double field = 300;
     const double ringRadius = 124;
-    return AnimatedBuilder(
-      animation: Listenable.merge(
-          <Listenable>[_intro, _pulseCurve, _orbit]),
-      builder: (context, _) {
-        final bool isDark = Theme.of(context).brightness == Brightness.dark;
-        return Transform.translate(
-          offset: _parallax,
-          child: SizedBox(
+    // The masked logo (two nested ShaderMasks over a decoded JPG) is the most
+    // expensive thing on screen. Build it once per build() and cache it behind a
+    // RepaintBoundary so the breathing scale/glow just composite the cached
+    // layer each frame instead of re-running the shaders.
+    final Widget maskedLogo = RepaintBoundary(child: _maskedLogo(context));
+    return ValueListenableBuilder<Offset>(
+      valueListenable: _parallax,
+      builder: (context, parallax, child) => Transform.translate(
+        offset: parallax,
+        child: child,
+      ),
+      child: AnimatedBuilder(
+        animation: Listenable.merge(
+            <Listenable>[_intro, _pulseCurve, _orbit]),
+        builder: (context, _) {
+          final bool isDark = Theme.of(context).brightness == Brightness.dark;
+          return SizedBox(
             width: field,
             height: field,
             child: Stack(
@@ -307,13 +318,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 // Orbiting service glyphs.
                 for (int i = 0; i < _orbitCats.length; i++)
                   _orbitGlyph(i, ringRadius, reduceMotion, isDark),
-                // Center mark.
-                _logoCore(),
+                // Center mark — wraps the cached logo with the live glow/scale.
+                _logoCore(maskedLogo),
               ],
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -364,7 +375,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     );
   }
 
-  Widget _logoCore() {
+  Widget _logoCore(Widget maskedLogo) {
     final double breathe = _pulseCurve.value; // 0 → 1
     final double scale = _logoScale.value * (1 + 0.03 * breathe);
     final double glowAlpha = 0.26 + 0.16 * breathe;
@@ -392,88 +403,56 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   ),
                 ),
               ),
-              Builder(builder: (context) {
-                final bool isDark = Theme.of(context).brightness == Brightness.dark;
-                if (isDark) {
-                  return ShaderMask(
-                    blendMode: BlendMode.dstIn,
-                    shaderCallback: (Rect rect) => const LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: <Color>[
-                        Color(0x00FFFFFF),
-                        Colors.white,
-                        Colors.white,
-                        Color(0x00FFFFFF),
-                      ],
-                      stops: <double>[0.0, 0.20, 0.80, 1.0],
-                    ).createShader(rect),
-                    child: ShaderMask(
-                      blendMode: BlendMode.dstIn,
-                      shaderCallback: (Rect rect) => const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Color(0x00FFFFFF),
-                          Colors.white,
-                          Colors.white,
-                          Color(0x00FFFFFF),
-                        ],
-                        stops: <double>[0.0, 0.20, 0.80, 1.0],
-                      ).createShader(rect),
-                      child: Image.asset(
-                        'assets/images/task_logo.jpg',
-                        width: 150,
-                        height: 150,
-                        fit: BoxFit.contain,
-                        filterQuality: FilterQuality.high,
-                        semanticLabel: 'Task',
-                      ),
-                    ),
-                  );
-                }
-                // Light mode: two nested ShaderMasks (horizontal + vertical)
-                // fade all four sides uniformly so the JPG background
-                // dissolves into the page on every edge, not just corners.
-                return ShaderMask(
-                  blendMode: BlendMode.dstIn,
-                  shaderCallback: (Rect rect) => const LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: <Color>[
-                      Color(0x00FFFFFF),
-                      Colors.white,
-                      Colors.white,
-                      Color(0x00FFFFFF),
-                    ],
-                    stops: <double>[0.0, 0.20, 0.80, 1.0],
-                  ).createShader(rect),
-                  child: ShaderMask(
-                    blendMode: BlendMode.dstIn,
-                    shaderCallback: (Rect rect) => const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: <Color>[
-                        Color(0x00FFFFFF),
-                        Colors.white,
-                        Colors.white,
-                        Color(0x00FFFFFF),
-                      ],
-                      stops: <double>[0.0, 0.20, 0.80, 1.0],
-                    ).createShader(rect),
-                    child: Image.asset(
-                      'assets/images/task_logo_light.jpg',
-                      width: 150,
-                      height: 150,
-                      fit: BoxFit.contain,
-                      filterQuality: FilterQuality.high,
-                      semanticLabel: 'Task',
-                    ),
-                  ),
-                );
-              }),
+              maskedLogo,
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  /// The brand mark with all four edges dissolved into the page via two nested
+  /// ShaderMasks (horizontal + vertical). The pixels never change, so this is
+  /// built once per build() and cached by the caller — only the breathing
+  /// scale/glow wrap it each frame.
+  Widget _maskedLogo(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final String asset = isDark
+        ? 'assets/images/task_logo.jpg'
+        : 'assets/images/task_logo_light.jpg';
+    return ShaderMask(
+      blendMode: BlendMode.dstIn,
+      shaderCallback: (Rect rect) => const LinearGradient(
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: <Color>[
+          Color(0x00FFFFFF),
+          Colors.white,
+          Colors.white,
+          Color(0x00FFFFFF),
+        ],
+        stops: <double>[0.0, 0.20, 0.80, 1.0],
+      ).createShader(rect),
+      child: ShaderMask(
+        blendMode: BlendMode.dstIn,
+        shaderCallback: (Rect rect) => const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: <Color>[
+            Color(0x00FFFFFF),
+            Colors.white,
+            Colors.white,
+            Color(0x00FFFFFF),
+          ],
+          stops: <double>[0.0, 0.20, 0.80, 1.0],
+        ).createShader(rect),
+        child: Image.asset(
+          asset,
+          width: 150,
+          height: 150,
+          fit: BoxFit.contain,
+          filterQuality: FilterQuality.high,
+          semanticLabel: 'Task',
         ),
       ),
     );

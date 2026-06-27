@@ -9,6 +9,7 @@ export 'src/theme/app_spacing.dart';
 export 'src/theme/app_theme.dart';
 export 'src/theme/app_typography.dart';
 export 'src/widgets/ambient_background.dart';
+export 'src/widgets/entrance_reveal.dart';
 export 'src/widgets/glow_button.dart';
 export 'src/widgets/section_header.dart';
 export 'src/widgets/status_pill.dart';

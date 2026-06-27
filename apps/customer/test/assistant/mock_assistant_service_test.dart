@@ -1,11 +1,12 @@
 // apps/customer/test/assistant/mock_assistant_service_test.dart
 import 'package:customer/features/assistant/assistant_service.dart';
 import 'package:customer/features/assistant/mock_assistant_service.dart';
+import 'package:customer/l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:task_domain/task_domain.dart';
 
 void main() {
-  final MockAssistantService svc = MockAssistantService();
+  final MockAssistantService svc = MockAssistantService(AppLocalizationsEn());
 
   test('infers a category and is ready, with no price set', () async {
     final AssistantTurn turn = await svc.respond(<ChatMessage>[

@@ -128,9 +128,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     ],
                   ),
                 ),
-                _brandHero(text),
+                EntranceReveal(index: 0, child: _brandHero(text)),
                 const SizedBox(height: AppSpacing.lg),
-                Expanded(child: _formSheet(text)),
+                Expanded(
+                  child: EntranceReveal(index: 1, child: _formSheet(text)),
+                ),
               ],
             ),
           ),

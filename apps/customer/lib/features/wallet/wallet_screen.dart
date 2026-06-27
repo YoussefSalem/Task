@@ -1,3 +1,4 @@
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:task_design/task_design.dart';
@@ -7,17 +8,18 @@ import 'package:task_design/task_design.dart';
 class WalletScreen extends ConsumerWidget {
   const WalletScreen({super.key});
 
-  static const List<(IconData, String, String, int)> _txns =
+  static List<(IconData, String, String, int)> _txnsFor(AppLocalizations l) =>
       <(IconData, String, String, int)>[
-    (Icons.ac_unit_rounded, 'AC service & gas refill', 'Today · 2:40 PM', -240),
-    (Icons.add_circle_rounded, 'Wallet top-up', 'Yesterday', 300),
-    (Icons.bolt_rounded, 'Electrical fault', 'Mar 18 · 6:15 PM', -150),
-    (Icons.card_giftcard_rounded, 'Referral credit', 'Mar 15', 50),
-  ];
+        (Icons.ac_unit_rounded, l.acServiceAndGasRefill, l.txnToday240, -240),
+        (Icons.add_circle_rounded, l.walletTopUp, l.txnYesterday, 300),
+        (Icons.bolt_rounded, l.electricalFault, l.txnMar18, -150),
+        (Icons.card_giftcard_rounded, l.referralCredit, l.txnMar15, 50),
+      ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextTheme text = Theme.of(context).textTheme;
+    final AppLocalizations l = AppLocalizations.of(context);
 
     return Stack(
       fit: StackFit.expand,
@@ -29,15 +31,15 @@ class WalletScreen extends ConsumerWidget {
             padding: const EdgeInsets.fromLTRB(
                 AppSpacing.xl, AppSpacing.lg, AppSpacing.xl, 112),
             children: <Widget>[
-              Text('Wallet',
+              Text(l.walletTitle,
                   style:
                       text.headlineSmall?.copyWith(fontWeight: FontWeight.w700)),
               const SizedBox(height: AppSpacing.xl),
-              _balanceCard(context, text),
+              _balanceCard(context, text, l),
               const SizedBox(height: AppSpacing.xl),
-              const SectionHeader(title: 'Recent activity'),
+              SectionHeader(title: l.recentActivity),
               const SizedBox(height: AppSpacing.md),
-              ..._txns.map((t) => _txnRow(text, t)),
+              ..._txnsFor(l).map((t) => _txnRow(text, t, l)),
             ],
           ),
         ),
@@ -45,7 +47,7 @@ class WalletScreen extends ConsumerWidget {
     );
   }
 
-  Widget _balanceCard(BuildContext context, TextTheme text) {
+  Widget _balanceCard(BuildContext context, TextTheme text, AppLocalizations l) {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
@@ -67,23 +69,23 @@ class WalletScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Task credit',
+          Text(l.taskCredit,
               style: text.bodyMedium?.copyWith(
                 color: Colors.white.withValues(alpha: 0.85),
               )),
           const SizedBox(height: 4),
-          Text('125 EGP',
+          Text('125 ${l.egp}',
               style: text.displaySmall?.copyWith(
                   color: Colors.white, fontWeight: FontWeight.w700)),
           const SizedBox(height: AppSpacing.lg),
           Row(
             children: <Widget>[
               Expanded(
-                child: _action(context, Icons.add_rounded, 'Top up'),
+                child: _action(context, Icons.add_rounded, l.topUp, l),
               ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: _action(context, Icons.swap_horiz_rounded, 'Send'),
+                child: _action(context, Icons.swap_horiz_rounded, l.sendAction, l),
               ),
             ],
           ),
@@ -92,7 +94,7 @@ class WalletScreen extends ConsumerWidget {
     );
   }
 
-  Widget _action(BuildContext context, IconData icon, String label) {
+  Widget _action(BuildContext context, IconData icon, String label, AppLocalizations l) {
     return Material(
       color: Colors.white.withValues(alpha: 0.18),
       borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
@@ -101,7 +103,7 @@ class WalletScreen extends ConsumerWidget {
         onTap: () {
           ScaffoldMessenger.of(context)
             ..clearSnackBars()
-            ..showSnackBar(SnackBar(content: Text('$label arrives with payments.')));
+            ..showSnackBar(SnackBar(content: Text(l.featureArrivesWithPayments(label))));
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
@@ -122,7 +124,7 @@ class WalletScreen extends ConsumerWidget {
     );
   }
 
-  Widget _txnRow(TextTheme text, (IconData, String, String, int) t) {
+  Widget _txnRow(TextTheme text, (IconData, String, String, int) t, AppLocalizations l) {
     final bool credit = t.$4 > 0;
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.md),
@@ -155,7 +157,7 @@ class WalletScreen extends ConsumerWidget {
               ],
             ),
           ),
-          Text('${credit ? '+' : ''}${t.$4} EGP',
+          Text('${credit ? '+' : ''}${t.$4} ${l.egp}',
               style: text.titleSmall?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: credit ? AppColors.success : AppColors.textPrimary,

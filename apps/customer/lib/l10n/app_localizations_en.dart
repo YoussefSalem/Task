@@ -9,6 +9,46 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get editName => 'Edit name';
+
+  @override
+  String get nameUpdated => 'Name updated';
+
+  @override
+  String get birthdayUpdated => 'Birthday updated';
+
+  @override
+  String get addPhoneNumber => 'Add phone number';
+
+  @override
+  String get changePhoneNumber => 'Change phone number';
+
+  @override
+  String get phoneNumberVerified => 'Phone number verified';
+
+  @override
+  String get verifyYourPhone => 'Verify your phone';
+
+  @override
+  String get confirmPhoneHint =>
+      'We\'ll text a 6-digit code to confirm it\'s your number.';
+
+  @override
+  String get enterYourPhoneNumber => 'Enter your phone number';
+
+  @override
+  String get couldNotVerifyPhone =>
+      'Couldn\'t verify your phone. Please try again.';
+
+  @override
+  String get phoneNumberInUse =>
+      'That number is already linked to another account.';
+
+  @override
+  String get signInAgainToChangePhone =>
+      'For security, sign in again before changing your phone number.';
+
+  @override
   String get tagline => 'On-demand home services';
 
   @override
@@ -1495,6 +1535,53 @@ class AppLocalizationsEn extends AppLocalizations {
   String get messageHint => 'Message…';
 
   @override
+  String get typingIndicator => 'typing…';
+
+  @override
+  String get seenLabel => 'Seen';
+
+  @override
+  String get chatSignedOut => 'Sign in to message technicians.';
+
+  @override
+  String get chatLoadError =>
+      'Couldn\'t load this conversation. Check your connection.';
+
+  @override
+  String get chatEmpty => 'Say hello to start the conversation.';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get notificationsEmpty => 'You\'re all caught up.';
+
+  @override
+  String get notificationsMarkAll => 'Mark all read';
+
+  @override
+  String get notifPostedTitle => 'Request posted';
+
+  @override
+  String get notifPostedBody =>
+      'We\'re finding the right technician for your job.';
+
+  @override
+  String notifNewMessageTitle(String name) {
+    return 'New message from $name';
+  }
+
+  @override
+  String get notifHiredTitle => 'You\'re hired';
+
+  @override
+  String get notifHiredBody =>
+      'The customer accepted your offer. Head over when ready.';
+
+  @override
+  String get customerWord => 'the customer';
+
+  @override
   String get suggestionAcLeaking => 'My AC is leaking water';
 
   @override
@@ -1549,6 +1636,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get assistantJustConfirm =>
       'Just to confirm — should I post this for technicians? Reply \"yes\" to post, or \"no\" to change something.';
+
+  @override
+  String get assistantPostFailed =>
+      'Sorry — I couldn\'t post your request just now. Please check your connection and reply \"yes\" to try again.';
 
   @override
   String assistantConfirm(Object cat, Object price, Object title) {
@@ -1715,4 +1806,56 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noSavedAddressesYet =>
       'No saved addresses yet. Add one to reuse it later.';
+
+  @override
+  String get helpSupportIntro =>
+      'We\'re here to help. Reach out directly or browse common questions below.';
+
+  @override
+  String get contactUs => 'Contact us';
+
+  @override
+  String get contactEmail => 'Email';
+
+  @override
+  String get contactPhone => 'Phone';
+
+  @override
+  String copiedToClipboard(Object value) {
+    return '$value copied to clipboard';
+  }
+
+  @override
+  String get commonQuestions => 'Common questions';
+
+  @override
+  String get faqBookingQ => 'How do I book a service?';
+
+  @override
+  String get faqBookingA =>
+      'Open the Home tab, pick a service, set your address, and confirm. We\'ll match you with a nearby technician.';
+
+  @override
+  String get faqCancelQ => 'Can I cancel a booking?';
+
+  @override
+  String get faqCancelA =>
+      'Yes — open the booking from My Jobs and tap cancel. Cancellation terms depend on how far along the job is.';
+
+  @override
+  String get faqPaymentQ => 'How do payments work?';
+
+  @override
+  String get faqPaymentA =>
+      'Pay with cash or card once the job is completed. A receipt is kept in your booking history.';
+
+  @override
+  String get privacyLastUpdated => 'Last updated: June 2026';
+
+  @override
+  String get privacyPlaceholderBadge => 'Placeholder — to be replaced';
+
+  @override
+  String get privacyPolicyBody =>
+      'This is placeholder privacy policy text and will be replaced with the final version before launch.\n\nWe collect the information you give us — your name, phone number, email, saved addresses, and booking history — so we can connect you with technicians and provide the service. Your location is used only to find nearby technicians and show your service address.\n\nWe never sell your personal data. We share it with technicians only as needed to complete a booking, and with service providers (such as payment and messaging) that help us run the app.\n\nYour data is stored securely and tied to your account. You can edit your profile and remove saved addresses at any time. To delete your account or request a copy of your data, contact support.\n\nBy using Task you agree to this policy. We\'ll notify you here when it changes.';
 }

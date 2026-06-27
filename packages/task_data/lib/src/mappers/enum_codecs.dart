@@ -140,3 +140,33 @@ extension BookingTypeCodec on BookingType {
         _ => throw FormatException('Unknown BookingType: $v'),
       };
 }
+
+extension SenderRoleCodec on SenderRole {
+  String toWire() => switch (this) {
+        SenderRole.customer => 'customer',
+        SenderRole.technician => 'technician',
+      };
+
+  static SenderRole fromWire(String v) => switch (v) {
+        'customer' => SenderRole.customer,
+        'technician' => SenderRole.technician,
+        _ => throw FormatException('Unknown SenderRole: $v'),
+      };
+}
+
+extension NotificationTypeCodec on NotificationType {
+  String toWire() => switch (this) {
+        NotificationType.message => 'message',
+        NotificationType.offer => 'offer',
+        NotificationType.hired => 'hired',
+        NotificationType.jobStatus => 'job_status',
+      };
+
+  static NotificationType fromWire(String v) => switch (v) {
+        'message' => NotificationType.message,
+        'offer' => NotificationType.offer,
+        'hired' => NotificationType.hired,
+        'job_status' => NotificationType.jobStatus,
+        _ => throw FormatException('Unknown NotificationType: $v'),
+      };
+}

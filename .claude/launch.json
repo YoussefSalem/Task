@@ -9,11 +9,11 @@
         "-d",
         "web-server",
         "--web-hostname",
-        "127.0.0.1",
+        "localhost",
         "--web-port",
         "5000",
         "-t",
-        "lib/main_dev.dart",
+        "lib/main_staging.dart",
         "--dart-define-from-file=groq.env.json"
       ],
       "cwd": "apps/customer",
@@ -21,12 +21,8 @@
     },
     {
       "name": "Firebase Emulators",
-      "runtimeExecutable": "firebase",
-      "runtimeArgs": [
-        "emulators:start",
-        "--project",
-        "demo-task"
-      ],
+      "runtimeExecutable": "C:\\Users\\youss\\Documents\\Task App\\start-emulators.bat",
+      "runtimeArgs": [],
       "cwd": ".",
       "port": 4000
     },

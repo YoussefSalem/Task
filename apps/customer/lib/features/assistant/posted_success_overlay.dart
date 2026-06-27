@@ -77,6 +77,7 @@ class _PostedSuccessOverlayState extends State<PostedSuccessOverlay>
   @override
   Widget build(BuildContext context) {
     final TextTheme text = Theme.of(context).textTheme;
+    final AppLocalizations l = AppLocalizations.of(context);
     return Material(
       color: AppColors.background,
       child: Stack(
@@ -94,7 +95,7 @@ class _PostedSuccessOverlayState extends State<PostedSuccessOverlay>
                 _badgeStack(),
                 const SizedBox(height: AppSpacing.xxl),
                 _risingText(
-                  'All set! 🎉',
+                  l.allSet,
                   text.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -106,8 +107,7 @@ class _PostedSuccessOverlayState extends State<PostedSuccessOverlay>
                   padding:
                       const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
                   child: _risingText(
-                    'Your request is live — technicians are reviewing it now '
-                    'and will send you offers shortly.',
+                    l.postedSuccessBody,
                     text.bodyMedium?.copyWith(
                       color: AppColors.textSecondary,
                       height: 1.4,
@@ -232,7 +232,7 @@ class _PostedSuccessOverlayState extends State<PostedSuccessOverlay>
           ),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            'Taking you home…',
+            AppLocalizations.of(context).takingYouHome,
             style: text.labelLarge?.copyWith(color: AppColors.textSecondary),
           ),
         ],

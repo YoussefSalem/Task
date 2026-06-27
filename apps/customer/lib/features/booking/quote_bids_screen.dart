@@ -86,7 +86,7 @@ class _QuoteBidsBodyState extends ConsumerState<_QuoteBidsBody> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text('Compare offers'),
+        title: Text(AppLocalizations.of(context).compareOffers),
       ),
       body: Stack(
         fit: StackFit.expand,
@@ -112,7 +112,7 @@ class _QuoteBidsBodyState extends ConsumerState<_QuoteBidsBody> {
                   border: Border(top: BorderSide(color: Color(0x22FFFFFF))),
                 ),
                 child: GlowButton(
-                  label: 'Hire & track',
+                  label: AppLocalizations.of(context).hireAndTrack,
                   onPressed: () => context.push('/job/live'),
                 ),
               ),
@@ -133,13 +133,14 @@ class _QuoteBidsBodyState extends ConsumerState<_QuoteBidsBody> {
             child: CircularProgressIndicator(strokeWidth: 3),
           ),
           const SizedBox(height: AppSpacing.xl),
-          Text('Collecting sealed offers…',
+          Text(AppLocalizations.of(context).collectingSealed,
               style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
           const SizedBox(height: AppSpacing.sm),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
             child: Text(
-              "Up to 5 pros bid privately for your ${job?.title.toLowerCase() ?? 'job'}. No one sees the others' price.",
+              AppLocalizations.of(context).upToFiveProsBid(
+                  job?.title.toLowerCase() ?? AppLocalizations.of(context).jobWord),
               textAlign: TextAlign.center,
               style: text.bodyMedium?.copyWith(
                 color: AppColors.textSecondary.withValues(alpha: 0.65),
@@ -165,12 +166,12 @@ class _QuoteBidsBodyState extends ConsumerState<_QuoteBidsBody> {
         Row(
           children: <Widget>[
             Expanded(
-              child: Text('${offers.length} offers received',
+              child: Text(AppLocalizations.of(context).offersReceivedCount(offers.length),
                   style: text.titleMedium
                       ?.copyWith(fontWeight: FontWeight.w700)),
             ),
-            const StatusPill(
-                label: 'Sealed', tint: AppColors.primary, icon: Icons.lock),
+            StatusPill(
+                label: AppLocalizations.of(context).sealed, tint: AppColors.primary, icon: Icons.lock),
           ],
         ),
         const SizedBox(height: AppSpacing.lg),
@@ -247,7 +248,7 @@ class _QuoteBidsBodyState extends ConsumerState<_QuoteBidsBody> {
                               const Icon(Icons.star_rounded,
                                   size: 14, color: AppColors.warning),
                               const SizedBox(width: 3),
-                              Text('${o.rating} · ${o.jobsDone} jobs',
+                              Text('${o.rating} · ${o.jobsDone} ${AppLocalizations.of(context).jobsWord}',
                                   style: text.bodySmall?.copyWith(
                                     color: AppColors.textSecondary
                                         .withValues(alpha: 0.7),
@@ -260,11 +261,11 @@ class _QuoteBidsBodyState extends ConsumerState<_QuoteBidsBody> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Text('${o.currentPrice} EGP',
+                        Text('${o.currentPrice} ${AppLocalizations.of(context).egp}',
                             style: text.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.w700)),
                         if (best)
-                          Text('Lowest',
+                          Text(AppLocalizations.of(context).lowest,
                               style: text.labelSmall?.copyWith(
                                   color: AppColors.success,
                                   fontWeight: FontWeight.w700)),

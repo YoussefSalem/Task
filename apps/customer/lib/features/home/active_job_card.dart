@@ -1,3 +1,5 @@
+import 'package:customer/features/localization/locale_controller.dart';
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,6 +7,7 @@ import 'package:task_design/task_design.dart';
 import 'package:task_domain/task_domain.dart';
 
 import '../job/job_tracking_screen.dart';
+import '../services/category_l10n.dart';
 
 @immutable
 class ActiveJob {
@@ -21,13 +24,13 @@ class ActiveJob {
   final Duration eta;
   final String? photoUrl;
 
-  String get statusLine => switch (status) {
-        JobStatus.accepted => 'Confirmed — preparing to head out',
+  String statusLine(AppLocalizations l) => switch (status) {
+        JobStatus.accepted => l.confirmedPreparingToHeadOut,
         JobStatus.enRoute =>
-          '${categoryLabel(category)} arriving in ${eta.inMinutes} min',
-        JobStatus.inProgress => '${categoryLabel(category)} is working',
-        JobStatus.pausedForApproval => 'Waiting for your approval',
-        _ => 'Job active',
+          l.arrrivingIn(categoryLabel(category, l), eta.inMinutes),
+        JobStatus.inProgress => l.isWorking(categoryLabel(category, l)),
+        JobStatus.pausedForApproval => l.waitingForApproval,
+        _ => l.jobActive,
       };
 
   double get progress => switch (status) {
@@ -46,26 +49,19 @@ class ActiveJob {
         _ => Icons.work_outline_rounded,
       };
 
-  static String categoryLabel(JobCategory c) => switch (c) {
-        JobCategory.plumbing => 'Plumber',
-        JobCategory.electrical => 'Electrician',
-        JobCategory.ac => 'AC Technician',
-        JobCategory.cleaning => 'Cleaner',
-        JobCategory.carpentry => 'Carpenter',
-        JobCategory.painting => 'Painter',
-        _ => 'Technician',
-      };
 }
 
 /// Holds the currently active job, or null when idle.
 /// For the prototype this is seeded with mock data; in production it would
 /// listen to a Firestore stream.
 final activeJobProvider = StateProvider<ActiveJob?>((ref) {
-  return const ActiveJob(
-    techName: 'Mohamed Ali',
+  final AppLocalizations l =
+      lookupAppLocalizations(ref.watch(localeControllerProvider));
+  return ActiveJob(
+    techName: l.techNameMohamed,
     category: JobCategory.electrical,
     status: JobStatus.enRoute,
-    eta: Duration(minutes: 15),
+    eta: const Duration(minutes: 15),
   );
 });
 
@@ -82,6 +78,7 @@ class ActiveJobCard extends ConsumerWidget {
     final text = Theme.of(context).textTheme;
     final tint = categoryTint(job.category);
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations l = AppLocalizations.of(context);
 
     return GestureDetector(
       onTap: () => context.push(JobTrackingScreen.routePath),
@@ -118,7 +115,7 @@ class ActiveJobCard extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(job.statusLine,
+                      Text(job.statusLine(l),
                           style: text.titleSmall?.copyWith(
                             fontWeight: FontWeight.w700,
                           )),
@@ -184,13 +181,13 @@ class ActiveJobCard extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                _StepDot(label: 'Confirmed', active: job.progress >= 0.15, tint: tint, isDark: isDark),
+                _StepDot(label: l.stepConfirmed, active: job.progress >= 0.15, tint: tint, isDark: isDark),
                 _StepLine(filled: job.progress >= 0.40, tint: tint, isDark: isDark),
-                _StepDot(label: 'En route', active: job.progress >= 0.40, tint: tint, isDark: isDark),
+                _StepDot(label: l.enRoute, active: job.progress >= 0.40, tint: tint, isDark: isDark),
                 _StepLine(filled: job.progress >= 0.70, tint: tint, isDark: isDark),
-                _StepDot(label: 'Working', active: job.progress >= 0.70, tint: tint, isDark: isDark),
+                _StepDot(label: l.stepWorking, active: job.progress >= 0.70, tint: tint, isDark: isDark),
                 _StepLine(filled: job.progress >= 1.0, tint: tint, isDark: isDark),
-                _StepDot(label: 'Done', active: job.progress >= 1.0, tint: tint, isDark: isDark),
+                _StepDot(label: l.done, active: job.progress >= 1.0, tint: tint, isDark: isDark),
               ],
             ),
           ],

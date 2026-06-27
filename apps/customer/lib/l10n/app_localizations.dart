@@ -98,6 +98,78 @@ abstract class AppLocalizations {
     Locale('en'),
   ];
 
+  /// No description provided for @editName.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit name'**
+  String get editName;
+
+  /// No description provided for @nameUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Name updated'**
+  String get nameUpdated;
+
+  /// No description provided for @birthdayUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Birthday updated'**
+  String get birthdayUpdated;
+
+  /// No description provided for @addPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Add phone number'**
+  String get addPhoneNumber;
+
+  /// No description provided for @changePhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Change phone number'**
+  String get changePhoneNumber;
+
+  /// No description provided for @phoneNumberVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number verified'**
+  String get phoneNumberVerified;
+
+  /// No description provided for @verifyYourPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your phone'**
+  String get verifyYourPhone;
+
+  /// No description provided for @confirmPhoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll text a 6-digit code to confirm it\'s your number.'**
+  String get confirmPhoneHint;
+
+  /// No description provided for @enterYourPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number'**
+  String get enterYourPhoneNumber;
+
+  /// No description provided for @couldNotVerifyPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t verify your phone. Please try again.'**
+  String get couldNotVerifyPhone;
+
+  /// No description provided for @phoneNumberInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'That number is already linked to another account.'**
+  String get phoneNumberInUse;
+
+  /// No description provided for @signInAgainToChangePhone.
+  ///
+  /// In en, this message translates to:
+  /// **'For security, sign in again before changing your phone number.'**
+  String get signInAgainToChangePhone;
+
   /// No description provided for @tagline.
   ///
   /// In en, this message translates to:
@@ -2936,6 +3008,90 @@ abstract class AppLocalizations {
   /// **'Message…'**
   String get messageHint;
 
+  /// No description provided for @typingIndicator.
+  ///
+  /// In en, this message translates to:
+  /// **'typing…'**
+  String get typingIndicator;
+
+  /// No description provided for @seenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Seen'**
+  String get seenLabel;
+
+  /// No description provided for @chatSignedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to message technicians.'**
+  String get chatSignedOut;
+
+  /// No description provided for @chatLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load this conversation. Check your connection.'**
+  String get chatLoadError;
+
+  /// No description provided for @chatEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Say hello to start the conversation.'**
+  String get chatEmpty;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re all caught up.'**
+  String get notificationsEmpty;
+
+  /// No description provided for @notificationsMarkAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all read'**
+  String get notificationsMarkAll;
+
+  /// No description provided for @notifPostedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Request posted'**
+  String get notifPostedTitle;
+
+  /// No description provided for @notifPostedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re finding the right technician for your job.'**
+  String get notifPostedBody;
+
+  /// No description provided for @notifNewMessageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New message from {name}'**
+  String notifNewMessageTitle(String name);
+
+  /// No description provided for @notifHiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re hired'**
+  String get notifHiredTitle;
+
+  /// No description provided for @notifHiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The customer accepted your offer. Head over when ready.'**
+  String get notifHiredBody;
+
+  /// No description provided for @customerWord.
+  ///
+  /// In en, this message translates to:
+  /// **'the customer'**
+  String get customerWord;
+
   /// No description provided for @suggestionAcLeaking.
   ///
   /// In en, this message translates to:
@@ -3031,6 +3187,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Just to confirm — should I post this for technicians? Reply \"yes\" to post, or \"no\" to change something.'**
   String get assistantJustConfirm;
+
+  /// No description provided for @assistantPostFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry — I couldn\'t post your request just now. Please check your connection and reply \"yes\" to try again.'**
+  String get assistantPostFailed;
 
   /// No description provided for @assistantConfirm.
   ///
@@ -3331,6 +3493,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No saved addresses yet. Add one to reuse it later.'**
   String get noSavedAddressesYet;
+
+  /// No description provided for @helpSupportIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re here to help. Reach out directly or browse common questions below.'**
+  String get helpSupportIntro;
+
+  /// No description provided for @contactUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact us'**
+  String get contactUs;
+
+  /// No description provided for @contactEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get contactEmail;
+
+  /// No description provided for @contactPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get contactPhone;
+
+  /// No description provided for @copiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} copied to clipboard'**
+  String copiedToClipboard(Object value);
+
+  /// No description provided for @commonQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Common questions'**
+  String get commonQuestions;
+
+  /// No description provided for @faqBookingQ.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I book a service?'**
+  String get faqBookingQ;
+
+  /// No description provided for @faqBookingA.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the Home tab, pick a service, set your address, and confirm. We\'ll match you with a nearby technician.'**
+  String get faqBookingA;
+
+  /// No description provided for @faqCancelQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I cancel a booking?'**
+  String get faqCancelQ;
+
+  /// No description provided for @faqCancelA.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes — open the booking from My Jobs and tap cancel. Cancellation terms depend on how far along the job is.'**
+  String get faqCancelA;
+
+  /// No description provided for @faqPaymentQ.
+  ///
+  /// In en, this message translates to:
+  /// **'How do payments work?'**
+  String get faqPaymentQ;
+
+  /// No description provided for @faqPaymentA.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with cash or card once the job is completed. A receipt is kept in your booking history.'**
+  String get faqPaymentA;
+
+  /// No description provided for @privacyLastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated: June 2026'**
+  String get privacyLastUpdated;
+
+  /// No description provided for @privacyPlaceholderBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Placeholder — to be replaced'**
+  String get privacyPlaceholderBadge;
+
+  /// No description provided for @privacyPolicyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This is placeholder privacy policy text and will be replaced with the final version before launch.\n\nWe collect the information you give us — your name, phone number, email, saved addresses, and booking history — so we can connect you with technicians and provide the service. Your location is used only to find nearby technicians and show your service address.\n\nWe never sell your personal data. We share it with technicians only as needed to complete a booking, and with service providers (such as payment and messaging) that help us run the app.\n\nYour data is stored securely and tied to your account. You can edit your profile and remove saved addresses at any time. To delete your account or request a copy of your data, contact support.\n\nBy using Task you agree to this policy. We\'ll notify you here when it changes.'**
+  String get privacyPolicyBody;
 }
 
 class _AppLocalizationsDelegate

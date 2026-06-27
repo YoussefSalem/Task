@@ -91,6 +91,9 @@ class MockJobMarketplaceRepository implements JobMarketplaceRepository {
     _mutateJob(jobId, (JobRequest job) => job.copyWith(status: JobStatus.cancelled));
   }
 
+  @override
+  Future<void> submitReview(String jobId, Review review) async {}
+
   void _mutateJob(String jobId, JobRequest Function(JobRequest) update) {
     _jobs = _jobs
         .map((JobRequest j) => j.id == jobId ? update(j) : j)

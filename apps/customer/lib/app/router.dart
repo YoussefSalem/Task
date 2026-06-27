@@ -13,10 +13,14 @@ import 'package:customer/features/marketplace/all_services_screen.dart';
 import 'package:customer/features/marketplace/job_create_stub_screen.dart';
 import 'package:customer/features/offers/offers_screen.dart';
 import 'package:customer/features/booking/quote_bids_screen.dart';
+import 'package:customer/features/bookings/booking_history_screen.dart';
 import 'package:customer/features/bookings/bookings_screen.dart';
+import 'package:customer/features/legal/privacy_screen.dart';
+import 'package:customer/features/support/help_support_screen.dart';
 import 'package:customer/features/home/home_screen.dart';
 import 'package:customer/features/home/home_shell.dart';
 import 'package:customer/features/job/job_tracking_screen.dart';
+import 'package:customer/features/notifications/notifications_screen.dart';
 import 'package:customer/features/payment/payment_screen.dart';
 import 'package:customer/features/profile/profile_screen.dart';
 import 'package:customer/features/review/rating_screen.dart';
@@ -124,6 +128,21 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const AddressScreen(),
       ),
       GoRoute(
+        path: BookingHistoryScreen.routePath,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const BookingHistoryScreen(),
+      ),
+      GoRoute(
+        path: HelpSupportScreen.routePath,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const HelpSupportScreen(),
+      ),
+      GoRoute(
+        path: PrivacyScreen.routePath,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const PrivacyScreen(),
+      ),
+      GoRoute(
         path: AsapDispatchScreen.routePath,
         parentNavigatorKey: _rootKey,
         builder: (context, state) => const AsapDispatchScreen(),
@@ -178,12 +197,19 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const OffersScreen(),
       ),
       GoRoute(
+        path: NotificationsScreen.routePath,
+        name: NotificationsScreen.routeName,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const NotificationsScreen(),
+      ),
+      GoRoute(
         path: ChatScreen.routePath,
         name: ChatScreen.routeName,
         parentNavigatorKey: _rootKey,
         builder: (context, state) {
           final args = state.extra as ChatArgs;
           return ChatScreen(
+            jobId: args.jobId,
             technicianId: args.technicianId,
             technicianName: args.technicianName,
           );

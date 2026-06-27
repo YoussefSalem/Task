@@ -9,6 +9,7 @@ import 'package:task_domain/task_domain.dart';
 
 import '../call/call_controller.dart';
 import '../call/call_screen.dart';
+import '../chat/chat_providers.dart';
 import '../chat/chat_screen.dart';
 import '../marketplace/marketplace_providers.dart';
 
@@ -244,10 +245,20 @@ class _OfferCard extends ConsumerWidget {
   final JobRequest? job;
   final VoidCallback onSelect;
 
-  void _acceptAndSelect(WidgetRef ref) {
+  void _acceptAndSelect(WidgetRef ref, AppLocalizations l) {
     onSelect();
     if (job != null) {
       ref.read(jobMarketplaceRepositoryProvider).acceptOffer(job!.id, offer.id);
+      // Tell the hired technician (in-app feed; no server fan-out yet).
+      ref.read(notificationRepositoryProvider).notify(
+            recipientUid: offer.technicianId,
+            draft: NotificationDraft(
+              type: NotificationType.hired,
+              title: l.notifHiredTitle,
+              body: l.notifHiredBody,
+              jobId: job!.id,
+            ),
+          );
     }
   }
 
@@ -276,7 +287,7 @@ class _OfferCard extends ConsumerWidget {
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
         child: InkWell(
-          onTap: () => _acceptAndSelect(ref),
+          onTap: () => _acceptAndSelect(ref, l),
           borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.lg),
@@ -408,13 +419,17 @@ class _OfferCard extends ConsumerWidget {
                         icon: Icons.chat_bubble_outline_rounded,
                         label: l.chat,
                         color: AppColors.primary,
-                        onTap: () => context.push(
-                          ChatScreen.routePath,
-                          extra: ChatArgs(
-                            technicianId: offer.technicianId,
-                            technicianName: offer.technicianName,
-                          ),
-                        ),
+                        onTap: () {
+                          if (job == null) return;
+                          context.push(
+                            ChatScreen.routePath,
+                            extra: ChatArgs(
+                              jobId: job!.id,
+                              technicianId: offer.technicianId,
+                              technicianName: offer.technicianName,
+                            ),
+                          );
+                        },
                       ),
                     ),
                     const SizedBox(width: AppSpacing.sm),
@@ -436,7 +451,7 @@ class _OfferCard extends ConsumerWidget {
                         label: selected ? l.selectedLabel : l.selectOffer,
                         color: selected ? AppColors.success : AppColors.primary,
                         filled: true,
-                        onTap: () => _acceptAndSelect(ref),
+                        onTap: () => _acceptAndSelect(ref, l),
                       ),
                     ),
                   ],

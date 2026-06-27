@@ -1,5 +1,7 @@
+import 'package:customer/l10n/app_localizations.dart';
 import 'package:task_domain/task_domain.dart';
 
+import '../services/category_l10n.dart';
 import 'assistant_service.dart';
 
 /// Maps free text to a [JobCategory] by keyword, or null if nothing matches.
@@ -40,6 +42,10 @@ JobCategory? categoryFromKeywords(String text) {
 /// Offline fallback assistant. Infers a category from the latest user message
 /// and writes a title/description, never asking about price.
 class MockAssistantService implements AssistantService {
+  MockAssistantService(this._l);
+
+  final AppLocalizations _l;
+
   @override
   Future<AssistantTurn> respond(List<ChatMessage> history) async {
     final ChatMessage? lastUser =
@@ -50,11 +56,8 @@ class MockAssistantService implements AssistantService {
     final JobCategory? category = categoryFromKeywords(text);
 
     if (category == null) {
-      return const AssistantTurn(
-        reply:
-            "Tell me what's going wrong — for example a leak, an AC that "
-            "won't cool, or power that keeps tripping — and where in your "
-            'home it is.',
+      return AssistantTurn(
+        reply: _l.assistantMockAskMore,
         ready: false,
       );
     }
@@ -66,10 +69,7 @@ class MockAssistantService implements AssistantService {
       description: text,
     );
     return AssistantTurn(
-      reply:
-          "Got it — this looks like a ${category.displayLabel} job. I've put "
-          'together a summary for technicians below. Set the price you want '
-          'to pay and publish when you are ready.',
+      reply: _l.assistantMockGotIt(categoryLabel(category, _l)),
       draft: draft,
       ready: true,
     );

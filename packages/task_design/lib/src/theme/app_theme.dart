@@ -10,6 +10,21 @@ import 'package:task_design/src/theme/app_spacing.dart';
 abstract final class AppTheme {
   const AppTheme._();
 
+  /// One shared page-transition language across every platform: the Material 3
+  /// "fade forwards" shared-axis motion. Routes slide a short distance along the
+  /// forward axis while cross-fading, so pushes feel directional and continuous
+  /// instead of the abrupt platform default. Applied to all targets (incl. web)
+  /// so navigation reads the same everywhere.
+  static const PageTransitionsTheme _transitions = PageTransitionsTheme(
+    builders: <TargetPlatform, PageTransitionsBuilder>{
+      TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
+      TargetPlatform.iOS: FadeForwardsPageTransitionsBuilder(),
+      TargetPlatform.macOS: FadeForwardsPageTransitionsBuilder(),
+      TargetPlatform.windows: FadeForwardsPageTransitionsBuilder(),
+      TargetPlatform.linux: FadeForwardsPageTransitionsBuilder(),
+    },
+  );
+
   static ThemeData get dark {
     const scheme = ColorScheme.dark(
       primary: AppColors.primary,
@@ -31,6 +46,7 @@ abstract final class AppTheme {
 
     return base.copyWith(
       textTheme: GoogleFonts.cairoTextTheme(base.textTheme),
+      pageTransitionsTheme: _transitions,
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(52),
@@ -93,6 +109,7 @@ abstract final class AppTheme {
 
     return base.copyWith(
       textTheme: GoogleFonts.cairoTextTheme(base.textTheme),
+      pageTransitionsTheme: _transitions,
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(52),

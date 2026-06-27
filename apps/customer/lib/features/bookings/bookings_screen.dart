@@ -6,6 +6,7 @@ import 'package:task_design/task_design.dart';
 import 'package:task_domain/task_domain.dart';
 
 import '../marketplace/marketplace_providers.dart';
+import '../services/category_l10n.dart';
 
 /// The Bookings tab: live + upcoming jobs first, history below. Tapping an
 /// active job returns to live tracking.
@@ -25,7 +26,8 @@ class BookingsScreen extends ConsumerWidget {
           bottom: false,
           child: jobsAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (Object e, _) => Center(child: Text('Error: $e')),
+            error: (Object e, _) =>
+                Center(child: Text(AppLocalizations.of(context).error(e.toString()))),
             data: (List<JobRequest> jobs) {
               final List<JobRequest> active = jobs
                   .where((JobRequest j) =>
@@ -70,6 +72,7 @@ class BookingsScreen extends ConsumerWidget {
   Widget _card(BuildContext context, JobRequest job, TextTheme text,
       {VoidCallback? onTap}) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations l = AppLocalizations.of(context);
     final (Color, IconData) badge = switch (job.status) {
       JobStatus.completed => (AppColors.success, Icons.check_circle),
       JobStatus.inProgress => (AppColors.primary, Icons.bolt),
@@ -112,7 +115,7 @@ class BookingsScreen extends ConsumerWidget {
                             style: text.titleSmall
                                 ?.copyWith(fontWeight: FontWeight.w700)),
                         const SizedBox(height: 2),
-                        Text(job.category.displayLabel,
+                        Text(categoryLabel(job.category, l),
                             style: text.bodySmall?.copyWith(
                               color: isDark
                                   ? AppColors.textSecondary.withValues(alpha: 0.6)
@@ -120,13 +123,13 @@ class BookingsScreen extends ConsumerWidget {
                             )),
                         const SizedBox(height: 6),
                         StatusPill(
-                            label: job.status.name,
+                            label: jobStatusLabel(job.status, l),
                             tint: badge.$1,
                             icon: badge.$2),
                       ],
                     ),
                   ),
-                  Text('${job.settledPrice} EGP',
+                  Text('${job.settledPrice} ${l.egp}',
                       style: text.titleSmall
                           ?.copyWith(fontWeight: FontWeight.w700)),
                 ],
@@ -152,7 +155,7 @@ class BookingsScreen extends ConsumerWidget {
                     ? AppColors.textSecondary.withValues(alpha: 0.4)
                     : AppColors.textSecondaryLight.withValues(alpha: 0.5)),
             const SizedBox(height: AppSpacing.md),
-            Text('No past jobs yet',
+            Text(AppLocalizations.of(context).noPastJobs,
                 style: text.titleSmall?.copyWith(fontWeight: FontWeight.w600)),
           ],
         ),

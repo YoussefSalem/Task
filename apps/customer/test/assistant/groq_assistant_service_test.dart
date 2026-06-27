@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:customer/features/assistant/assistant_service.dart';
 import 'package:customer/features/assistant/groq_assistant_service.dart';
+import 'package:customer/l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -39,6 +40,7 @@ void main() {
     final GroqAssistantService svc = GroqAssistantService(
       client: _clientReturning(content),
       apiKey: 'test-key',
+      l: AppLocalizationsEn(),
     );
 
     final AssistantTurn turn = await svc.respond(<ChatMessage>[
@@ -66,6 +68,7 @@ void main() {
     final GroqAssistantService svc = GroqAssistantService(
       client: _clientReturning(content),
       apiKey: 'test-key',
+      l: AppLocalizationsEn(),
     );
     final AssistantTurn turn =
         await svc.respond(<ChatMessage>[const ChatMessage('hi', fromUser: true)]);
@@ -84,6 +87,7 @@ void main() {
     final GroqAssistantService svc = GroqAssistantService(
       client: _clientReturning(content),
       apiKey: 'test-key',
+      l: AppLocalizationsEn(),
     );
     final AssistantTurn turn = await svc.respond(
         <ChatMessage>[const ChatMessage('build me a website', fromUser: true)]);
@@ -96,6 +100,7 @@ void main() {
     final GroqAssistantService svc = GroqAssistantService(
       client: _clientReturning('nonsense', status: 500),
       apiKey: 'test-key',
+      l: AppLocalizationsEn(),
     );
     final AssistantTurn turn = await svc
         .respond(<ChatMessage>[const ChatMessage('hi', fromUser: true)]);

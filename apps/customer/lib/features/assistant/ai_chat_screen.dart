@@ -28,11 +28,11 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   final TextEditingController _input = TextEditingController();
   final ScrollController _scroll = ScrollController();
 
-  static const List<String> _suggestions = <String>[
-    'My AC is leaking water',
-    'Power keeps tripping',
-    'Need a deep clean this weekend',
-  ];
+  static List<String> _suggestionsFor(AppLocalizations l) => <String>[
+        l.suggestionAcLeaking,
+        l.suggestionPowerTripping,
+        l.suggestionDeepClean,
+      ];
 
   @override
   void initState() {
@@ -103,10 +103,10 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text('Task Assistant',
+                Text(AppLocalizations.of(context).taskAssistant,
                     style:
                         text.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-                Text('AI · always on',
+                Text(AppLocalizations.of(context).aiAlwaysOn,
                     style: text.labelSmall?.copyWith(
                       color: AppColors.success,
                     )),
@@ -117,7 +117,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
         actions: <Widget>[
           if (chat.phase == ChatPhase.posted || messages.length > 1)
             IconButton(
-              tooltip: 'New request',
+              tooltip: AppLocalizations.of(context).newRequest,
               icon: const Icon(Icons.refresh_rounded),
               onPressed: () => ref.read(bookingChatProvider.notifier).reset(),
             ),
@@ -233,16 +233,18 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   }
 
   Widget _suggestionRow(TextTheme text) {
+    final List<String> suggestions =
+        _suggestionsFor(AppLocalizations.of(context));
     return SizedBox(
       height: 44,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-        itemCount: _suggestions.length,
+        itemCount: suggestions.length,
         separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.sm),
         itemBuilder: (BuildContext context, int i) {
           return GestureDetector(
-            onTap: () => _send(_suggestions[i]),
+            onTap: () => _send(suggestions[i]),
             child: Container(
               alignment: Alignment.center,
               padding:
@@ -253,7 +255,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                 border: Border.all(
                     color: AppColors.primary.withValues(alpha: 0.4)),
               ),
-              child: Text(_suggestions[i],
+              child: Text(suggestions[i],
                   style: text.labelLarge?.copyWith(
                     color: AppColors.primary,
                     fontWeight: FontWeight.w600,
@@ -267,11 +269,12 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
 
   Widget _composer(TextTheme text, ChatState chat) {
     final bool posted = chat.phase == ChatPhase.posted;
+    final AppLocalizations l = AppLocalizations.of(context);
     final String hint = switch (chat.phase) {
-      ChatPhase.awaitingPrice => 'Enter your price in EGP…',
-      ChatPhase.awaitingConfirm => 'Reply yes to post, or no to change…',
-      ChatPhase.posted => 'Request posted',
-      ChatPhase.gathering => 'Message the assistant…',
+      ChatPhase.awaitingPrice => l.enterYourPriceInEgp,
+      ChatPhase.awaitingConfirm => l.replyYesToPost,
+      ChatPhase.posted => l.requestPosted,
+      ChatPhase.gathering => l.messageAssistant,
     };
     return Padding(
       padding: EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.md, AppSpacing.xl,

@@ -1,11 +1,12 @@
 // apps/customer/test/mock_job_marketplace_repository_test.dart
 import 'package:customer/features/marketplace/mock_job_marketplace_repository.dart';
+import 'package:customer/l10n/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:task_domain/task_domain.dart';
 
 void main() {
   test('publish adds a job to watchMyJobs newest-first', () async {
-    final MockJobMarketplaceRepository repo = MockJobMarketplaceRepository();
+    final MockJobMarketplaceRepository repo = MockJobMarketplaceRepository(AppLocalizationsEn());
     final int before = (await repo.watchMyJobs().first).length;
 
     final JobRequest job = await repo.publish(const JobRequestDraft().copyWith(
@@ -21,7 +22,7 @@ void main() {
   });
 
   test('acceptOffer marks the offer accepted and fixes settledPrice', () async {
-    final MockJobMarketplaceRepository repo = MockJobMarketplaceRepository();
+    final MockJobMarketplaceRepository repo = MockJobMarketplaceRepository(AppLocalizationsEn());
     final JobRequest seeded =
         (await repo.watchMyJobs().first).firstWhere((j) => j.offers.isNotEmpty);
     final Offer target = seeded.offers.first;
@@ -35,7 +36,7 @@ void main() {
   });
 
   test('counterOffer appends a customer proposal and sets countered', () async {
-    final MockJobMarketplaceRepository repo = MockJobMarketplaceRepository();
+    final MockJobMarketplaceRepository repo = MockJobMarketplaceRepository(AppLocalizationsEn());
     final JobRequest seeded =
         (await repo.watchMyJobs().first).firstWhere((j) => j.offers.isNotEmpty);
     final Offer target = seeded.offers.first;

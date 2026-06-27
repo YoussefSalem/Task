@@ -55,6 +55,11 @@ class AuthController {
   String? _verificationId;
   bool _mockPending = false;
 
+  // Carried between startPhoneVerification and confirmPhoneVerification (the
+  // signed-in "add/change my phone" flow, distinct from sign-in above).
+  String? _phoneVerificationId;
+  bool _mockPhonePending = false;
+
   bool get _looksOffline => !ready;
 
   /// Sends an OTP to an E.164 number (e.g. +201001234567).
@@ -143,6 +148,113 @@ class AuthController {
     }
   }
 
+  /// Starts verifying a phone number for the *already signed-in* user (adding a
+  /// number for social sign-ups, or changing an existing one). Sends an OTP via
+  /// [FirebaseAuth.verifyPhoneNumber] — supported on web and mobile in this
+  /// firebase_auth version. On Android the code may auto-retrieve, in which case
+  /// the credential is applied immediately and the outcome is [AuthStep.signedIn].
+  Future<AuthOutcome> startPhoneVerification(String e164) async {
+    _phoneVerificationId = null;
+    _mockPhonePending = false;
+
+    if (_looksOffline) {
+      _mockPhonePending = true;
+      return const AuthOutcome(AuthStep.codeSent, mock: true);
+    }
+
+    final User? user = _auth.currentUser;
+    if (user == null) {
+      return AuthOutcome(AuthStep.failed, message: l.genericAuthError);
+    }
+
+    try {
+      final Completer<AuthOutcome> done = Completer<AuthOutcome>();
+      await _auth.verifyPhoneNumber(
+        phoneNumber: e164,
+        verificationCompleted: (PhoneAuthCredential cred) async {
+          try {
+            await _applyPhoneCredential(user, cred);
+            if (!done.isCompleted) {
+              done.complete(const AuthOutcome(AuthStep.signedIn));
+            }
+          } on FirebaseAuthException catch (e) {
+            if (!done.isCompleted) {
+              done.complete(AuthOutcome(AuthStep.failed, message: _friendly(e)));
+            }
+          }
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          if (!done.isCompleted) {
+            done.complete(AuthOutcome(AuthStep.failed, message: _friendly(e)));
+          }
+        },
+        codeSent: (String id, int? _) {
+          _phoneVerificationId = id;
+          if (!done.isCompleted) {
+            done.complete(const AuthOutcome(AuthStep.codeSent));
+          }
+        },
+        codeAutoRetrievalTimeout: (String id) => _phoneVerificationId = id,
+      );
+      return done.future;
+    } on FirebaseAuthException catch (e) {
+      return AuthOutcome(AuthStep.failed, message: '[${e.code}] ${_friendly(e)}');
+    } catch (e) {
+      return AuthOutcome(AuthStep.failed, message: e.toString());
+    }
+  }
+
+  /// Confirms the OTP from [startPhoneVerification] and writes the number onto
+  /// the signed-in user (linking it if they had none, updating it otherwise).
+  Future<AuthOutcome> confirmPhoneVerification(String code) async {
+    if (_mockPhonePending) {
+      if (code.length < 4) {
+        return AuthOutcome(AuthStep.failed, message: l.enterFullCode);
+      }
+      return const AuthOutcome(AuthStep.signedIn, mock: true);
+    }
+
+    final User? user = _auth.currentUser;
+    if (user == null) {
+      return AuthOutcome(AuthStep.failed, message: l.genericAuthError);
+    }
+    if (_phoneVerificationId == null) {
+      return AuthOutcome(AuthStep.failed, message: l.requestNewCode);
+    }
+
+    try {
+      final PhoneAuthCredential cred = PhoneAuthProvider.credential(
+          verificationId: _phoneVerificationId!, smsCode: code);
+      await _applyPhoneCredential(user, cred);
+      await user.reload();
+      return const AuthOutcome(AuthStep.signedIn);
+    } on FirebaseAuthException catch (e) {
+      return AuthOutcome(AuthStep.failed, message: _friendly(e));
+    } catch (e) {
+      return AuthOutcome(AuthStep.failed, message: e.toString());
+    }
+  }
+
+  /// Sets the verified phone on the user: links the phone provider when the
+  /// account has none, otherwise updates the existing number. Falls back across
+  /// both so "add" and "change" both succeed regardless of starting state.
+  Future<void> _applyPhoneCredential(User user, PhoneAuthCredential cred) async {
+    final bool hasPhone = (user.phoneNumber ?? '').isNotEmpty;
+    if (hasPhone) {
+      await user.updatePhoneNumber(cred);
+      return;
+    }
+    try {
+      await user.linkWithCredential(cred);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'provider-already-linked') {
+        await user.updatePhoneNumber(cred);
+      } else {
+        rethrow;
+      }
+    }
+  }
+
   /// Signs the user out of Firebase. After this the [authStateProvider] stream
   /// emits null, so the splash/router lands on sign-in. No-op in mock mode.
   Future<void> signOut() async {
@@ -187,6 +299,9 @@ class AuthController {
         'invalid-verification-code' => l.incorrectCode,
         'too-many-requests' => l.tooManyAttempts,
         'popup-closed-by-user' => l.signInCancelled,
+        'credential-already-in-use' => l.phoneNumberInUse,
+        'account-exists-with-different-credential' => l.phoneNumberInUse,
+        'requires-recent-login' => l.signInAgainToChangePhone,
         _ => e.message ?? l.genericAuthError,
       };
 }

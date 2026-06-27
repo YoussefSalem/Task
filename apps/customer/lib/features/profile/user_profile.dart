@@ -65,6 +65,38 @@ class UserProfileRepository {
       'created_at': FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
   }
+
+  /// Updates only the name. Merges, so email/birthday/phone are untouched.
+  Future<void> updateName({
+    required String firstName,
+    required String lastName,
+  }) async {
+    await _doc.set(<String, dynamic>{
+      'role': 'customer',
+      'first_name': firstName,
+      'last_name': lastName,
+      'updated_at': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
+  /// Updates only the birthday.
+  Future<void> updateBirthday(DateTime birthday) async {
+    await _doc.set(<String, dynamic>{
+      'role': 'customer',
+      'birthday': Timestamp.fromDate(birthday),
+      'updated_at': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
+  /// Updates only the phone number (E.164). Written after OTP verification has
+  /// linked the number to the Auth account.
+  Future<void> updatePhone(String phone) async {
+    await _doc.set(<String, dynamic>{
+      'role': 'customer',
+      'phone': phone,
+      'updated_at': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
 }
 
 /// Ensures a `users/{uid}` document exists for the signed-in user, regardless

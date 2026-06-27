@@ -1,5 +1,4 @@
 import 'package:customer/l10n/app_localizations.dart';
-import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui_web' as ui_web;
 
@@ -7,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
+import 'package:task_domain/task_domain.dart';
 import 'package:web/web.dart' as web;
 
 import '../location/location_provider.dart';
@@ -41,7 +41,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
   _SearchPhase _phase = _SearchPhase.searching;
   int _prosFound = 0;
   int _offersCount = 0;
-  final List<Timer> _timers = [];
+  bool _navigatedToOffers = false;
 
   @override
   void initState() {
@@ -67,8 +67,6 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
       duration: const Duration(milliseconds: 400),
     )..forward();
 
-    // Register this as the active search so Home can surface a status card,
-    // regardless of how we got here (job-create or AI chat flow).
     final String? jobId = widget.jobId;
     if (jobId != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -76,23 +74,32 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             ActiveSearch(jobId: jobId);
       });
     }
-
-    _runSequence();
   }
 
-  void _runSequence() {
-    _timers.add(Timer(const Duration(milliseconds: 3000), () {
-      if (!mounted) return;
-      setState(() { _phase = _SearchPhase.prosFound; _prosFound = 4; });
-    }));
-    _timers.add(Timer(const Duration(milliseconds: 5500), () {
-      if (!mounted) return;
-      setState(() => _phase = _SearchPhase.awaitingOffers);
-    }));
-    _timers.add(Timer(const Duration(milliseconds: 9000), () {
-      if (!mounted) return;
-      setState(() { _phase = _SearchPhase.offersReady; _offersCount = 3; });
-      // Mark offers ready so the Home card routes straight to Offers.
+  void _syncPhaseFromJob(JobRequest? job) {
+    if (job == null) return;
+    final offers = job.offers;
+    final _SearchPhase newPhase;
+    if (offers.isNotEmpty && offers.any((o) => o.status == OfferStatus.pending)) {
+      newPhase = _SearchPhase.offersReady;
+    } else if (offers.isNotEmpty) {
+      newPhase = _SearchPhase.awaitingOffers;
+    } else if (job.status == JobStatus.biddingActive) {
+      newPhase = _SearchPhase.searching;
+    } else {
+      newPhase = _SearchPhase.searching;
+    }
+
+    if (newPhase != _phase) {
+      setState(() {
+        _phase = newPhase;
+        _prosFound = offers.length;
+        _offersCount = offers.length;
+      });
+    }
+
+    if (newPhase == _SearchPhase.offersReady && !_navigatedToOffers) {
+      _navigatedToOffers = true;
       final ActiveSearch? current = ref.read(activeSearchProvider);
       if (current != null) {
         ref.read(activeSearchProvider.notifier).state =
@@ -102,7 +109,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
         if (!mounted) return;
         context.pushReplacement(OffersScreen.routePath);
       });
-    }));
+    }
   }
 
   /// Leave the radar but keep the search running in the background. The Home
@@ -115,7 +122,6 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
     _glowCtrl.dispose();
     _dotCtrl.dispose();
     _panelCtrl.dispose();
-    for (final t in _timers) { t.cancel(); }
     super.dispose();
   }
 
@@ -138,66 +144,77 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
     }
   }
 
-  Future<_ExitChoice?> _showExitDialog() => showDialog<_ExitChoice>(
-    context: context,
-    builder: (ctx) => AlertDialog(
-      backgroundColor: Theme.of(ctx).brightness == Brightness.dark
-          ? AppColors.surface
-          : AppColors.surfaceLight,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: const Text('Stop search?',
-          style: TextStyle(fontWeight: FontWeight.w700)),
-      content: const Text(
-        'Your request stays active and technicians can still send offers.\n\n'
-        'You\'ll get a notification when offers arrive. To fully stop, cancel the request.',
-        style: TextStyle(height: 1.5),
-      ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(ctx, _ExitChoice.cancel),
-          child: Text('Cancel request',
-              style: TextStyle(color: Colors.red.shade400, fontWeight: FontWeight.w600)),
+  Future<_ExitChoice?> _showExitDialog() {
+    final AppLocalizations l = AppLocalizations.of(context);
+    return showDialog<_ExitChoice>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(ctx).brightness == Brightness.dark
+            ? AppColors.surface
+            : AppColors.surfaceLight,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(l.stopSearchQ,
+            style: const TextStyle(fontWeight: FontWeight.w700)),
+        content: Text(
+          l.stopSearchBody,
+          style: const TextStyle(height: 1.5),
         ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Stay'),
-            ),
-            const SizedBox(width: 4),
-            FilledButton(
-              onPressed: () => Navigator.pop(ctx, _ExitChoice.exit),
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, _ExitChoice.cancel),
+            child: Text(l.cancelRequest,
+                style: TextStyle(color: Colors.red.shade400, fontWeight: FontWeight.w600)),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: Text(l.stay),
               ),
-              child: const Text('Go home'),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
+              const SizedBox(width: 4),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, _ExitChoice.exit),
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                ),
+                child: Text(l.goHome),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
-  String get _headline => switch (_phase) {
-    _SearchPhase.searching => 'Finding nearby professionals…',
-    _SearchPhase.prosFound => '$_prosFound pros found nearby',
-    _SearchPhase.awaitingOffers => 'Waiting for offers…',
-    _SearchPhase.offersReady => '$_offersCount offers received!',
+  String _headlineFor(AppLocalizations l) => switch (_phase) {
+    _SearchPhase.searching => l.findingNearbyProfessionals,
+    _SearchPhase.prosFound => l.prosFoundNearby(_prosFound),
+    _SearchPhase.awaitingOffers => l.waitingForOffers,
+    _SearchPhase.offersReady => l.offersReceivedCount(_offersCount),
   };
 
-  String get _sub => switch (_phase) {
-    _SearchPhase.searching => 'Scanning your area — usually under a minute',
-    _SearchPhase.prosFound => 'Sending your job details to them now',
-    _SearchPhase.awaitingOffers => 'Pros are reviewing your request',
-    _SearchPhase.offersReady => 'Opening your offers…',
+  String _subFor(AppLocalizations l) => switch (_phase) {
+    _SearchPhase.searching => l.scanningYourArea,
+    _SearchPhase.prosFound => l.sendingJobDetails,
+    _SearchPhase.awaitingOffers => l.prosReviewing,
+    _SearchPhase.offersReady => l.openingYourOffers,
   };
 
   @override
   Widget build(BuildContext context) {
+    final jobs = ref.watch(myJobsProvider).valueOrNull ?? const <JobRequest>[];
+    final currentJob = widget.jobId != null
+        ? jobs.where((j) => j.id == widget.jobId).firstOrNull
+        : (jobs.isNotEmpty ? jobs.first : null);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _syncPhaseFromJob(currentJob);
+    });
+
+    final AppLocalizations l = AppLocalizations.of(context);
     final loc = ref.watch(locationProvider);
     final double lat = loc.lat ?? 29.9602;
     final double lng = loc.lng ?? 31.2569;
@@ -341,7 +358,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                           ),
                         ),
                         const SizedBox(width: 7),
-                        Text('Live search',
+                        Text(l.liveSearch,
                             style: text.labelSmall?.copyWith(
                               fontWeight: FontWeight.w600,
                             )),
@@ -364,8 +381,8 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                   curve: Curves.easeOutCubic,
                 )),
                 child: _BottomPanel(
-                  headline: _headline,
-                  sub: _sub,
+                  headline: _headlineFor(l),
+                  sub: _subFor(l),
                   phase: _phase,
                   offersCount: _offersCount,
                   accent: accent,
@@ -656,6 +673,7 @@ class _BottomPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool offersReady = phase == _SearchPhase.offersReady;
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations l = AppLocalizations.of(context);
 
     return Container(
       padding: EdgeInsets.fromLTRB(
@@ -738,7 +756,7 @@ class _BottomPanel extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'You can exit — your request stays active. We\'ll notify you when offers arrive.',
+                      l.youCanExitNote,
                       style: text.bodySmall?.copyWith(
                         color: isDark
                             ? AppColors.textSecondary.withValues(alpha: 0.5)
@@ -769,7 +787,7 @@ class _BottomPanel extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14)),
                 ),
-                child: Text('Stop search',
+                child: Text(l.stopSearch,
                     style: text.titleSmall?.copyWith(
                       color: isDark
                           ? AppColors.textSecondary
@@ -781,7 +799,7 @@ class _BottomPanel extends StatelessWidget {
 
           if (offersReady) ...[
             GlowButton(
-              label: 'View $offersCount offers',
+              label: l.viewOffersCount(offersCount),
               icon: Icons.local_offer_rounded,
               onPressed: () => context.pushReplacement(OffersScreen.routePath),
             ),
@@ -854,10 +872,15 @@ class _PhaseBar extends StatelessWidget {
   final _SearchPhase current;
   final Color accent;
 
-  static const _labels = ['Searching', 'Found', 'Waiting', 'Offers'];
-
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l = AppLocalizations.of(context);
+    final List<String> labels = <String>[
+      l.phaseSearching,
+      l.phaseFound,
+      l.phaseWaiting,
+      l.phaseOffers,
+    ];
     return Row(
       children: List.generate(_SearchPhase.values.length, (i) {
         final active = i <= current.index;
@@ -883,7 +906,7 @@ class _PhaseBar extends StatelessWidget {
                     ),
                     const SizedBox(height: 5),
                     Text(
-                      _labels[i],
+                      labels[i],
                       style: TextStyle(
                         fontSize: 9,
                         fontWeight: FontWeight.w500,
