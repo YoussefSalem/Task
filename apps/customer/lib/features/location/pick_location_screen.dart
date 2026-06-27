@@ -120,9 +120,14 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
         ((web.GeolocationPositionError err) {
           if (!completer.isCompleted) completer.completeError(err);
         }).toJS,
+        web.PositionOptions(
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0,
+        ),
       );
       final pos =
-          await completer.future.timeout(const Duration(seconds: 10));
+          await completer.future.timeout(const Duration(seconds: 20));
       final lat = pos.coords.latitude.toDouble();
       final lng = pos.coords.longitude.toDouble();
       if (!mounted) return;
