@@ -154,6 +154,23 @@ extension SenderRoleCodec on SenderRole {
       };
 }
 
+extension WalletTransactionTypeCodec on WalletTransactionType {
+  String toWire() => switch (this) {
+        WalletTransactionType.referral => 'referral',
+        WalletTransactionType.refund => 'refund',
+        WalletTransactionType.credit => 'credit',
+        WalletTransactionType.debit => 'debit',
+      };
+
+  static WalletTransactionType fromWire(String v) => switch (v) {
+        'referral' => WalletTransactionType.referral,
+        'refund' => WalletTransactionType.refund,
+        'credit' => WalletTransactionType.credit,
+        'debit' => WalletTransactionType.debit,
+        _ => throw FormatException('Unknown WalletTransactionType: $v'),
+      };
+}
+
 extension NotificationTypeCodec on NotificationType {
   String toWire() => switch (this) {
         NotificationType.message => 'message',

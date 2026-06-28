@@ -28,25 +28,6 @@ class PrivacyScreen extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.all(AppSpacing.xl),
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.md, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: AppColors.warning.withValues(alpha: 0.16),
-                        borderRadius:
-                            BorderRadius.circular(AppSpacing.radiusSm),
-                      ),
-                      child: Text(l.privacyPlaceholderBadge,
-                          style: text.labelSmall?.copyWith(
-                            color: AppColors.warning,
-                            fontWeight: FontWeight.w700,
-                          )),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.md),
                 Text(l.privacyLastUpdated,
                     style: text.bodySmall?.copyWith(
                       color: AppColors.textSecondary.withValues(alpha: 0.6),

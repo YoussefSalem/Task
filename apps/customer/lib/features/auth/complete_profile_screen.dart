@@ -296,6 +296,30 @@ class _CompleteProfileScreenState extends ConsumerState<CompleteProfileScreen> {
             ),
           ),
         ),
+        const SizedBox(height: AppSpacing.sm),
+        // One-time field: birthday can never be edited after this, so warn now.
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Icon(Icons.lock_outline_rounded,
+                size: 14,
+                color: isDark
+                    ? AppColors.textSecondary.withValues(alpha: 0.6)
+                    : AppColors.textSecondaryLight),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                AppLocalizations.of(context).birthdayPermanentWarning,
+                style: text.bodySmall?.copyWith(
+                  color: isDark
+                      ? AppColors.textSecondary.withValues(alpha: 0.6)
+                      : AppColors.textSecondaryLight,
+                  height: 1.3,
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }

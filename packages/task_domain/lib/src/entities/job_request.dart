@@ -26,6 +26,7 @@ class JobRequest {
     required this.status,
     this.offers = const <Offer>[],
     required this.createdAt,
+    this.cancellationReason,
   });
 
   final String id;
@@ -45,6 +46,10 @@ class JobRequest {
   final List<Offer> offers;
   final DateTime createdAt;
 
+  /// Why the customer cancelled, when [status] is [JobStatus.cancelled] and a
+  /// reason was given. Null for non-cancelled jobs or cancellations without one.
+  final String? cancellationReason;
+
   Offer? get acceptedOffer {
     for (final Offer o in offers) {
       if (o.status == OfferStatus.accepted) return o;
@@ -59,6 +64,7 @@ class JobRequest {
     JobStatus? status,
     List<Offer>? offers,
     int? fixedPrice,
+    String? cancellationReason,
   }) =>
       JobRequest(
         id: id,
@@ -77,5 +83,6 @@ class JobRequest {
         status: status ?? this.status,
         offers: offers ?? this.offers,
         createdAt: createdAt,
+        cancellationReason: cancellationReason ?? this.cancellationReason,
       );
 }

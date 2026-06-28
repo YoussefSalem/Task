@@ -15,13 +15,12 @@ import '../location/pick_location_screen.dart';
 import '../matching/matching_screen.dart';
 import '../offers/offers_screen.dart';
 import 'active_job_card.dart';
-import 'home_shell.dart';
 import '../marketplace/all_services_screen.dart';
 import '../marketplace/job_create_stub_screen.dart';
 import '../marketplace/marketplace_providers.dart';
 import '../profile/user_profile.dart';
 import '../services/category_l10n.dart';
-import '../services/technician_catalog.dart';
+import 'home_providers.dart';
 
 /// Home dashboard. The hero is the AI request flow - describe a problem, set
 /// your own price - which is what makes Task different from a plain services
@@ -112,20 +111,7 @@ class HomeScreen extends ConsumerWidget {
                       onTap: startCategory,
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.xxl),
-                  EntranceReveal(
-                    index: 8,
-                    child: SectionHeader(
-                      title: AppLocalizations.of(context).topRatedNearYou,
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.lg),
-                  EntranceReveal(
-                    index: 9,
-                    child: _TopProsCarousel(
-                      onTap: (Technician t) => startCategory(t.category),
-                    ),
-                  ),
+                  _TopProsSection(onTapCategory: startCategory),
                 ],
               ),
             ),
@@ -170,28 +156,6 @@ class _TopBar extends ConsumerWidget {
           showDot:
               (ref.watch(unreadNotificationsProvider).valueOrNull ?? 0) > 0,
           onTap: () => context.push(NotificationsScreen.routePath),
-        ),
-        const SizedBox(width: AppSpacing.sm),
-        GestureDetector(
-          onTap: () => context.go(HomeShell.profileRoutePath),
-          child: Semantics(
-            label: l.yourProfile,
-            button: true,
-            child: Container(
-              height: 46,
-              width: 46,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.primary, width: 2),
-              ),
-              child: ClipOval(
-                child: _Avatar(
-                  seed: 'ahmed-user',
-                  initials: l.demoUserName.substring(0, 1),
-                ),
-              ),
-            ),
-          ),
         ),
       ],
     );
@@ -813,60 +777,72 @@ class _BannerData {
   final String? badge;
 }
 
-List<_BannerData> _bannersFor(AppLocalizations l) => <_BannerData>[
-  _BannerData(
-    headline: l.summerAcCheckup,
-    sub: l.bookFullAcService,
-    gradient: const [Color(0xFF0EA5E9), Color(0xFF0369A1)],
-    icon: Icons.ac_unit_rounded,
-    badge: l.badgeLimited,
-  ),
-  _BannerData(
-    headline: l.referAndEarn,
-    sub: l.shareYourCode,
-    gradient: const [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
-    icon: Icons.card_giftcard_rounded,
-    badge: l.newTag,
-  ),
-  _BannerData(
-    headline: l.ramadanDeepClean,
-    sub: l.professionalWholeHomeCleaning,
-    gradient: const [Color(0xFF10B981), Color(0xFF047857)],
-    icon: Icons.cleaning_services_rounded,
-  ),
-];
+/// Maps a [Promotion] document to the carousel's presentational model. The
+/// gradient derives from the promotion's accent colour; the icon from its name.
+_BannerData _bannerFromPromotion(Promotion p) {
+  final Color accent = _hexToColor(p.accentHex) ?? AppColors.primary;
+  return _BannerData(
+    headline: p.headline,
+    sub: p.subtitle,
+    gradient: <Color>[accent, _darken(accent)],
+    icon: _iconFromName(p.iconName),
+    badge: p.badge,
+  );
+}
 
-class _HeroBannerCarousel extends StatefulWidget {
+Color? _hexToColor(String? hex) {
+  if (hex == null) return null;
+  final String h = hex.replaceAll('#', '').trim();
+  if (h.length != 6) return null;
+  final int? v = int.tryParse(h, radix: 16);
+  if (v == null) return null;
+  return Color(0xFF000000 | v);
+}
+
+Color _darken(Color c) => Color.lerp(c, Colors.black, 0.28) ?? c;
+
+IconData _iconFromName(String? name) => switch (name) {
+      'ac' || 'ac_unit' => Icons.ac_unit_rounded,
+      'cleaning' => Icons.cleaning_services_rounded,
+      'gift' || 'referral' => Icons.card_giftcard_rounded,
+      'bolt' || 'electrical' => Icons.bolt_rounded,
+      'plumbing' || 'water' => Icons.plumbing_rounded,
+      'discount' || 'offer' => Icons.local_offer_rounded,
+      _ => Icons.local_offer_rounded,
+    };
+
+class _HeroBannerCarousel extends ConsumerStatefulWidget {
   const _HeroBannerCarousel();
 
   @override
-  State<_HeroBannerCarousel> createState() => _HeroBannerCarouselState();
+  ConsumerState<_HeroBannerCarousel> createState() =>
+      _HeroBannerCarouselState();
 }
 
-class _HeroBannerCarouselState extends State<_HeroBannerCarousel> {
+class _HeroBannerCarouselState extends ConsumerState<_HeroBannerCarousel> {
   final PageController _page = PageController(viewportFraction: 1.0);
   int _current = 0;
   Timer? _autoScroll;
   List<_BannerData> _banners = const <_BannerData>[];
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _banners = _bannersFor(AppLocalizations.of(context));
-    if (_current >= _banners.length) _current = 0;
-    final reduce = MediaQuery.maybeOf(context)?.disableAnimations ?? false;
-    _autoScroll?.cancel();
-    if (!reduce) {
-      _autoScroll = Timer.periodic(const Duration(seconds: 5), (_) {
-        if (!mounted) return;
-        final next = (_current + 1) % _banners.length;
-        _page.animateToPage(
-          next,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-        );
-      });
+  // Auto-advance only when there are at least two banners and motion is allowed.
+  void _ensureAutoScroll() {
+    final bool reduce =
+        MediaQuery.maybeOf(context)?.disableAnimations ?? false;
+    if (reduce || _banners.length < 2) {
+      _autoScroll?.cancel();
+      _autoScroll = null;
+      return;
     }
+    _autoScroll ??= Timer.periodic(const Duration(seconds: 5), (_) {
+      if (!mounted || _banners.length < 2) return;
+      final int next = (_current + 1) % _banners.length;
+      _page.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    });
   }
 
   @override
@@ -879,6 +855,16 @@ class _HeroBannerCarouselState extends State<_HeroBannerCarousel> {
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
+    final List<Promotion> promos =
+        ref.watch(promotionsProvider).valueOrNull ?? const <Promotion>[];
+    _banners = promos.map(_bannerFromPromotion).toList();
+    if (_banners.isEmpty) {
+      _autoScroll?.cancel();
+      _autoScroll = null;
+      return const SizedBox.shrink();
+    }
+    if (_current >= _banners.length) _current = 0;
+    _ensureAutoScroll();
     return Column(
       children: <Widget>[
         SizedBox(
@@ -1363,43 +1349,58 @@ class _CategoryTile extends StatelessWidget {
 // Top pros carousel
 // ─────────────────────────────────────────────────────────────────────────
 
-class _TopProsCarousel extends StatelessWidget {
-  const _TopProsCarousel({required this.onTap});
-  final ValueChanged<Technician> onTap;
+/// Home "top rated" section, streamed from Firestore. Renders nothing until at
+/// least one technician exists, so the home never shows an empty rail or filler.
+class _TopProsSection extends ConsumerWidget {
+  const _TopProsSection({required this.onTapCategory});
+  final ValueChanged<JobCategory> onTapCategory;
 
   @override
-  Widget build(BuildContext context) {
-    final List<Technician> pros = technicians(AppLocalizations.of(context));
-    return SizedBox(
-      height: 184,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        clipBehavior: Clip.none,
-        padding: EdgeInsets.zero,
-        itemCount: pros.length,
-        separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
-        itemBuilder: (BuildContext context, int i) {
-          final Technician t = pros[i];
-          return _ProCard(tech: t, onTap: () => onTap(t));
-        },
-      ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final List<TechnicianProfile> pros =
+        ref.watch(topTechniciansProvider).valueOrNull ??
+            const <TechnicianProfile>[];
+    if (pros.isEmpty) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const SizedBox(height: AppSpacing.xxl),
+        SectionHeader(title: AppLocalizations.of(context).topRatedNearYou),
+        const SizedBox(height: AppSpacing.lg),
+        SizedBox(
+          height: 184,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            clipBehavior: Clip.none,
+            padding: EdgeInsets.zero,
+            itemCount: pros.length,
+            separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
+            itemBuilder: (BuildContext context, int i) {
+              final TechnicianProfile t = pros[i];
+              return _ProCard(tech: t, onTap: () => onTapCategory(t.category));
+            },
+          ),
+        ),
+      ],
     );
   }
 }
 
 class _ProCard extends StatelessWidget {
   const _ProCard({required this.tech, required this.onTap});
-  final Technician tech;
+  final TechnicianProfile tech;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final TextTheme text = Theme.of(context).textTheme;
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations l = AppLocalizations.of(context);
+    final String specialty = categoryLabel(tech.category, l);
     return Semantics(
       button: true,
       label:
-          '${tech.name}, ${tech.specialty}, rated '
+          '${tech.name}, $specialty, rated '
           '${tech.rating.toStringAsFixed(1)}',
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -1500,7 +1501,7 @@ class _ProCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    tech.specialty,
+                    specialty,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: text.bodySmall?.copyWith(
@@ -1513,14 +1514,17 @@ class _ProCard extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       StatusPill(
-                        label: tech.badge.label(AppLocalizations.of(context)),
-                        tint: tech.badge.tint,
+                        label: tech.tier.label(l),
+                        tint: tech.tier.tint,
                       ),
                       const Spacer(),
                       Text(
-                        '${tech.hourlyRate} ${AppLocalizations.of(context).egpPerHour}',
+                        l.jobsCountLabel(tech.jobsDone),
                         style: text.labelMedium?.copyWith(
                           fontWeight: FontWeight.w700,
+                          color: isDark
+                              ? AppColors.textSecondary.withValues(alpha: 0.7)
+                              : AppColors.textSecondaryLight,
                           fontFeatures: const <FontFeature>[
                             FontFeature.tabularFigures(),
                           ],

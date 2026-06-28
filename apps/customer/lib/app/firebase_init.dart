@@ -1,5 +1,7 @@
 import 'package:customer/app/flavor.dart';
 import 'package:customer/firebase_options.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 
@@ -20,9 +22,60 @@ Future<bool> initFirebase(Flavor flavor) async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    await _activateAppCheck();
+    await _configureAuthForDebug();
     return true;
   } catch (e, st) {
     debugPrint('Firebase init failed: $e\n$st');
     return false;
+  }
+}
+
+/// Activates App Check so calls to App Check-enforced backends are accepted —
+/// notably the LiveKit `generateCallToken` Cloud Function, which sets
+/// `enforceAppCheck: true`. Without a provider the SDK sends a placeholder
+/// token and those calls are rejected.
+///
+/// Debug builds use the debug provider: on first run it prints
+/// `App Check debug token: <UUID>` to the device log — register that token in
+/// Firebase Console → App Check → Apps → (your app) → Manage debug tokens for
+/// enforced calls to succeed on an emulator/simulator. Release builds use
+/// Play Integrity (Android) / App Attest (iOS).
+///
+/// Web is skipped: App Check on web needs a registered reCAPTCHA site key,
+/// which isn't configured here, and activating without one breaks the web app.
+/// Failures are swallowed so they never block app startup.
+Future<void> _activateAppCheck() async {
+  if (kIsWeb) return;
+  try {
+    await FirebaseAppCheck.instance.activate(
+      androidProvider:
+          kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
+      appleProvider: kDebugMode ? AppleProvider.debug : AppleProvider.appAttest,
+    );
+  } catch (e) {
+    debugPrint('App Check activation failed: $e');
+  }
+}
+
+/// When true, debug builds disable phone-auth app verification so sign-in works
+/// with fictional test numbers (Firebase Console → Authentication → Sign-in
+/// method → Phone → "Phone numbers for testing") — those return a fixed code
+/// with no SMS and no integrity check. Set this to FALSE to test the real SMS
+/// pipeline: the SDK then runs Play Integrity (Android) attestation, which only
+/// passes on a Play-certified device/emulator image with the app's SHA-256
+/// registered and the Play Integrity API enabled on the project.
+const bool _disablePhoneVerificationForTesting = false;
+
+/// Debug-only: optionally disable phone-auth app verification (see the flag
+/// above). Release builds keep full Play Integrity / App Attest enforcement —
+/// this is a no-op there.
+Future<void> _configureAuthForDebug() async {
+  if (kIsWeb || !kDebugMode || !_disablePhoneVerificationForTesting) return;
+  try {
+    await FirebaseAuth.instance
+        .setSettings(appVerificationDisabledForTesting: true);
+  } catch (e) {
+    debugPrint('Auth debug settings failed: $e');
   }
 }

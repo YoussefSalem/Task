@@ -16,6 +16,7 @@ import 'package:customer/features/booking/quote_bids_screen.dart';
 import 'package:customer/features/bookings/booking_history_screen.dart';
 import 'package:customer/features/bookings/bookings_screen.dart';
 import 'package:customer/features/legal/privacy_screen.dart';
+import 'package:customer/features/legal/terms_screen.dart';
 import 'package:customer/features/support/help_support_screen.dart';
 import 'package:customer/features/home/home_screen.dart';
 import 'package:customer/features/home/home_shell.dart';
@@ -26,6 +27,7 @@ import 'package:customer/features/profile/profile_screen.dart';
 import 'package:customer/features/review/rating_screen.dart';
 import 'package:customer/features/splash/splash_screen.dart';
 import 'package:customer/features/messages/messages_screen.dart';
+import 'package:customer/features/wallet/wallet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -133,6 +135,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const BookingHistoryScreen(),
       ),
       GoRoute(
+        path: WalletScreen.routePath,
+        name: WalletScreen.routeName,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const WalletScreen(),
+      ),
+      GoRoute(
         path: HelpSupportScreen.routePath,
         parentNavigatorKey: _rootKey,
         builder: (context, state) => const HelpSupportScreen(),
@@ -141,6 +149,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: PrivacyScreen.routePath,
         parentNavigatorKey: _rootKey,
         builder: (context, state) => const PrivacyScreen(),
+      ),
+      GoRoute(
+        path: TermsScreen.routePath,
+        name: TermsScreen.routeName,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const TermsScreen(),
       ),
       GoRoute(
         path: AsapDispatchScreen.routePath,

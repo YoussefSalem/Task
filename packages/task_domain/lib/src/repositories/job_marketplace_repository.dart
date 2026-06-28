@@ -17,8 +17,8 @@ abstract interface class JobMarketplaceRepository {
   /// Customer counters a technician's offer with [amount] EGP.
   Future<void> counterOffer(String jobId, String offerId, int amount);
 
-  /// Customer cancels a posted job.
-  Future<void> cancelJob(String jobId);
+  /// Customer cancels a posted job, optionally recording why ([reason]).
+  Future<void> cancelJob(String jobId, {String? reason});
 
   /// Customer submits a review after job completion.
   Future<void> submitReview(String jobId, Review review);

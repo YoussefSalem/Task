@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 import 'geolocation.dart';
 
-const String _mapsKey = 'AIzaSyBkGqJxUaSwTtMdLG6HEArY2Ca_VO0yZKE';
+const String _mapsKey = 'AIzaSyBYeBkqiWJTiP-VPebzE3EWFt4MptMOqgA';
 
 @immutable
 class UserLocation {

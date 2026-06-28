@@ -98,6 +98,90 @@ abstract class AppLocalizations {
     Locale('en'),
   ];
 
+  /// No description provided for @cancelBookingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel booking'**
+  String get cancelBookingTitle;
+
+  /// No description provided for @cancelBookingPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Why are you cancelling?'**
+  String get cancelBookingPrompt;
+
+  /// No description provided for @cancelReasonFoundAnother.
+  ///
+  /// In en, this message translates to:
+  /// **'Found another technician'**
+  String get cancelReasonFoundAnother;
+
+  /// No description provided for @cancelReasonNoLongerNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'No longer needed'**
+  String get cancelReasonNoLongerNeeded;
+
+  /// No description provided for @cancelReasonPriceTooHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Price too high'**
+  String get cancelReasonPriceTooHigh;
+
+  /// No description provided for @cancelReasonTakingTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Taking too long'**
+  String get cancelReasonTakingTooLong;
+
+  /// No description provided for @cancelReasonPostedByMistake.
+  ///
+  /// In en, this message translates to:
+  /// **'Posted by mistake'**
+  String get cancelReasonPostedByMistake;
+
+  /// No description provided for @cancelReasonOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get cancelReasonOther;
+
+  /// No description provided for @cancelNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a note (optional)'**
+  String get cancelNoteHint;
+
+  /// No description provided for @cancelConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel booking'**
+  String get cancelConfirm;
+
+  /// No description provided for @keepBooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep booking'**
+  String get keepBooking;
+
+  /// No description provided for @bookingCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking cancelled'**
+  String get bookingCancelled;
+
+  /// No description provided for @selectACancelReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose a reason'**
+  String get selectACancelReason;
+
+  /// No description provided for @cancelledReasonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason: {reason}'**
+  String cancelledReasonLabel(String reason);
+
   /// No description provided for @editName.
   ///
   /// In en, this message translates to:
@@ -115,6 +199,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Birthday updated'**
   String get birthdayUpdated;
+
+  /// No description provided for @birthdayPermanentWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Your date of birth can\'t be changed after this — please make sure it\'s correct.'**
+  String get birthdayPermanentWarning;
+
+  /// No description provided for @birthdayCannotBeChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth can\'t be changed'**
+  String get birthdayCannotBeChanged;
+
+  /// No description provided for @confirmBirthdayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your date of birth'**
+  String get confirmBirthdayTitle;
+
+  /// No description provided for @confirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirmAction;
 
   /// No description provided for @addPhoneNumber.
   ///
@@ -1634,6 +1742,12 @@ abstract class AppLocalizations {
   /// **'{category} arriving in {minutes} min'**
   String arrrivingIn(Object category, Object minutes);
 
+  /// No description provided for @technicianOnTheWay.
+  ///
+  /// In en, this message translates to:
+  /// **'{category} pro is on the way'**
+  String technicianOnTheWay(String category);
+
   /// No description provided for @isWorking.
   ///
   /// In en, this message translates to:
@@ -1957,6 +2071,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'PLATINUM'**
   String get badgePlatinum;
+
+  /// No description provided for @tierBronze.
+  ///
+  /// In en, this message translates to:
+  /// **'BRONZE'**
+  String get tierBronze;
+
+  /// No description provided for @tierSilver.
+  ///
+  /// In en, this message translates to:
+  /// **'SILVER'**
+  String get tierSilver;
+
+  /// No description provided for @tierGold.
+  ///
+  /// In en, this message translates to:
+  /// **'GOLD'**
+  String get tierGold;
+
+  /// No description provided for @tierPlatinum.
+  ///
+  /// In en, this message translates to:
+  /// **'PLATINUM'**
+  String get tierPlatinum;
 
   /// No description provided for @techNameMohamed.
   ///
@@ -2804,6 +2942,24 @@ abstract class AppLocalizations {
   /// **'Wallet top-up'**
   String get walletTopUp;
 
+  /// No description provided for @walletEmptyLedger.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions yet'**
+  String get walletEmptyLedger;
+
+  /// No description provided for @walletEmptyLedgerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits and refunds will appear here.'**
+  String get walletEmptyLedgerHint;
+
+  /// No description provided for @walletLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your wallet'**
+  String get walletLoadError;
+
   /// No description provided for @referralCredit.
   ///
   /// In en, this message translates to:
@@ -2905,6 +3061,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ETA {minutes} min'**
   String etaMinutes(Object minutes);
+
+  /// No description provided for @awaitingLiveLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for live location…'**
+  String get awaitingLiveLocation;
+
+  /// No description provided for @noActiveJob.
+  ///
+  /// In en, this message translates to:
+  /// **'No active job right now'**
+  String get noActiveJob;
 
   /// No description provided for @homeService.
   ///
@@ -3587,8 +3755,14 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyBody.
   ///
   /// In en, this message translates to:
-  /// **'This is placeholder privacy policy text and will be replaced with the final version before launch.\n\nWe collect the information you give us — your name, phone number, email, saved addresses, and booking history — so we can connect you with technicians and provide the service. Your location is used only to find nearby technicians and show your service address.\n\nWe never sell your personal data. We share it with technicians only as needed to complete a booking, and with service providers (such as payment and messaging) that help us run the app.\n\nYour data is stored securely and tied to your account. You can edit your profile and remove saved addresses at any time. To delete your account or request a copy of your data, contact support.\n\nBy using Task you agree to this policy. We\'ll notify you here when it changes.'**
+  /// **'Your privacy matters to us. This policy explains what we collect and how we use it.\n\nWe collect the information you give us — your name, phone number, email, saved addresses, and booking history — so we can connect you with technicians and provide the service. Your location is used only to find nearby technicians and show your service address.\n\nWe never sell your personal data. We share it with technicians only as needed to complete a booking, and with service providers (such as payment and messaging) that help us run the app.\n\nYour data is stored securely and tied to your account. You can edit your profile and remove saved addresses at any time. To delete your account or request a copy of your data, contact support.\n\nBy using Task you agree to this policy. We\'ll notify you here when it changes.'**
   String get privacyPolicyBody;
+
+  /// No description provided for @termsOfServiceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Task. By creating an account or using the app you agree to these terms.\n\nTask is a marketplace that connects you with independent technicians for home services. We are not the provider of the work itself; technicians are independent contractors responsible for the services they perform.\n\nWhen you post a job you set a price and may receive offers. Agreeing to an offer forms a direct booking between you and the technician. You agree to provide accurate details, allow safe access to the work site, and pay the agreed amount on completion.\n\nYou agree to use Task lawfully and respectfully: no fraudulent bookings, no harassment of technicians, and no attempts to take payments outside the app. We may suspend accounts that break these rules.\n\nRatings and reviews must reflect genuine experiences. Cancellations should be made as early as possible; repeated late cancellations may affect your account.\n\nTask is provided \"as is.\" To the extent permitted by law, we are not liable for the acts of independent technicians. These terms may change, and we\'ll post updates here.\n\nQuestions? Reach us any time through Help & Support.'**
+  String get termsOfServiceBody;
 }
 
 class _AppLocalizationsDelegate

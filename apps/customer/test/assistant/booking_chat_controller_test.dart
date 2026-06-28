@@ -43,7 +43,7 @@ class _FailingRepository implements JobMarketplaceRepository {
   Future<void> counterOffer(String jobId, String offerId, int amount) async {}
 
   @override
-  Future<void> cancelJob(String jobId) async {}
+  Future<void> cancelJob(String jobId, {String? reason}) async {}
 
   @override
   Future<void> submitReview(String jobId, Review review) async {}

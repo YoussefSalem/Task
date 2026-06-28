@@ -9,6 +9,50 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
+  String get cancelBookingTitle => 'إلغاء الطلب';
+
+  @override
+  String get cancelBookingPrompt => 'ليه بتلغي الطلب؟';
+
+  @override
+  String get cancelReasonFoundAnother => 'لقيت فني تاني';
+
+  @override
+  String get cancelReasonNoLongerNeeded => 'مش محتاجه دلوقتي';
+
+  @override
+  String get cancelReasonPriceTooHigh => 'السعر عالي';
+
+  @override
+  String get cancelReasonTakingTooLong => 'بياخد وقت كتير';
+
+  @override
+  String get cancelReasonPostedByMistake => 'اتنشر بالغلط';
+
+  @override
+  String get cancelReasonOther => 'سبب تاني';
+
+  @override
+  String get cancelNoteHint => 'اكتب ملاحظة (اختياري)';
+
+  @override
+  String get cancelConfirm => 'إلغاء الطلب';
+
+  @override
+  String get keepBooking => 'احتفظ بالطلب';
+
+  @override
+  String get bookingCancelled => 'اتلغى الطلب';
+
+  @override
+  String get selectACancelReason => 'اختار سبب من فضلك';
+
+  @override
+  String cancelledReasonLabel(String reason) {
+    return 'السبب: $reason';
+  }
+
+  @override
   String get editName => 'تعديل الاسم';
 
   @override
@@ -16,6 +60,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get birthdayUpdated => 'اتحدّث تاريخ الميلاد';
+
+  @override
+  String get birthdayPermanentWarning =>
+      'لا يمكن تغيير تاريخ ميلادك بعد ذلك — يرجى التأكد من صحته.';
+
+  @override
+  String get birthdayCannotBeChanged => 'لا يمكن تغيير تاريخ الميلاد';
+
+  @override
+  String get confirmBirthdayTitle => 'تأكيد تاريخ ميلادك';
+
+  @override
+  String get confirmAction => 'تأكيد';
 
   @override
   String get addPhoneNumber => 'أضف رقم تليفون';
@@ -798,6 +855,11 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String technicianOnTheWay(String category) {
+    return '$category في الطريق إليك';
+  }
+
+  @override
   String isWorking(Object category) {
     return '$category بشتغل دلوقتي';
   }
@@ -961,6 +1023,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get badgePlatinum => 'بلاتيني';
+
+  @override
+  String get tierBronze => 'برونزي';
+
+  @override
+  String get tierSilver => 'فضي';
+
+  @override
+  String get tierGold => 'ذهبي';
+
+  @override
+  String get tierPlatinum => 'بلاتيني';
 
   @override
   String get techNameMohamed => 'محمد علي';
@@ -1410,6 +1484,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get walletTopUp => 'شحن المحفظة';
 
   @override
+  String get walletEmptyLedger => 'لا توجد عمليات بعد';
+
+  @override
+  String get walletEmptyLedgerHint => 'هتظهر هنا الأرصدة والمبالغ المستردة.';
+
+  @override
+  String get walletLoadError => 'تعذّر تحميل المحفظة';
+
+  @override
   String get referralCredit => 'رصيد إحالة';
 
   @override
@@ -1469,6 +1552,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String etaMinutes(Object minutes) {
     return 'بيوصل خلال $minutes دقيقة';
   }
+
+  @override
+  String get awaitingLiveLocation => 'في انتظار الموقع المباشر…';
+
+  @override
+  String get noActiveJob => 'لا يوجد طلب نشط حاليًا';
 
   @override
   String get homeService => 'خدمة منزلية';
@@ -1845,5 +1934,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get privacyPolicyBody =>
-      'هذا نص مؤقت لسياسة الخصوصية وسيتم استبداله بالنسخة النهائية قبل الإطلاق.\n\nنجمع المعلومات التي تزوّدنا بها — اسمك ورقم هاتفك وبريدك الإلكتروني وعناوينك المحفوظة وسجل حجوزاتك — لنوصلك بالفنّيين ونقدّم لك الخدمة. يُستخدم موقعك فقط للعثور على فنّيين قريبين وإظهار عنوان الخدمة.\n\nنحن لا نبيع بياناتك الشخصية أبدًا. نشاركها مع الفنّيين فقط بالقدر اللازم لإتمام الحجز، ومع مزوّدي الخدمات (مثل الدفع والمراسلة) الذين يساعدوننا في تشغيل التطبيق.\n\nتُخزَّن بياناتك بأمان ومرتبطة بحسابك. يمكنك تعديل ملفك الشخصي وحذف العناوين المحفوظة في أي وقت. لحذف حسابك أو طلب نسخة من بياناتك، تواصل مع الدعم.\n\nباستخدامك تطبيق Task فإنك توافق على هذه السياسة. وسنُعلمك هنا عند تغييرها.';
+      'خصوصيتك تهمّنا. توضّح هذه السياسة ما الذي نجمعه وكيف نستخدمه.\n\nنجمع المعلومات التي تزوّدنا بها — اسمك ورقم هاتفك وبريدك الإلكتروني وعناوينك المحفوظة وسجل حجوزاتك — لنوصلك بالفنّيين ونقدّم لك الخدمة. يُستخدم موقعك فقط للعثور على فنّيين قريبين وإظهار عنوان الخدمة.\n\nنحن لا نبيع بياناتك الشخصية أبدًا. نشاركها مع الفنّيين فقط بالقدر اللازم لإتمام الحجز، ومع مزوّدي الخدمات (مثل الدفع والمراسلة) الذين يساعدوننا في تشغيل التطبيق.\n\nتُخزَّن بياناتك بأمان ومرتبطة بحسابك. يمكنك تعديل ملفك الشخصي وحذف العناوين المحفوظة في أي وقت. لحذف حسابك أو طلب نسخة من بياناتك، تواصل مع الدعم.\n\nباستخدامك تطبيق Task فإنك توافق على هذه السياسة. وسنُعلمك هنا عند تغييرها.';
+
+  @override
+  String get termsOfServiceBody =>
+      'أهلاً بك في Task. بإنشائك حسابًا أو استخدامك التطبيق فإنك توافق على هذه الشروط.\n\nTask هو سوق يوصلك بفنّيين مستقلين لخدمات المنزل. نحن لسنا مقدّم الخدمة نفسها؛ فالفنّيون متعاقدون مستقلّون ومسؤولون عن الأعمال التي ينفّذونها.\n\nعند نشرك لطلب تحدّد سعرًا وقد تتلقّى عروضًا. وموافقتك على عرض تُنشئ حجزًا مباشرًا بينك وبين الفنّي. أنت توافق على تقديم تفاصيل دقيقة، وإتاحة وصول آمن لمكان العمل، ودفع المبلغ المتفق عليه عند الإتمام.\n\nأنت توافق على استخدام Task بشكل قانوني ومحترم: لا حجوزات وهمية، ولا مضايقة للفنّيين، ولا محاولات للدفع خارج التطبيق. وقد نوقف الحسابات التي تخالف هذه القواعد.\n\nيجب أن تعكس التقييمات والمراجعات تجارب حقيقية. ويُفضَّل الإلغاء في أبكر وقت ممكن؛ وقد يؤثّر الإلغاء المتأخر المتكرر على حسابك.\n\nيُقدَّم Task «كما هو». وبالقدر الذي يسمح به القانون، لسنا مسؤولين عن تصرّفات الفنّيين المستقلّين. وقد تتغيّر هذه الشروط وسننشر التحديثات هنا.\n\nأي أسئلة؟ تواصل معنا في أي وقت عبر المساعدة والدعم.';
 }

@@ -252,7 +252,10 @@ class _EditNameSheetState extends State<_EditNameSheet> {
 // Birthday
 // ─────────────────────────────────────────────────────────────────────────
 
-/// Shows the platform date picker and persists the choice. No-op on cancel.
+/// Shows the platform date picker and persists the choice — a one-time action.
+/// Birthday can only be set while unset (see ProfileScreen, which passes a null
+/// [current] and locks the row once a value exists); a confirmation guards the
+/// write because it can never be changed afterwards. No-op on cancel.
 Future<void> pickAndSaveBirthday(
     BuildContext context, WidgetRef ref, DateTime? current) async {
   final AppLocalizations l = AppLocalizations.of(context);
@@ -274,6 +277,28 @@ Future<void> pickAndSaveBirthday(
     ),
   );
   if (picked == null) return;
+  // Permanent, one-time: confirm before persisting since it can't be changed.
+  if (!context.mounted) return;
+  final bool confirmed = await showDialog<bool>(
+        context: context,
+        useRootNavigator: true,
+        builder: (BuildContext ctx) => AlertDialog(
+          title: Text(l.confirmBirthdayTitle),
+          content: Text(l.birthdayPermanentWarning),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(l.cancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(l.confirmAction),
+            ),
+          ],
+        ),
+      ) ??
+      false;
+  if (!confirmed) return;
   try {
     await ref.read(userProfileRepositoryProvider)?.updateBirthday(picked);
     messenger

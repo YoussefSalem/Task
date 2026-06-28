@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:customer/features/auth/auth_controller.dart';
 import 'package:customer/features/auth/otp_verify_screen.dart';
+import 'package:customer/features/legal/privacy_screen.dart';
+import 'package:customer/features/legal/terms_screen.dart';
 import 'package:customer/features/profile/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:customer/features/localization/language_switcher.dart';
@@ -433,14 +435,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         GestureDetector(
-            onTap: () => _toast(AppLocalizations.of(context).privacyOpensLater),
+            onTap: () => context.push(PrivacyScreen.routePath),
             child: Text(AppLocalizations.of(context).privacyPolicy, style: style)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Icon(Icons.circle, size: 4, color: muted),
         ),
         GestureDetector(
-            onTap: () => _toast(AppLocalizations.of(context).termsOpensLater),
+            onTap: () => context.push(TermsScreen.routePath),
             child: Text(AppLocalizations.of(context).termsOfService, style: style)),
       ],
     );

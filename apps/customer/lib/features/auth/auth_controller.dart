@@ -102,7 +102,14 @@ class AuthController {
         },
         codeAutoRetrievalTimeout: (String id) => _verificationId = id,
       );
-      return done.future;
+      // Guard against app-verification stalling with no callback firing (e.g.
+      // Play Integrity/reCAPTCHA failing silently on an emulator): surface an
+      // error instead of spinning forever.
+      return done.future.timeout(
+        const Duration(seconds: 60),
+        onTimeout: () =>
+            AuthOutcome(AuthStep.failed, message: l.genericAuthError),
+      );
     } on FirebaseAuthException catch (e) {
       // Real Firebase is up: surface the actual error instead of silently
       // falling back to the mock (which masks reCAPTCHA/config failures and
@@ -196,7 +203,14 @@ class AuthController {
         },
         codeAutoRetrievalTimeout: (String id) => _phoneVerificationId = id,
       );
-      return done.future;
+      // Guard against app-verification stalling with no callback firing (e.g.
+      // Play Integrity/reCAPTCHA failing silently on an emulator): surface an
+      // error instead of spinning forever.
+      return done.future.timeout(
+        const Duration(seconds: 60),
+        onTimeout: () =>
+            AuthOutcome(AuthStep.failed, message: l.genericAuthError),
+      );
     } on FirebaseAuthException catch (e) {
       return AuthOutcome(AuthStep.failed, message: '[${e.code}] ${_friendly(e)}');
     } catch (e) {

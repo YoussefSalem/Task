@@ -94,9 +94,12 @@ class FirestoreJobMarketplaceRepository implements JobMarketplaceRepository {
   }
 
   @override
-  Future<void> cancelJob(String jobId) async {
+  Future<void> cancelJob(String jobId, {String? reason}) async {
+    final String? trimmed = reason?.trim();
     await _jobs.doc(jobId).update(<String, dynamic>{
       'status': JobStatus.cancelled.name,
+      'cancelled_at': FieldValue.serverTimestamp(),
+      if (trimmed != null && trimmed.isNotEmpty) 'cancellation_reason': trimmed,
     });
   }
 
@@ -171,6 +174,7 @@ class FirestoreJobMarketplaceRepository implements JobMarketplaceRepository {
               .toList() ??
           const <Offer>[],
       createdAt: (d['created_at'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      cancellationReason: d['cancellation_reason'] as String?,
     );
   }
 
@@ -225,7 +229,7 @@ class EmptyJobMarketplaceRepository implements JobMarketplaceRepository {
   Future<void> counterOffer(String jobId, String offerId, int amount) async {}
 
   @override
-  Future<void> cancelJob(String jobId) async {}
+  Future<void> cancelJob(String jobId, {String? reason}) async {}
 
   @override
   Future<void> submitReview(String jobId, Review review) async {}

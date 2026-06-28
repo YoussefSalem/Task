@@ -8,38 +8,38 @@ import 'package:task_domain/task_domain.dart';
 
 import '../booking/booking_state.dart';
 import '../marketplace/marketplace_providers.dart';
+import '../services/category_l10n.dart';
+import 'tracking_providers.dart';
 
-/// Live job tracking. A stylized map shows the pro approaching; the stage
-/// timeline advances en route → in progress → complete. On completion the
-/// customer pays and rates. Progression is timed for the prototype.
-class JobTrackingScreen extends ConsumerStatefulWidget {
+/// Google Static Maps key (Maps Static API must be enabled on it). Shared with
+/// the matching + location screens; duplicated as a const to keep features
+/// self-contained.
+const String _mapsKey = 'AIzaSyBYeBkqiWJTiP-VPebzE3EWFt4MptMOqgA';
+
+/// Live job tracking. A real map shows the technician's last reported position;
+/// the stage timeline advances en route → in progress → complete. On completion
+/// the customer pays and rates. All data is read from Firestore — no mock seed.
+class JobTrackingScreen extends ConsumerWidget {
   const JobTrackingScreen({super.key});
 
   static const String routePath = '/job/live';
 
-  @override
-  ConsumerState<JobTrackingScreen> createState() => _JobTrackingScreenState();
-}
-
-class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _move = AnimationController(
-    vsync: this,
-    duration: const Duration(seconds: 6),
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    final bool reduce = WidgetsBinding
-        .instance.platformDispatcher.accessibilityFeatures.disableAnimations;
-    if (!reduce) _move.forward();
-  }
-
-  @override
-  void dispose() {
-    _move.dispose();
-    super.dispose();
+  /// The job the tracking screen follows: the hired job in progress, else the
+  /// most recently completed one (so the pay/rate step is still reachable).
+  JobRequest? _trackedJob(List<JobRequest> jobs) {
+    const Set<JobStatus> live = <JobStatus>{
+      JobStatus.accepted,
+      JobStatus.enRoute,
+      JobStatus.inProgress,
+      JobStatus.pausedForApproval,
+    };
+    for (final JobRequest j in jobs) {
+      if (live.contains(j.status)) return j;
+    }
+    for (final JobRequest j in jobs) {
+      if (j.status == JobStatus.completed) return j;
+    }
+    return null;
   }
 
   int _stageIndexFromStatus(JobStatus? status) => switch (status) {
@@ -57,32 +57,50 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
       };
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AppLocalizations l = AppLocalizations.of(context);
     final List<JobRequest> jobs =
         ref.watch(myJobsProvider).valueOrNull ?? const <JobRequest>[];
-    final JobRequest? job = jobs.where((j) =>
-        j.status == JobStatus.accepted ||
-        j.status == JobStatus.enRoute ||
-        j.status == JobStatus.inProgress ||
-        j.status == JobStatus.completed).isEmpty
-        ? (jobs.isNotEmpty ? jobs.first : null)
-        : jobs.where((j) =>
-            j.status == JobStatus.accepted ||
-            j.status == JobStatus.enRoute ||
-            j.status == JobStatus.inProgress ||
-            j.status == JobStatus.completed).first;
-    final int stageIndex = _stageIndexFromStatus(job?.status);
-    final JobStage stage = _stageFromStatus(job?.status);
+    final JobRequest? job = _trackedJob(jobs);
     final TextTheme text = Theme.of(context).textTheme;
+
+    if (job == null) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: () => context.go('/home'),
+          ),
+        ),
+        body: Center(
+          child: Text(l.noActiveJob,
+              style: text.titleMedium
+                  ?.copyWith(color: AppColors.textSecondary)),
+        ),
+      );
+    }
+
+    final TrackingPoint? point =
+        ref.watch(jobTrackingProvider(job.id)).valueOrNull;
+    final int stageIndex = _stageIndexFromStatus(job.status);
+    final JobStage stage = _stageFromStatus(job.status);
     final bool done = stage == JobStage.completed;
 
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Positioned.fill(
-            child: _Map(progress: _move, arrived: stageIndex > 0),
-          ),
+          Positioned.fill(child: _LiveMap(point: point)),
+          if (point == null && !done)
+            SafeArea(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.sm),
+                  child: _MapChip(label: l.awaitingLiveLocation),
+                ),
+              ),
+            ),
           SafeArea(
             child: Align(
               alignment: AlignmentDirectional.topStart,
@@ -100,16 +118,22 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: _sheet(job, text, done, stage, stageIndex),
+            child: _sheet(context, l, job, text, done, stage, stageIndex, point),
           ),
         ],
       ),
     );
   }
 
-  Widget _sheet(JobRequest? job, TextTheme text, bool done, JobStage stage, int stageIndex) {
+  Widget _sheet(BuildContext context, AppLocalizations l, JobRequest job,
+      TextTheme text, bool done, JobStage stage, int stageIndex,
+      TrackingPoint? point) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    final AppLocalizations l = AppLocalizations.of(context);
+    final String etaLabel = done
+        ? l.done
+        : (point?.etaMinutes != null
+            ? l.etaMinutes(point!.etaMinutes!)
+            : jobStatusLabel(job.status, l));
     return Container(
       width: double.infinity,
       padding: EdgeInsets.fromLTRB(AppSpacing.xl, AppSpacing.lg, AppSpacing.xl,
@@ -146,16 +170,16 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
                         ?.copyWith(fontWeight: FontWeight.w700)),
               ),
               StatusPill(
-                label: done ? l.done : l.etaMinutes(8),
+                label: etaLabel,
                 tint: done ? AppColors.success : AppColors.primary,
                 icon: done ? Icons.check_circle : Icons.schedule_rounded,
               ),
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
-          _proRow(job, text),
+          _proRow(context, l, job, text),
           const SizedBox(height: AppSpacing.lg),
-          _timeline(text, stageIndex),
+          _timeline(context, l, text, stageIndex),
           const SizedBox(height: AppSpacing.lg),
           if (done)
             GlowButton(
@@ -167,11 +191,12 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
             Row(
               children: <Widget>[
                 Expanded(
-                  child: _ghostAction(Icons.chat_bubble_outline_rounded, l.chat),
+                  child: _ghostAction(
+                      context, l, Icons.chat_bubble_outline_rounded, l.chat),
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
-                  child: _ghostAction(Icons.call_rounded, l.call),
+                  child: _ghostAction(context, l, Icons.call_rounded, l.call),
                 ),
               ],
             ),
@@ -180,16 +205,26 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
     );
   }
 
-  Widget _proRow(JobRequest? job, TextTheme text) {
-    final AppLocalizations l = AppLocalizations.of(context);
-    final String pro = job?.acceptedOffer?.technicianName ?? l.techNameKhaled;
+  Widget _proRow(BuildContext context, AppLocalizations l, JobRequest job,
+      TextTheme text) {
+    final Offer? offer = job.acceptedOffer;
+    final String pro = (offer?.technicianName.isNotEmpty ?? false)
+        ? offer!.technicianName
+        : categoryLabel(job.category, l);
+    final String initials = pro
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((String s) => s.isNotEmpty)
+        .map((String s) => s[0])
+        .take(2)
+        .join();
     return Row(
       children: <Widget>[
         CircleAvatar(
           radius: 26,
           backgroundColor: AppColors.primary,
           child: Text(
-            pro.split(' ').map((String s) => s[0]).take(2).join(),
+            initials,
             style: const TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w700),
           ),
@@ -202,7 +237,7 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
               Text(pro,
                   style:
                       text.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-              Text(job?.title ?? l.homeService,
+              Text(job.title,
                   style: text.bodySmall?.copyWith(
                     color: Theme.of(context).brightness == Brightness.dark
                         ? AppColors.textSecondary.withValues(alpha: 0.65)
@@ -211,19 +246,20 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
             ],
           ),
         ),
-        const Row(
-          children: <Widget>[
-            Icon(Icons.star_rounded, size: 16, color: AppColors.warning),
-            SizedBox(width: 3),
-            Text('4.9'),
-          ],
-        ),
+        if (offer != null && offer.rating > 0)
+          Row(
+            children: <Widget>[
+              const Icon(Icons.star_rounded, size: 16, color: AppColors.warning),
+              const SizedBox(width: 3),
+              Text(offer.rating.toStringAsFixed(1)),
+            ],
+          ),
       ],
     );
   }
 
-  Widget _timeline(TextTheme text, int stageIndex) {
-    final AppLocalizations l = AppLocalizations.of(context);
+  Widget _timeline(BuildContext context, AppLocalizations l, TextTheme text,
+      int stageIndex) {
     final List<(JobStage, String)> steps = <(JobStage, String)>[
       (JobStage.enRoute, l.headingToAddress),
       (JobStage.inProgress, l.workingOnJob),
@@ -233,6 +269,7 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
       children: <Widget>[
         for (int i = 0; i < steps.length; i++)
           _timelineRow(
+            context,
             steps[i].$2,
             done: i < stageIndex,
             active: i == stageIndex,
@@ -243,7 +280,7 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
     );
   }
 
-  Widget _timelineRow(String label,
+  Widget _timelineRow(BuildContext context, String label,
       {required bool done,
       required bool active,
       required bool last,
@@ -296,12 +333,13 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
     );
   }
 
-  Widget _ghostAction(IconData icon, String label) {
+  Widget _ghostAction(
+      BuildContext context, AppLocalizations l, IconData icon, String label) {
     return OutlinedButton.icon(
       onPressed: () {
         ScaffoldMessenger.of(context)
           ..clearSnackBars()
-          ..showSnackBar(SnackBar(content: Text(AppLocalizations.of(context).featureOpensComms(label))));
+          ..showSnackBar(SnackBar(content: Text(l.featureOpensComms(label))));
       },
       icon: Icon(icon, size: 18),
       label: Text(label),
@@ -321,98 +359,79 @@ class _JobTrackingScreenState extends ConsumerState<JobTrackingScreen>
   }
 }
 
-/// Stylized dark map: grid streets, a route line, and the pro marker gliding
-/// toward the destination pin.
-class _Map extends StatelessWidget {
-  const _Map({required this.progress, required this.arrived});
-  final Animation<double> progress;
-  final bool arrived;
+/// Small frosted chip overlaid on the map for status text.
+class _MapChip extends StatelessWidget {
+  const _MapChip({required this.label});
+  final String label;
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: <Color>[Color(0xFF161E2E), Color(0xFF0E1320)],
-        ),
+    return Container(
+      padding:
+          const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.background.withValues(alpha: 0.75),
+        borderRadius: BorderRadius.circular(999),
       ),
-      child: AnimatedBuilder(
-        animation: progress,
-        builder: (BuildContext context, _) {
-          return CustomPaint(
-            size: Size.infinite,
-            painter: _MapPainter(arrived ? 1.0 : progress.value),
-          );
-        },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const SizedBox(
+            height: 12,
+            width: 12,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Text(label,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium
+                  ?.copyWith(color: Colors.white)),
+        ],
       ),
     );
   }
 }
 
-class _MapPainter extends CustomPainter {
-  _MapPainter(this.t);
-  final double t;
+/// The map layer. When the technician has reported a position, a Google Static
+/// Maps image centred on it (with a marker) renders over a plain backdrop. With
+/// no position yet, only the backdrop shows — no invented route or marker.
+class _LiveMap extends StatelessWidget {
+  const _LiveMap({required this.point});
+  final TrackingPoint? point;
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final Paint grid = Paint()
-      ..color = const Color(0x10FFFFFF)
-      ..strokeWidth = 1;
-    const double step = 44;
-    for (double x = 0; x < size.width; x += step) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), grid);
-    }
-    for (double y = 0; y < size.height; y += step) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), grid);
-    }
-
-    final Offset start = Offset(size.width * 0.2, size.height * 0.28);
-    final Offset end = Offset(size.width * 0.78, size.height * 0.5);
-    final Path route = Path()
-      ..moveTo(start.dx, start.dy)
-      ..lineTo(start.dx, end.dy)
-      ..lineTo(end.dx, end.dy);
-    canvas.drawPath(
-      route,
-      Paint()
-        ..color = const Color(0xFF7C3AED).withValues(alpha: 0.5)
-        ..strokeWidth = 4
-        ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round,
+  Widget build(BuildContext context) {
+    final TrackingPoint? p = point;
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        const DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[Color(0xFF161E2E), Color(0xFF0E1320)],
+            ),
+          ),
+        ),
+        if (p != null)
+          Image.network(
+            'https://maps.googleapis.com/maps/api/staticmap'
+            '?center=${p.lat},${p.lng}'
+            '&zoom=15'
+            '&size=640x640'
+            '&scale=2'
+            '&maptype=roadmap'
+            '&markers=color:0x7C3AED%7C${p.lat},${p.lng}'
+            '&key=$_mapsKey',
+            fit: BoxFit.cover,
+            gaplessPlayback: true,
+            errorBuilder: (_, _, _) => const SizedBox.shrink(),
+            frameBuilder: (context, child, frame, wasSync) =>
+                (wasSync || frame != null) ? child : const SizedBox.shrink(),
+          ),
+      ],
     );
-
-    // Destination pin.
-    canvas.drawCircle(end, 9,
-        Paint()..color = const Color(0xFF34D399));
-    canvas.drawCircle(end, 9,
-        Paint()
-          ..color = Colors.white
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2);
-
-    // Moving pro marker along the L-shaped route.
-    final double vLen = (end.dy - start.dy).abs();
-    final double hLen = (end.dx - start.dx).abs();
-    final double total = vLen + hLen;
-    final double travelled = t * total;
-    Offset pos;
-    if (travelled <= vLen) {
-      pos = Offset(start.dx, start.dy + travelled);
-    } else {
-      pos = Offset(start.dx + (travelled - vLen), end.dy);
-    }
-    canvas.drawCircle(pos, 16,
-        Paint()..color = const Color(0xFF7C3AED).withValues(alpha: 0.35));
-    canvas.drawCircle(pos, 9, Paint()..color = const Color(0xFF7C3AED));
-    canvas.drawCircle(pos, 9,
-        Paint()
-          ..color = Colors.white
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2);
   }
-
-  @override
-  bool shouldRepaint(covariant _MapPainter old) => old.t != t;
 }

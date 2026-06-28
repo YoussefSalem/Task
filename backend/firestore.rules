@@ -25,9 +25,21 @@ service cloud.firestore {
 
     // --- users (customers + technicians + admins) ---
     match /users/{userId} {
-      allow read: if isSelf(userId) || isAdmin();
+      // Owners and admins read any field; in addition, any signed-in user may
+      // read technician profiles so the customer app can show the public
+      // "top rated" directory (name, rating, photo, specialty). The directory
+      // query is constrained to role == 'technician', which satisfies this rule.
+      allow read: if isSelf(userId)
+        || isAdmin()
+        || (isSignedIn() && resource.data.role == 'technician');
       allow create: if isSelf(userId);
-      allow update: if isSelf(userId) || isAdmin();
+      // Birthday is a one-time input: an owner may set it while unset but can
+      // never change it once stored (the profile UI locks it too). Admins are
+      // unrestricted. Other profile fields stay freely editable by the owner.
+      allow update: if isAdmin()
+        || (isSelf(userId)
+            && (!('birthday' in resource.data)
+                || request.resource.data.birthday == resource.data.birthday));
       allow delete: if isAdmin();
 
       // In-app notification feed. There is no Cloud Function fan-out yet, so any
@@ -38,6 +50,25 @@ service cloud.firestore {
         allow read: if isSelf(userId);
         allow create: if isSignedIn();
         allow update, delete: if isSelf(userId);
+      }
+
+      // Push (FCM) device tokens, keyed by the token string. Only the owner
+      // registers/removes their own devices; the backend reads them with admin
+      // privileges to fan a notification out as a push.
+      match /fcm_tokens/{token} {
+        allow read, write: if isSelf(userId);
+      }
+
+      // Wallet balance + ledger. Read-only from the client — balances and
+      // transactions are written by the backend (referrals, refunds, admin
+      // credits) once the payments phase lands. Client writes are denied.
+      match /wallet/{docId} {
+        allow read: if isSelf(userId) || isAdmin();
+        allow write: if false;
+      }
+      match /wallet_transactions/{txnId} {
+        allow read: if isSelf(userId) || isAdmin();
+        allow write: if false;
       }
     }
 
@@ -123,6 +154,29 @@ service cloud.firestore {
         allow read: if isSignedIn();
         allow update, delete: if isAdmin();
       }
+    }
+
+    // --- threads inbox (collection-group query) ---
+    // The messages tab lists a user's conversations with a
+    // collectionGroup('threads') query filtered by customer_id (technicians
+    // filter by technician_id). A rule scoped to a specific parent
+    // (/jobs/{jobId}/threads/...) does NOT authorize collection-group queries
+    // that span every job — Firestore requires a recursive-wildcard match for
+    // that. The query's equality filter mirrors the participant check below, so
+    // the query is provably safe. Direct/nested thread access and the messages
+    // subcollection remain governed by the /jobs/{jobId}/threads rule above.
+    match /{path=**}/threads/{technicianId} {
+      allow read: if isSignedIn() && (
+        resource.data.customer_id == request.auth.uid
+        || resource.data.technician_id == request.auth.uid
+        || isAdmin()
+      );
+    }
+
+    // --- home promotions (admin-managed marketing content) ---
+    match /promotions/{promotionId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
     }
   }
 }

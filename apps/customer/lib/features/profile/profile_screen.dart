@@ -2,7 +2,9 @@ import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:task_design/task_design.dart';
+import 'package:task_domain/task_domain.dart';
 
 import '../auth/auth_controller.dart';
 import '../address/address_repository.dart';
@@ -13,6 +15,8 @@ import '../legal/privacy_screen.dart';
 import '../support/help_support_screen.dart';
 import '../localization/language_switcher.dart';
 import '../settings/theme_controller.dart';
+import '../wallet/wallet_providers.dart';
+import '../wallet/wallet_screen.dart';
 import 'profile_edit.dart';
 import 'user_profile.dart';
 
@@ -191,7 +195,7 @@ class ProfileScreen extends ConsumerWidget {
     // affordance — a pencil to change an existing value, or a plus to add a
     // missing one. Read-only rows (email) render without either.
     Widget row(IconData icon, String label, String value,
-        {VoidCallback? onTap, bool unset = false}) {
+        {VoidCallback? onTap, bool unset = false, bool locked = false}) {
       final Widget content = Padding(
         padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.lg, vertical: AppSpacing.md),
@@ -217,6 +221,10 @@ class ProfileScreen extends ConsumerWidget {
                 size: 18,
                 color: AppColors.primary,
               ),
+            ] else if (locked) ...<Widget>[
+              // Set-once value (birthday): signal it's intentionally locked.
+              const SizedBox(width: AppSpacing.sm),
+              Icon(Icons.lock_outline_rounded, size: 16, color: labelColor),
             ],
           ],
         ),
@@ -261,13 +269,17 @@ class ProfileScreen extends ConsumerWidget {
                 onTap: () => showPhoneSheet(context, ref, hasPhone: hasPhone),
               ),
               Divider(height: 1, color: dividerColor),
+              // Birthday is a one-time input: editable only while unset, then
+              // locked (read-only) so it can never be changed afterwards.
               row(
                 Icons.cake_rounded,
                 l.birthday,
                 birthday,
                 unset: !hasBirthday,
-                onTap: () =>
-                    pickAndSaveBirthday(context, ref, profile.birthday),
+                locked: hasBirthday,
+                onTap: hasBirthday
+                    ? null
+                    : () => pickAndSaveBirthday(context, ref, null),
               ),
             ],
           ),
@@ -285,37 +297,50 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   Widget _walletCard(BuildContext context, TextTheme text, WidgetRef ref) {
-    final int balance = ref.watch(walletCreditProvider);
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      decoration: BoxDecoration(
+    final AppLocalizations l = AppLocalizations.of(context);
+    final WalletSummary summary =
+        ref.watch(walletSummaryProvider).valueOrNull ?? WalletSummary.empty;
+    final String balance = intl.NumberFormat.decimalPattern(
+            Localizations.localeOf(context).toString())
+        .format(summary.balanceMajor);
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+      child: InkWell(
         borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[Color(0xFF5B21B6), Color(0xFF7C3AED)],
-        ),
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(AppLocalizations.of(context).taskCredit,
-                    style: text.bodyMedium?.copyWith(
-                      color: Colors.white.withValues(alpha: 0.85),
-                    )),
-                const SizedBox(height: 4),
-                Text('$balance ${AppLocalizations.of(context).egp}',
-                    style: text.headlineSmall?.copyWith(
-                        color: Colors.white, fontWeight: FontWeight.w700)),
-              ],
+        onTap: () => context.push(WalletScreen.routePath),
+        child: Container(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[Color(0xFF5B21B6), Color(0xFF7C3AED)],
             ),
           ),
-          const Icon(Icons.account_balance_wallet_rounded,
-              color: Colors.white, size: 36),
-        ],
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(l.taskCredit,
+                        style: text.bodyMedium?.copyWith(
+                          color: Colors.white.withValues(alpha: 0.85),
+                        )),
+                    const SizedBox(height: 4),
+                    Text('$balance ${l.egp}',
+                        style: text.headlineSmall?.copyWith(
+                            color: Colors.white, fontWeight: FontWeight.w700)),
+                  ],
+                ),
+              ),
+              const Icon(Icons.account_balance_wallet_rounded,
+                  color: Colors.white, size: 36),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -19,6 +19,24 @@ final myJobsProvider = StreamProvider<List<JobRequest>>(
   (ref) => ref.watch(jobMarketplaceRepositoryProvider).watchMyJobs(),
 );
 
+/// The customer's currently-hired job — a technician is assigned and the work is
+/// underway — or null when none. Drives the home active-job card and the live
+/// tracking screen so both agree on which job is "active". Newest first.
+final activeJobRequestProvider = Provider<JobRequest?>((ref) {
+  final List<JobRequest> jobs =
+      ref.watch(myJobsProvider).valueOrNull ?? const <JobRequest>[];
+  const Set<JobStatus> active = <JobStatus>{
+    JobStatus.accepted,
+    JobStatus.enRoute,
+    JobStatus.inProgress,
+    JobStatus.pausedForApproval,
+  };
+  for (final JobRequest j in jobs) {
+    if (active.contains(j.status)) return j;
+  }
+  return null;
+});
+
 /// Snapshot of an in-progress search, surfaced on the Home screen so the user
 /// can jump back into it. `offersReady` flips true once the radar finds offers.
 class ActiveSearch {

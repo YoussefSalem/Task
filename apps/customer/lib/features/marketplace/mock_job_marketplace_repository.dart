@@ -87,8 +87,15 @@ class MockJobMarketplaceRepository implements JobMarketplaceRepository {
   }
 
   @override
-  Future<void> cancelJob(String jobId) async {
-    _mutateJob(jobId, (JobRequest job) => job.copyWith(status: JobStatus.cancelled));
+  Future<void> cancelJob(String jobId, {String? reason}) async {
+    final String? trimmed = reason?.trim();
+    _mutateJob(
+        jobId,
+        (JobRequest job) => job.copyWith(
+              status: JobStatus.cancelled,
+              cancellationReason:
+                  (trimmed != null && trimmed.isNotEmpty) ? trimmed : null,
+            ));
   }
 
   @override

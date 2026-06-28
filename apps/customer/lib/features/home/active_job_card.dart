@@ -1,4 +1,3 @@
-import 'package:customer/features/localization/locale_controller.dart';
 import 'package:customer/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,27 +6,34 @@ import 'package:task_design/task_design.dart';
 import 'package:task_domain/task_domain.dart';
 
 import '../job/job_tracking_screen.dart';
+import '../marketplace/marketplace_providers.dart';
 import '../services/category_l10n.dart';
 
 @immutable
 class ActiveJob {
   const ActiveJob({
+    required this.jobId,
     required this.techName,
     required this.category,
     required this.status,
-    required this.eta,
+    this.eta,
     this.photoUrl,
   });
+  final String jobId;
   final String techName;
   final JobCategory category;
   final JobStatus status;
-  final Duration eta;
+
+  /// Known time-to-arrival, when live tracking provides one. Null otherwise —
+  /// the status line then omits a specific minute count rather than invent one.
+  final Duration? eta;
   final String? photoUrl;
 
   String statusLine(AppLocalizations l) => switch (status) {
         JobStatus.accepted => l.confirmedPreparingToHeadOut,
-        JobStatus.enRoute =>
-          l.arrrivingIn(categoryLabel(category, l), eta.inMinutes),
+        JobStatus.enRoute => eta != null
+            ? l.arrrivingIn(categoryLabel(category, l), eta!.inMinutes)
+            : l.technicianOnTheWay(categoryLabel(category, l)),
         JobStatus.inProgress => l.isWorking(categoryLabel(category, l)),
         JobStatus.pausedForApproval => l.waitingForApproval,
         _ => l.jobActive,
@@ -51,17 +57,17 @@ class ActiveJob {
 
 }
 
-/// Holds the currently active job, or null when idle.
-/// For the prototype this is seeded with mock data; in production it would
-/// listen to a Firestore stream.
-final activeJobProvider = StateProvider<ActiveJob?>((ref) {
-  final AppLocalizations l =
-      lookupAppLocalizations(ref.watch(localeControllerProvider));
+/// The currently-hired job as a card view-model, or null when idle. Derived
+/// from the customer's real Firestore jobs via [activeJobRequestProvider] — no
+/// mock seed. The technician name comes from the accepted offer.
+final activeJobProvider = Provider<ActiveJob?>((ref) {
+  final JobRequest? job = ref.watch(activeJobRequestProvider);
+  if (job == null) return null;
   return ActiveJob(
-    techName: l.techNameMohamed,
-    category: JobCategory.electrical,
-    status: JobStatus.enRoute,
-    eta: const Duration(minutes: 15),
+    jobId: job.id,
+    techName: job.acceptedOffer?.technicianName ?? '',
+    category: job.category,
+    status: job.status,
   );
 });
 
@@ -119,13 +125,16 @@ class ActiveJobCard extends ConsumerWidget {
                           style: text.titleSmall?.copyWith(
                             fontWeight: FontWeight.w700,
                           )),
-                      const SizedBox(height: 2),
-                      Text(job.techName,
-                          style: text.bodySmall?.copyWith(
-                            color: isDark
-                                ? AppColors.textSecondary.withValues(alpha: 0.65)
-                                : AppColors.textSecondaryLight,
-                          )),
+                      if (job.techName.isNotEmpty) ...<Widget>[
+                        const SizedBox(height: 2),
+                        Text(job.techName,
+                            style: text.bodySmall?.copyWith(
+                              color: isDark
+                                  ? AppColors.textSecondary
+                                      .withValues(alpha: 0.65)
+                                  : AppColors.textSecondaryLight,
+                            )),
+                      ],
                     ],
                   ),
                 ),

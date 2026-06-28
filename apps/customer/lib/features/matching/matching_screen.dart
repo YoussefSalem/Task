@@ -11,7 +11,7 @@ import '../location/location_provider.dart';
 import '../marketplace/marketplace_providers.dart';
 import '../offers/offers_screen.dart';
 
-const String _mapsKey = 'AIzaSyBkGqJxUaSwTtMdLG6HEArY2Ca_VO0yZKE';
+const String _mapsKey = 'AIzaSyBYeBkqiWJTiP-VPebzE3EWFt4MptMOqgA';
 
 /// How far along the search sequence we are. Stays alive in the background
 /// when the user exits — the job is never cancelled just by leaving.

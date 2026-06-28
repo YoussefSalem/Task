@@ -26,3 +26,4 @@ export const ping = onCall({enforceAppCheck: false}, () => {
 });
 
 export {generateCallToken} from "./calls/generate_call_token";
+export {onNotificationCreated} from "./notifications/on_notification_created";

@@ -1,4 +1,6 @@
 import 'package:customer/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:task_design/task_design.dart';
 import 'package:task_domain/task_domain.dart';
 
 /// Localized display name for a [JobCategory]. The domain enum carries an
@@ -32,6 +34,24 @@ String categoryLabel(JobCategory c, AppLocalizations l) => switch (c) {
       JobCategory.swimmingPool => l.catSwimmingPool,
       JobCategory.pestControl => l.catPestControl,
     };
+
+/// Localized label + accent for a technician trust [TechnicianTier], shown as a
+/// chip on directory cards.
+extension TechnicianTierUi on TechnicianTier {
+  String label(AppLocalizations l) => switch (this) {
+        TechnicianTier.bronze => l.tierBronze,
+        TechnicianTier.silver => l.tierSilver,
+        TechnicianTier.gold => l.tierGold,
+        TechnicianTier.platinum => l.tierPlatinum,
+      };
+
+  Color get tint => switch (this) {
+        TechnicianTier.bronze => const Color(0xFFB45309),
+        TechnicianTier.silver => AppColors.textSecondary,
+        TechnicianTier.gold => AppColors.warning,
+        TechnicianTier.platinum => AppColors.primary,
+      };
+}
 
 /// Localized label for a [JobStatus], used on status pills.
 String jobStatusLabel(JobStatus s, AppLocalizations l) => switch (s) {

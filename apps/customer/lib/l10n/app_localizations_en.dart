@@ -9,6 +9,50 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get cancelBookingTitle => 'Cancel booking';
+
+  @override
+  String get cancelBookingPrompt => 'Why are you cancelling?';
+
+  @override
+  String get cancelReasonFoundAnother => 'Found another technician';
+
+  @override
+  String get cancelReasonNoLongerNeeded => 'No longer needed';
+
+  @override
+  String get cancelReasonPriceTooHigh => 'Price too high';
+
+  @override
+  String get cancelReasonTakingTooLong => 'Taking too long';
+
+  @override
+  String get cancelReasonPostedByMistake => 'Posted by mistake';
+
+  @override
+  String get cancelReasonOther => 'Other';
+
+  @override
+  String get cancelNoteHint => 'Add a note (optional)';
+
+  @override
+  String get cancelConfirm => 'Cancel booking';
+
+  @override
+  String get keepBooking => 'Keep booking';
+
+  @override
+  String get bookingCancelled => 'Booking cancelled';
+
+  @override
+  String get selectACancelReason => 'Please choose a reason';
+
+  @override
+  String cancelledReasonLabel(String reason) {
+    return 'Reason: $reason';
+  }
+
+  @override
   String get editName => 'Edit name';
 
   @override
@@ -16,6 +60,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get birthdayUpdated => 'Birthday updated';
+
+  @override
+  String get birthdayPermanentWarning =>
+      'Your date of birth can\'t be changed after this — please make sure it\'s correct.';
+
+  @override
+  String get birthdayCannotBeChanged => 'Date of birth can\'t be changed';
+
+  @override
+  String get confirmBirthdayTitle => 'Confirm your date of birth';
+
+  @override
+  String get confirmAction => 'Confirm';
 
   @override
   String get addPhoneNumber => 'Add phone number';
@@ -805,6 +862,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String technicianOnTheWay(String category) {
+    return '$category pro is on the way';
+  }
+
+  @override
   String isWorking(Object category) {
     return '$category is working';
   }
@@ -968,6 +1030,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get badgePlatinum => 'PLATINUM';
+
+  @override
+  String get tierBronze => 'BRONZE';
+
+  @override
+  String get tierSilver => 'SILVER';
+
+  @override
+  String get tierGold => 'GOLD';
+
+  @override
+  String get tierPlatinum => 'PLATINUM';
 
   @override
   String get techNameMohamed => 'Mohamed Ali';
@@ -1418,6 +1492,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletTopUp => 'Wallet top-up';
 
   @override
+  String get walletEmptyLedger => 'No transactions yet';
+
+  @override
+  String get walletEmptyLedgerHint => 'Credits and refunds will appear here.';
+
+  @override
+  String get walletLoadError => 'Couldn\'t load your wallet';
+
+  @override
   String get referralCredit => 'Referral credit';
 
   @override
@@ -1477,6 +1560,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String etaMinutes(Object minutes) {
     return 'ETA $minutes min';
   }
+
+  @override
+  String get awaitingLiveLocation => 'Waiting for live location…';
+
+  @override
+  String get noActiveJob => 'No active job right now';
 
   @override
   String get homeService => 'Home service';
@@ -1861,5 +1950,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyBody =>
-      'This is placeholder privacy policy text and will be replaced with the final version before launch.\n\nWe collect the information you give us — your name, phone number, email, saved addresses, and booking history — so we can connect you with technicians and provide the service. Your location is used only to find nearby technicians and show your service address.\n\nWe never sell your personal data. We share it with technicians only as needed to complete a booking, and with service providers (such as payment and messaging) that help us run the app.\n\nYour data is stored securely and tied to your account. You can edit your profile and remove saved addresses at any time. To delete your account or request a copy of your data, contact support.\n\nBy using Task you agree to this policy. We\'ll notify you here when it changes.';
+      'Your privacy matters to us. This policy explains what we collect and how we use it.\n\nWe collect the information you give us — your name, phone number, email, saved addresses, and booking history — so we can connect you with technicians and provide the service. Your location is used only to find nearby technicians and show your service address.\n\nWe never sell your personal data. We share it with technicians only as needed to complete a booking, and with service providers (such as payment and messaging) that help us run the app.\n\nYour data is stored securely and tied to your account. You can edit your profile and remove saved addresses at any time. To delete your account or request a copy of your data, contact support.\n\nBy using Task you agree to this policy. We\'ll notify you here when it changes.';
+
+  @override
+  String get termsOfServiceBody =>
+      'Welcome to Task. By creating an account or using the app you agree to these terms.\n\nTask is a marketplace that connects you with independent technicians for home services. We are not the provider of the work itself; technicians are independent contractors responsible for the services they perform.\n\nWhen you post a job you set a price and may receive offers. Agreeing to an offer forms a direct booking between you and the technician. You agree to provide accurate details, allow safe access to the work site, and pay the agreed amount on completion.\n\nYou agree to use Task lawfully and respectfully: no fraudulent bookings, no harassment of technicians, and no attempts to take payments outside the app. We may suspend accounts that break these rules.\n\nRatings and reviews must reflect genuine experiences. Cancellations should be made as early as possible; repeated late cancellations may affect your account.\n\nTask is provided \"as is.\" To the extent permitted by law, we are not liable for the acts of independent technicians. These terms may change, and we\'ll post updates here.\n\nQuestions? Reach us any time through Help & Support.';
 }
