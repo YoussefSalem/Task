@@ -62,6 +62,22 @@ class JobDraftController extends Notifier<JobRequestDraft> {
 
   void startCategory(JobCategory category) =>
       state = JobRequestDraft(category: category);
+
+  /// Seeds the draft from a past [job] so the customer can post the same work
+  /// again (Re-book) or tweak it first (Reschedule). Photos are dropped — the
+  /// originals were local file paths that no longer resolve on a later session.
+  void startFrom(JobRequest job) => state = JobRequestDraft(
+        category: job.category,
+        title: job.title,
+        description: job.description,
+        fixedPrice: job.fixedPrice,
+        urgency: job.urgency,
+        propertyType: job.propertyType,
+        floor: job.floor,
+        parking: job.parking,
+        locationLabel: job.locationLabel,
+        notes: job.notes,
+      );
   void setTitle(String title) => state = state.copyWith(title: title);
   void setDescription(String d) => state = state.copyWith(description: d);
   void setPrice(int price) => state = state.copyWith(fixedPrice: price);

@@ -7,6 +7,7 @@ import 'package:task_domain/task_domain.dart';
 
 import '../marketplace/marketplace_providers.dart';
 import '../services/category_l10n.dart';
+import 'rebook_actions.dart';
 
 /// The Bookings tab: live + upcoming jobs first, history below. Tapping an
 /// active job returns to live tracking.
@@ -60,7 +61,8 @@ class BookingsScreen extends ConsumerWidget {
                   if (past.isEmpty)
                     _empty(text)
                   else
-                    ...past.map((JobRequest j) => _card(context, ref, j, text)),
+                    ...past.map((JobRequest j) =>
+                        _card(context, ref, j, text, rebookable: true)),
                 ],
               );
             },
@@ -72,7 +74,7 @@ class BookingsScreen extends ConsumerWidget {
 
   Widget _card(BuildContext context, WidgetRef ref, JobRequest job,
       TextTheme text,
-      {VoidCallback? onTap, bool cancellable = false}) {
+      {VoidCallback? onTap, bool cancellable = false, bool rebookable = false}) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final AppLocalizations l = AppLocalizations.of(context);
     final (Color, IconData) badge = switch (job.status) {
@@ -99,7 +101,10 @@ class BookingsScreen extends ConsumerWidget {
             borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
             child: Padding(
               padding: const EdgeInsets.all(AppSpacing.md),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Row(
                 children: <Widget>[
                   Container(
                     height: 50,
@@ -165,6 +170,12 @@ class BookingsScreen extends ConsumerWidget {
                     ],
                   ),
                 ],
+                ),
+                if (rebookable) ...<Widget>[
+                  const SizedBox(height: AppSpacing.sm),
+                  RebookActions(job: job),
+                ],
+              ],
               ),
             ),
           ),

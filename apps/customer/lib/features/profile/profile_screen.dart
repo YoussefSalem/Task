@@ -14,7 +14,9 @@ import '../bookings/booking_history_screen.dart';
 import '../legal/privacy_screen.dart';
 import '../support/help_support_screen.dart';
 import '../localization/language_switcher.dart';
+import '../settings/notification_prefs.dart';
 import '../settings/theme_controller.dart';
+import 'delete_account.dart';
 import '../wallet/wallet_providers.dart';
 import '../wallet/wallet_screen.dart';
 import 'profile_edit.dart';
@@ -70,10 +72,13 @@ class ProfileScreen extends ConsumerWidget {
               const SizedBox(height: AppSpacing.xl),
               EntranceReveal(index: 4, child: _AppearanceSection(text: text)),
               const SizedBox(height: AppSpacing.xl),
-              EntranceReveal(index: 5, child: _menu(context, text, ref)),
+              EntranceReveal(
+                  index: 5, child: _NotificationPrefsSection(text: text)),
+              const SizedBox(height: AppSpacing.xl),
+              EntranceReveal(index: 6, child: _menu(context, text, ref)),
               const SizedBox(height: AppSpacing.xl),
               EntranceReveal(
-                index: 6,
+                index: 7,
                 child: OutlinedButton.icon(
                   onPressed: () async {
                     await ref.read(authControllerProvider).signOut();
@@ -92,6 +97,8 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: AppSpacing.sm),
+              const EntranceReveal(index: 8, child: DeleteAccountButton()),
             ],
           ),
         ),
@@ -400,7 +407,10 @@ class ProfileScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
         border: Border.all(color: dividerColor),
       ),
-      child: Column(
+      clipBehavior: Clip.antiAlias,
+      child: Material(
+        type: MaterialType.transparency,
+        child: Column(
         children: <Widget>[
           for (int i = 0; i < items.length; i++) ...<Widget>[
             ListTile(
@@ -424,6 +434,7 @@ class ProfileScreen extends ConsumerWidget {
           ],
         ],
       ),
+      ),
     );
   }
 }
@@ -432,6 +443,99 @@ class ProfileScreen extends ConsumerWidget {
 ///
 /// Displayed as a segmented selector inside a card so it reads as a distinct
 /// settings group rather than just another list item.
+/// Notification preferences card: a master push toggle plus per-category
+/// switches that grey out while push is off. Writes through
+/// [notificationPrefsProvider] (local + Firestore mirror) on every change.
+class _NotificationPrefsSection extends ConsumerWidget {
+  const _NotificationPrefsSection({required this.text});
+
+  final TextTheme text;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final AppLocalizations loc = AppLocalizations.of(context);
+    final NotificationPrefs prefs = ref.watch(notificationPrefsProvider);
+    final NotificationPrefsController controller =
+        ref.read(notificationPrefsProvider.notifier);
+    final Color dividerColor =
+        isDark ? const Color(0x14FFFFFF) : const Color(0x14000000);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: AppSpacing.sm),
+          child: Text(
+            loc.notificationPreferences,
+            style: text.labelMedium?.copyWith(
+              color: AppColors.primary,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.4,
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: isDark
+                ? AppColors.surface.withValues(alpha: 0.5)
+                : AppColors.surfaceLight,
+            borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+            border: Border.all(color: dividerColor),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Material(
+            type: MaterialType.transparency,
+            child: Column(
+            children: <Widget>[
+              SwitchListTile.adaptive(
+                value: prefs.pushEnabled,
+                onChanged: controller.setPushEnabled,
+                secondary: const Icon(Icons.notifications_active_rounded,
+                    color: AppColors.primary),
+                title: Text(loc.pushNotifications,
+                    style: text.titleSmall
+                        ?.copyWith(fontWeight: FontWeight.w600)),
+                subtitle: Text(loc.pushNotificationsSubtitle,
+                    style: text.bodySmall),
+              ),
+              Divider(height: 1, color: dividerColor),
+              _categorySwitch(loc.notifyJobUpdates,
+                  loc.notifyJobUpdatesSubtitle, prefs.jobUpdates,
+                  prefs.pushEnabled, controller.setJobUpdates, text),
+              _categorySwitch(loc.notifyOffers, loc.notifyOffersSubtitle,
+                  prefs.offers, prefs.pushEnabled, controller.setOffers, text),
+              _categorySwitch(loc.notifyMessages, loc.notifyMessagesSubtitle,
+                  prefs.messages, prefs.pushEnabled, controller.setMessages,
+                  text),
+              _categorySwitch(loc.notifyPromotions,
+                  loc.notifyPromotionsSubtitle, prefs.promotions,
+                  prefs.pushEnabled, controller.setPromotions, text),
+            ],
+          ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// A single category switch. Disabled (and visually dimmed) while the master
+  /// push toggle is off, since categories have no effect without it.
+  Widget _categorySwitch(String title, String subtitle, bool value,
+      bool enabled, ValueChanged<bool> onChanged, TextTheme text) {
+    return Opacity(
+      opacity: enabled ? 1 : 0.45,
+      child: SwitchListTile.adaptive(
+        value: enabled && value,
+        onChanged: enabled ? onChanged : null,
+        title:
+            Text(title, style: text.titleSmall?.copyWith(fontWeight: FontWeight.w600)),
+        subtitle: Text(subtitle, style: text.bodySmall),
+      ),
+    );
+  }
+}
+
 class _AppearanceSection extends ConsumerWidget {
   const _AppearanceSection({required this.text});
 

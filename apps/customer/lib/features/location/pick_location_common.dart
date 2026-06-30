@@ -4,6 +4,18 @@ import 'package:task_design/task_design.dart';
 
 import '../booking/booking_state.dart';
 
+/// A location chosen on the map, returned to the caller when the picker runs in
+/// "address mode" (`/pick-location?mode=address`) instead of mutating the active
+/// location. Carries the coordinates and the reverse-geocoded address line.
+@immutable
+class PickedPlace {
+  const PickedPlace(
+      {required this.lat, required this.lng, required this.address});
+  final double lat;
+  final double lng;
+  final String address;
+}
+
 // ---------------------------------------------------------------------------
 // Shared presentation widgets for the location picker.
 //
@@ -175,6 +187,7 @@ class LocationBottomPanel extends StatelessWidget {
     required this.onConfirm,
     required this.savedAddresses,
     required this.onSavedTap,
+    this.confirmLabel,
   });
 
   final String address;
@@ -184,6 +197,10 @@ class LocationBottomPanel extends StatelessWidget {
   final VoidCallback onConfirm;
   final List<SavedAddress> savedAddresses;
   final ValueChanged<SavedAddress> onSavedTap;
+
+  /// Confirm-button label. Defaults to "Set service location"; the address-add
+  /// flow overrides it with "Use this location".
+  final String? confirmLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -359,7 +376,7 @@ class LocationBottomPanel extends StatelessWidget {
                       const Icon(Icons.check_circle_rounded,
                           color: Colors.white, size: 20),
                       const SizedBox(width: 10),
-                      Text(AppLocalizations.of(context).setServiceLocation,
+                      Text(confirmLabel ?? AppLocalizations.of(context).setServiceLocation,
                           style: text.titleSmall?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w700,

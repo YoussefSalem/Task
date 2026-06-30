@@ -3763,6 +3763,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Welcome to Task. By creating an account or using the app you agree to these terms.\n\nTask is a marketplace that connects you with independent technicians for home services. We are not the provider of the work itself; technicians are independent contractors responsible for the services they perform.\n\nWhen you post a job you set a price and may receive offers. Agreeing to an offer forms a direct booking between you and the technician. You agree to provide accurate details, allow safe access to the work site, and pay the agreed amount on completion.\n\nYou agree to use Task lawfully and respectfully: no fraudulent bookings, no harassment of technicians, and no attempts to take payments outside the app. We may suspend accounts that break these rules.\n\nRatings and reviews must reflect genuine experiences. Cancellations should be made as early as possible; repeated late cancellations may affect your account.\n\nTask is provided \"as is.\" To the extent permitted by law, we are not liable for the acts of independent technicians. These terms may change, and we\'ll post updates here.\n\nQuestions? Reach us any time through Help & Support.'**
   String get termsOfServiceBody;
+
+  /// No description provided for @deleteAccountConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account?'**
+  String get deleteAccountConfirmTitle;
+
+  /// No description provided for @deleteAccountConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently removes your profile, bookings, saved addresses, and wallet credit. This can\'t be undone.'**
+  String get deleteAccountConfirmBody;
+
+  /// No description provided for @deleteAccountFinalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you absolutely sure?'**
+  String get deleteAccountFinalTitle;
+
+  /// No description provided for @deleteAccountFinalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account and all of its data will be permanently deleted. You\'ll need to sign up again to use Task.'**
+  String get deleteAccountFinalBody;
+
+  /// No description provided for @deleteAccountAcknowledge.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand this can\'t be undone'**
+  String get deleteAccountAcknowledge;
+
+  /// No description provided for @deleteAccountConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete permanently'**
+  String get deleteAccountConfirmAction;
+
+  /// No description provided for @deleteAccountReauthTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify it\'s you'**
+  String get deleteAccountReauthTitle;
+
+  /// No description provided for @deleteAccountReauthBody.
+  ///
+  /// In en, this message translates to:
+  /// **'For your security, confirm your identity to finish deleting your account.'**
+  String get deleteAccountReauthBody;
+
+  /// No description provided for @accountDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been deleted.'**
+  String get accountDeleted;
+
+  /// No description provided for @deleteAccountError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete your account. Please try again.'**
+  String get deleteAccountError;
+
+  /// No description provided for @notificationPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationPreferences;
+
+  /// No description provided for @pushNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Push notifications'**
+  String get pushNotifications;
+
+  /// No description provided for @pushNotificationsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive alerts on this device'**
+  String get pushNotificationsSubtitle;
+
+  /// No description provided for @notifyJobUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Job updates'**
+  String get notifyJobUpdates;
+
+  /// No description provided for @notifyJobUpdatesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Status changes for your bookings'**
+  String get notifyJobUpdatesSubtitle;
+
+  /// No description provided for @notifyOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers & bids'**
+  String get notifyOffers;
+
+  /// No description provided for @notifyOffersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When technicians respond to your jobs'**
+  String get notifyOffersSubtitle;
+
+  /// No description provided for @notifyMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get notifyMessages;
+
+  /// No description provided for @notifyMessagesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New chat messages'**
+  String get notifyMessagesSubtitle;
+
+  /// No description provided for @notifyPromotions.
+  ///
+  /// In en, this message translates to:
+  /// **'Promotions'**
+  String get notifyPromotions;
+
+  /// No description provided for @notifyPromotionsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deals and announcements'**
+  String get notifyPromotionsSubtitle;
+
+  /// No description provided for @rebook.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-book'**
+  String get rebook;
+
+  /// No description provided for @reschedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule'**
+  String get reschedule;
+
+  /// No description provided for @useThisLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this location'**
+  String get useThisLocation;
+
+  /// No description provided for @nameThisAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Name this address'**
+  String get nameThisAddress;
+
+  /// No description provided for @addressFromMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get addressFromMap;
+
+  /// No description provided for @addressDetailsOptionalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Apartment, floor, or landmark (optional)'**
+  String get addressDetailsOptionalHint;
+
+  /// No description provided for @tapToSetOnMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to set on the map'**
+  String get tapToSetOnMap;
+
+  /// No description provided for @enterALabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a label for this address'**
+  String get enterALabel;
 }
 
 class _AppLocalizationsDelegate

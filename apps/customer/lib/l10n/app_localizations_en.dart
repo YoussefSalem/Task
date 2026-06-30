@@ -1955,4 +1955,96 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get termsOfServiceBody =>
       'Welcome to Task. By creating an account or using the app you agree to these terms.\n\nTask is a marketplace that connects you with independent technicians for home services. We are not the provider of the work itself; technicians are independent contractors responsible for the services they perform.\n\nWhen you post a job you set a price and may receive offers. Agreeing to an offer forms a direct booking between you and the technician. You agree to provide accurate details, allow safe access to the work site, and pay the agreed amount on completion.\n\nYou agree to use Task lawfully and respectfully: no fraudulent bookings, no harassment of technicians, and no attempts to take payments outside the app. We may suspend accounts that break these rules.\n\nRatings and reviews must reflect genuine experiences. Cancellations should be made as early as possible; repeated late cancellations may affect your account.\n\nTask is provided \"as is.\" To the extent permitted by law, we are not liable for the acts of independent technicians. These terms may change, and we\'ll post updates here.\n\nQuestions? Reach us any time through Help & Support.';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Delete account?';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'This permanently removes your profile, bookings, saved addresses, and wallet credit. This can\'t be undone.';
+
+  @override
+  String get deleteAccountFinalTitle => 'Are you absolutely sure?';
+
+  @override
+  String get deleteAccountFinalBody =>
+      'Your account and all of its data will be permanently deleted. You\'ll need to sign up again to use Task.';
+
+  @override
+  String get deleteAccountAcknowledge => 'I understand this can\'t be undone';
+
+  @override
+  String get deleteAccountConfirmAction => 'Delete permanently';
+
+  @override
+  String get deleteAccountReauthTitle => 'Verify it\'s you';
+
+  @override
+  String get deleteAccountReauthBody =>
+      'For your security, confirm your identity to finish deleting your account.';
+
+  @override
+  String get accountDeleted => 'Your account has been deleted.';
+
+  @override
+  String get deleteAccountError =>
+      'Couldn\'t delete your account. Please try again.';
+
+  @override
+  String get notificationPreferences => 'Notifications';
+
+  @override
+  String get pushNotifications => 'Push notifications';
+
+  @override
+  String get pushNotificationsSubtitle => 'Receive alerts on this device';
+
+  @override
+  String get notifyJobUpdates => 'Job updates';
+
+  @override
+  String get notifyJobUpdatesSubtitle => 'Status changes for your bookings';
+
+  @override
+  String get notifyOffers => 'Offers & bids';
+
+  @override
+  String get notifyOffersSubtitle => 'When technicians respond to your jobs';
+
+  @override
+  String get notifyMessages => 'Messages';
+
+  @override
+  String get notifyMessagesSubtitle => 'New chat messages';
+
+  @override
+  String get notifyPromotions => 'Promotions';
+
+  @override
+  String get notifyPromotionsSubtitle => 'Deals and announcements';
+
+  @override
+  String get rebook => 'Re-book';
+
+  @override
+  String get reschedule => 'Reschedule';
+
+  @override
+  String get useThisLocation => 'Use this location';
+
+  @override
+  String get nameThisAddress => 'Name this address';
+
+  @override
+  String get addressFromMap => 'Address';
+
+  @override
+  String get addressDetailsOptionalHint =>
+      'Apartment, floor, or landmark (optional)';
+
+  @override
+  String get tapToSetOnMap => 'Tap to set on the map';
+
+  @override
+  String get enterALabel => 'Enter a label for this address';
 }

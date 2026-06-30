@@ -105,8 +105,18 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
     super.dispose();
   }
 
+  bool get _addressMode =>
+      GoRouterState.of(context).uri.queryParameters['mode'] == 'address';
+
   void _confirmLocation() {
     if (_pinLat == null || _pinLng == null) return;
+    if (_addressMode) {
+      // Return the picked place to the add-address flow instead of switching
+      // the active service location.
+      context.pop(
+          PickedPlace(lat: _pinLat!, lng: _pinLng!, address: _pinAddress));
+      return;
+    }
     ref
         .read(locationProvider.notifier)
         .setFromPinDrop(_pinLat!, _pinLng!, _pinAddress);
@@ -225,6 +235,9 @@ class _PickLocationScreenState extends ConsumerState<PickLocationScreen> {
                 text: text,
                 bottomPadding: mq.padding.bottom,
                 onConfirm: _confirmLocation,
+                confirmLabel: _addressMode
+                    ? AppLocalizations.of(context).useThisLocation
+                    : null,
                 savedAddresses:
                     ref.watch(savedAddressesProvider).valueOrNull ??
                         const <SavedAddress>[],

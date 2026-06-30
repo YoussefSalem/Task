@@ -6,6 +6,7 @@ import 'package:task_domain/task_domain.dart';
 
 import '../marketplace/marketplace_providers.dart';
 import '../services/category_l10n.dart';
+import 'rebook_actions.dart';
 
 /// Read-only history of the user's past (completed or cancelled) bookings,
 /// pulled per-user from Firestore via [myJobsProvider].
@@ -74,7 +75,10 @@ class BookingHistoryScreen extends ConsumerWidget {
           borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.md),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Row(
               children: <Widget>[
                 Container(
                   height: 50,
@@ -113,6 +117,10 @@ class BookingHistoryScreen extends ConsumerWidget {
                 Text('${job.settledPrice} ${l.egp}',
                     style: text.titleSmall
                         ?.copyWith(fontWeight: FontWeight.w700)),
+              ],
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                RebookActions(job: job),
               ],
             ),
           ),

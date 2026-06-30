@@ -1939,4 +1939,93 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get termsOfServiceBody =>
       'أهلاً بك في Task. بإنشائك حسابًا أو استخدامك التطبيق فإنك توافق على هذه الشروط.\n\nTask هو سوق يوصلك بفنّيين مستقلين لخدمات المنزل. نحن لسنا مقدّم الخدمة نفسها؛ فالفنّيون متعاقدون مستقلّون ومسؤولون عن الأعمال التي ينفّذونها.\n\nعند نشرك لطلب تحدّد سعرًا وقد تتلقّى عروضًا. وموافقتك على عرض تُنشئ حجزًا مباشرًا بينك وبين الفنّي. أنت توافق على تقديم تفاصيل دقيقة، وإتاحة وصول آمن لمكان العمل، ودفع المبلغ المتفق عليه عند الإتمام.\n\nأنت توافق على استخدام Task بشكل قانوني ومحترم: لا حجوزات وهمية، ولا مضايقة للفنّيين، ولا محاولات للدفع خارج التطبيق. وقد نوقف الحسابات التي تخالف هذه القواعد.\n\nيجب أن تعكس التقييمات والمراجعات تجارب حقيقية. ويُفضَّل الإلغاء في أبكر وقت ممكن؛ وقد يؤثّر الإلغاء المتأخر المتكرر على حسابك.\n\nيُقدَّم Task «كما هو». وبالقدر الذي يسمح به القانون، لسنا مسؤولين عن تصرّفات الفنّيين المستقلّين. وقد تتغيّر هذه الشروط وسننشر التحديثات هنا.\n\nأي أسئلة؟ تواصل معنا في أي وقت عبر المساعدة والدعم.';
+
+  @override
+  String get deleteAccountConfirmTitle => 'حذف الحساب؟';
+
+  @override
+  String get deleteAccountConfirmBody =>
+      'سيؤدي هذا إلى حذف ملفك الشخصي وحجوزاتك وعناوينك المحفوظة ورصيد محفظتك نهائيًا. لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get deleteAccountFinalTitle => 'هل أنت متأكد تمامًا؟';
+
+  @override
+  String get deleteAccountFinalBody =>
+      'سيتم حذف حسابك وكل بياناته نهائيًا. ستحتاج إلى إنشاء حساب جديد لاستخدام Task مرة أخرى.';
+
+  @override
+  String get deleteAccountAcknowledge => 'أفهم أنه لا يمكن التراجع عن هذا';
+
+  @override
+  String get deleteAccountConfirmAction => 'احذف نهائيًا';
+
+  @override
+  String get deleteAccountReauthTitle => 'تأكّد من هويتك';
+
+  @override
+  String get deleteAccountReauthBody => 'لأمانك، أكّد هويتك لإتمام حذف حسابك.';
+
+  @override
+  String get accountDeleted => 'تم حذف حسابك.';
+
+  @override
+  String get deleteAccountError => 'تعذّر حذف حسابك. يُرجى المحاولة مرة أخرى.';
+
+  @override
+  String get notificationPreferences => 'الإشعارات';
+
+  @override
+  String get pushNotifications => 'إشعارات الدفع';
+
+  @override
+  String get pushNotificationsSubtitle => 'استقبل التنبيهات على هذا الجهاز';
+
+  @override
+  String get notifyJobUpdates => 'تحديثات المهام';
+
+  @override
+  String get notifyJobUpdatesSubtitle => 'تغيّرات حالة حجوزاتك';
+
+  @override
+  String get notifyOffers => 'العروض والمزايدات';
+
+  @override
+  String get notifyOffersSubtitle => 'عندما يستجيب الفنّيون لمهامك';
+
+  @override
+  String get notifyMessages => 'الرسائل';
+
+  @override
+  String get notifyMessagesSubtitle => 'رسائل المحادثة الجديدة';
+
+  @override
+  String get notifyPromotions => 'العروض الترويجية';
+
+  @override
+  String get notifyPromotionsSubtitle => 'الصفقات والإعلانات';
+
+  @override
+  String get rebook => 'إعادة الحجز';
+
+  @override
+  String get reschedule => 'إعادة الجدولة';
+
+  @override
+  String get useThisLocation => 'استخدم هذا الموقع';
+
+  @override
+  String get nameThisAddress => 'سمِّ هذا العنوان';
+
+  @override
+  String get addressFromMap => 'العنوان';
+
+  @override
+  String get addressDetailsOptionalHint => 'شقة أو طابق أو معلم (اختياري)';
+
+  @override
+  String get tapToSetOnMap => 'اضغط للتحديد على الخريطة';
+
+  @override
+  String get enterALabel => 'أدخل اسمًا لهذا العنوان';
 }

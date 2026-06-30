@@ -27,6 +27,10 @@ final authStateProvider = StreamProvider<User?>((ref) {
 
 enum AuthStep { codeSent, signedIn, failed }
 
+/// Outcome of an account-deletion attempt. [needsReauth] means Firebase wants a
+/// recent login first — the caller must re-authenticate, then retry.
+enum DeleteAccountResult { deleted, needsReauth, failed }
+
 @immutable
 class AuthOutcome {
   const AuthOutcome(this.step, {this.message, this.mock = false});
@@ -59,6 +63,11 @@ class AuthController {
   // signed-in "add/change my phone" flow, distinct from sign-in above).
   String? _phoneVerificationId;
   bool _mockPhonePending = false;
+
+  // Carried between startReauthOtp and confirmReauthOtp (re-authentication
+  // before account deletion when Firebase requires a recent login).
+  String? _reauthVerificationId;
+  bool _mockReauthPending = false;
 
   bool get _looksOffline => !ready;
 
@@ -276,6 +285,152 @@ class AuthController {
     try {
       await _auth.signOut();
     } catch (_) {}
+  }
+
+  /// Whether the signed-in user re-authenticates by phone OTP (has a phone
+  /// number) versus a social provider popup. Drives the deletion reauth path.
+  bool get reauthUsesPhone =>
+      (_auth.currentUser?.phoneNumber ?? '').isNotEmpty;
+
+  /// Permanently deletes the signed-in user's Firebase Auth account. [cleanup]
+  /// runs first, while the user is still authenticated, so it can remove the
+  /// Firestore `users/{uid}` doc and device token under the security rules.
+  ///
+  /// Returns [DeleteAccountResult.needsReauth] when Firebase requires a recent
+  /// login; the caller then re-authenticates (see [startReauthOtp] /
+  /// [reauthenticateWithSocial]) and calls this again.
+  Future<DeleteAccountResult> deleteAccount(
+      {Future<void> Function()? cleanup}) async {
+    if (_looksOffline) {
+      await _safeCleanup(cleanup);
+      return DeleteAccountResult.deleted; // mock mode — nothing real to delete
+    }
+    final User? user = _auth.currentUser;
+    if (user == null) return DeleteAccountResult.deleted;
+    try {
+      await _safeCleanup(cleanup);
+      await user.delete();
+      return DeleteAccountResult.deleted;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        return DeleteAccountResult.needsReauth;
+      }
+      return DeleteAccountResult.failed;
+    } catch (_) {
+      return DeleteAccountResult.failed;
+    }
+  }
+
+  Future<void> _safeCleanup(Future<void> Function()? cleanup) async {
+    if (cleanup == null) return;
+    try {
+      await cleanup();
+    } catch (_) {/* best-effort: still proceed with account deletion */}
+  }
+
+  /// Sends a re-auth OTP to the signed-in user's own phone number. Used before
+  /// deletion when [reauthUsesPhone] is true.
+  Future<AuthOutcome> startReauthOtp() async {
+    _reauthVerificationId = null;
+    _mockReauthPending = false;
+
+    if (_looksOffline) {
+      _mockReauthPending = true;
+      return const AuthOutcome(AuthStep.codeSent, mock: true);
+    }
+
+    final User? user = _auth.currentUser;
+    final String phone = user?.phoneNumber ?? '';
+    if (user == null || phone.isEmpty) {
+      return AuthOutcome(AuthStep.failed, message: l.genericAuthError);
+    }
+
+    try {
+      final Completer<AuthOutcome> done = Completer<AuthOutcome>();
+      await _auth.verifyPhoneNumber(
+        phoneNumber: phone,
+        verificationCompleted: (PhoneAuthCredential _) {
+          // Auto-retrieval: the code is delivered via codeSent below; we still
+          // require the user to confirm so deletion stays a deliberate act.
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          if (!done.isCompleted) {
+            done.complete(AuthOutcome(AuthStep.failed, message: _friendly(e)));
+          }
+        },
+        codeSent: (String id, int? _) {
+          _reauthVerificationId = id;
+          if (!done.isCompleted) {
+            done.complete(const AuthOutcome(AuthStep.codeSent));
+          }
+        },
+        codeAutoRetrievalTimeout: (String id) => _reauthVerificationId = id,
+      );
+      return done.future.timeout(
+        const Duration(seconds: 60),
+        onTimeout: () =>
+            AuthOutcome(AuthStep.failed, message: l.genericAuthError),
+      );
+    } on FirebaseAuthException catch (e) {
+      return AuthOutcome(AuthStep.failed, message: '[${e.code}] ${_friendly(e)}');
+    } catch (e) {
+      return AuthOutcome(AuthStep.failed, message: e.toString());
+    }
+  }
+
+  /// Confirms the re-auth OTP from [startReauthOtp] and re-authenticates the
+  /// user, satisfying Firebase's recent-login requirement for deletion.
+  Future<AuthOutcome> confirmReauthOtp(String code) async {
+    if (_mockReauthPending) {
+      if (code.length < 4) {
+        return AuthOutcome(AuthStep.failed, message: l.enterFullCode);
+      }
+      return const AuthOutcome(AuthStep.signedIn, mock: true);
+    }
+
+    final User? user = _auth.currentUser;
+    if (user == null) {
+      return AuthOutcome(AuthStep.failed, message: l.genericAuthError);
+    }
+    if (_reauthVerificationId == null) {
+      return AuthOutcome(AuthStep.failed, message: l.requestNewCode);
+    }
+    try {
+      final PhoneAuthCredential cred = PhoneAuthProvider.credential(
+          verificationId: _reauthVerificationId!, smsCode: code);
+      await user.reauthenticateWithCredential(cred);
+      return const AuthOutcome(AuthStep.signedIn);
+    } on FirebaseAuthException catch (e) {
+      return AuthOutcome(AuthStep.failed, message: _friendly(e));
+    } catch (e) {
+      return AuthOutcome(AuthStep.failed, message: e.toString());
+    }
+  }
+
+  /// Re-authenticates a social (Google/Apple) user via the provider flow.
+  Future<AuthOutcome> reauthenticateWithSocial() async {
+    if (_looksOffline) return const AuthOutcome(AuthStep.signedIn, mock: true);
+    final User? user = _auth.currentUser;
+    if (user == null) {
+      return AuthOutcome(AuthStep.failed, message: l.genericAuthError);
+    }
+    final String providerId = user.providerData.isNotEmpty
+        ? user.providerData.first.providerId
+        : '';
+    final AuthProvider provider =
+        providerId.contains('apple') ? AppleAuthProvider() : GoogleAuthProvider();
+    try {
+      if (kIsWeb) {
+        await user.reauthenticateWithPopup(provider);
+      } else {
+        await user.reauthenticateWithProvider(provider);
+      }
+      return const AuthOutcome(AuthStep.signedIn);
+    } on FirebaseAuthException catch (e) {
+      return AuthOutcome(AuthStep.failed, message: _friendly(e));
+    } catch (e) {
+      return AuthOutcome(AuthStep.failed, message: e.toString());
+    }
   }
 
   Future<AuthOutcome> signInWithGoogle() =>
