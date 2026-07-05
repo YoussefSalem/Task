@@ -11,19 +11,36 @@ pubspec.lock
 # Node / Cloud Functions
 node_modules/
 backend/functions/lib/
+.next/
+.vercel/
+out/
+dist/
+tsconfig.tsbuildinfo
+firebase.functions.generated.json
+firebase.hosting.generated.json
 
 # Firebase
 .firebase/
 firebase-debug.log
 *-debug.log
+*.log
 .runtimeconfig.json
 
 # Env / secrets
 .env
+.env.*
+!.env.example
 *.keystore
 google-services.json
 GoogleService-Info.plist
 serviceAccountKey.json
+*serviceAccount*.json
+*service-account*.json
+*firebase-admin*.json
+*credentials*.json
+*secret*.json
+*.pem
+*.key
 
 # OS
 .DS_Store

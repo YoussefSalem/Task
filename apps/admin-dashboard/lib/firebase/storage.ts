@@ -1,0 +1,4 @@
+import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { getFirebaseClient } from "@/lib/firebase/client";
+export async function uploadFirebaseFile(file:File,folder:string){if(file.size<=0||file.size>20*1024*1024)throw new Error("File must be between 1 byte and 20 MB");const safe=file.name.replace(/[^a-z0-9._-]/gi,"-");const path=`${folder}/${new Date().toISOString().slice(0,10)}/${crypto.randomUUID()}-${safe}`;const target=ref(getFirebaseClient().storage,path);await uploadBytes(target,file,{contentType:file.type,customMetadata:{originalName:file.name}});return{path,url:await getDownloadURL(target),fileName:file.name,mimeType:file.type||"application/octet-stream",fileSize:file.size}}
+export async function deleteFirebaseFile(path:string){await deleteObject(ref(getFirebaseClient().storage,path))}

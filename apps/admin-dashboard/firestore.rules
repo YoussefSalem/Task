@@ -1,0 +1,495 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function adminRecord() {
+      return get(/databases/$(database)/documents/admins/$(request.auth.uid)).data;
+    }
+
+    function activeAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && (adminRecord().status == "Active" || adminRecord().status == "active")
+        && adminRecord().enabled != false
+        && adminRecord().authDisabled != true;
+    }
+
+    function demoFlag() {
+      return "isDemoUser" in adminRecord() && adminRecord().isDemoUser == true;
+    }
+
+    function superAdmin() {
+      return activeAdmin()
+        && !demoFlag()
+        && (
+          adminRecord().role == "Super admin"
+          || adminRecord().role == "Super Admin"
+          || adminRecord().roleId == "super-admin"
+          || adminRecord().roleId == "super_admin"
+        );
+    }
+
+    function demoAdmin() {
+      return activeAdmin() && demoFlag();
+    }
+
+    function realAdmin() {
+      return activeAdmin() && !demoFlag();
+    }
+
+    function can(permission) {
+      return realAdmin()
+        && (superAdmin() || has(permission) || modernCan(permission));
+    }
+
+    function demoDoc() {
+      return demoAdmin()
+        && ("environment" in resource.data)
+        && resource.data.environment == "demo";
+    }
+
+    function productionDoc() {
+      return realAdmin()
+        && ("environment" in resource.data)
+        && resource.data.environment == "production";
+    }
+
+    function demoCreate() {
+      return demoAdmin()
+        && ("environment" in request.resource.data)
+        && request.resource.data.environment == "demo";
+    }
+
+    function productionCreate() {
+      return realAdmin()
+        && ("environment" in request.resource.data)
+        && request.resource.data.environment == "production";
+    }
+
+    function demoUpdate() {
+      return demoAdmin()
+        && ("environment" in resource.data)
+        && ("environment" in request.resource.data)
+        && resource.data.environment == "demo"
+        && request.resource.data.environment == "demo";
+    }
+
+    function productionUpdate() {
+      return realAdmin()
+        && ("environment" in resource.data)
+        && ("environment" in request.resource.data)
+        && resource.data.environment == "production"
+        && request.resource.data.environment == "production";
+    }
+
+    function has(permission) {
+      return (
+          adminRecord().roleId is string
+          && exists(/databases/$(database)/documents/roles/$(adminRecord().roleId))
+          && get(/databases/$(database)/documents/roles/$(adminRecord().roleId)).data.permissions is list
+          && permission in get(/databases/$(database)/documents/roles/$(adminRecord().roleId)).data.permissions
+        )
+        || (
+          adminRecord().permissions is list
+          && permission in adminRecord().permissions
+        );
+    }
+
+    function modernCan(permission) {
+      return (permission == "admins.manage" && (
+          has("users.view") || has("users.create") || has("users.edit") || has("users.delete")
+          || has("users.change_status") || has("roles.view") || has("roles.create")
+          || has("roles.edit") || has("roles.delete")
+          || has("adminUsers.view") || has("adminUsers.create") || has("adminUsers.edit")
+          || has("adminUsers.delete") || has("adminUsers.enable") || has("adminUsers.disable")
+          || has("invitations.view") || has("invitations.send") || has("invitations.resend")
+        ))
+        || (permission == "users.view" && has("adminUsers.view"))
+        || (permission == "users.create" && has("adminUsers.create"))
+        || (permission == "users.edit" && has("adminUsers.edit"))
+        || (permission == "users.delete" && has("adminUsers.delete"))
+        || (permission == "users.invite" && (has("invitations.send") || has("invitations.view")))
+        || (permission == "users.sync" && has("adminUsers.sync"))
+        || (permission == "users.change_status" && (has("adminUsers.enable") || has("adminUsers.disable")))
+        || (permission == "customers.read" && (has("customers.view") || has("operations.advancedSearch.view") || has("fraudRisk.view")))
+        || (permission == "customers.write" && (
+          has("customers.create") || has("customers.edit") || has("customers.delete")
+          || has("customers.change_status") || has("customers.enable") || has("customers.disable")
+        ))
+        || (permission == "providers.read" && (has("providers.view") || has("technicians.view") || has("technicians.performance.view") || has("operations.commandCenter.view") || has("operations.advancedSearch.view")))
+        || (permission == "providers.approve" && (
+          has("providers.approve") || has("providers.reject") || has("providers.edit")
+          || has("providers.documents") || has("technicians.approve") || has("technicians.reject") || has("technicians.edit")
+        ))
+        || (permission == "providers.suspend" && (has("providers.suspend") || has("providers.ban") || has("providers.enable") || has("providers.disable") || has("technicians.change_status") || has("technicians.suspend") || has("technicians.enable") || has("technicians.disable")))
+        || (permission == "technicians.performance.aiSummary" && (has("technicians.performance.aiSummary") || has("technicians.performance.view")))
+        || (permission == "technicians.warning.create" && (has("technicians.warnings.create") || has("technicians.warning.create") || has("providers.edit")))
+        || (permission == "technicians.warning.delete" && (has("technicians.warnings.delete") || has("technicians.warning.delete") || has("providers.edit")))
+        || (permission == "technicians.warnings.create" && (has("technicians.warnings.create") || has("providers.edit")))
+        || (permission == "technicians.warnings.delete" && (has("technicians.warnings.delete") || has("providers.edit")))
+        || (permission == "technicians.warnings.reset" && (has("technicians.warnings.reset") || has("providers.edit")))
+        || (permission == "technicians.notes" && (has("technicians.notes.create") || has("technicians.notes.edit") || has("technicians.notes.delete") || has("providers.edit")))
+        || (permission == "technicians.status.warn" && (has("technicians.status.warn") || has("technicians.warnings.create")))
+        || (permission == "technicians.status.suspend" && (has("technicians.status.suspend") || has("providers.disable")))
+        || (permission == "technicians.status.disable" && (has("technicians.status.disable") || has("providers.disable")))
+        || (permission == "technicians.status.reactivate" && (has("technicians.status.reactivate") || has("providers.enable")))
+        || (permission == "technicians.status.blacklist" && (has("technicians.status.blacklist") || has("providers.disable")))
+        || (permission == "technicians.analytics.view" && has("technicians.performance.view"))
+        || (permission == "technicians.analytics.export" && (has("technicians.analytics.export") || has("technicians.performance.export")))
+        || (permission == "jobs.read" && (
+          has("jobs.view") || has("technicians.performance.view")
+          || has("operations.commandCenter.view") || has("operations.liveJobs.view")
+          || has("operations.map.view") || has("operations.smartAlerts.view")
+          || has("operations.sla.view") || has("operations.bookingControl.view")
+          || has("operations.reports.view") || has("operations.advancedSearch.view")
+          || has("bookings.emergency.view") || has("bookings.scheduled.view") || has("bookings.quotation.view")
+        ))
+        || (permission == "jobs.write" && (
+          has("jobs.create") || has("jobs.edit") || has("jobs.assign") || has("jobs.change_status")
+          || has("operations.bookingControl.edit") || has("operations.bookingControl.assign")
+          || has("bookings.emergency.assign") || has("bookings.emergency.cancel") || has("bookings.emergency.editFee")
+          || has("bookings.scheduled.assign") || has("bookings.scheduled.reschedule") || has("bookings.scheduled.cancel")
+          || has("bookings.quotation.assign") || has("bookings.quotation.approve") || has("bookings.quotation.reject") || has("bookings.quotation.convertToBooking")
+        ))
+        || (permission == "services.manage" && (
+          has("services.view") || has("services.create") || has("services.edit")
+          || has("services.delete") || has("services.change_status")
+          || has("services.categories.view") || has("services.categories.create")
+          || has("services.categories.edit") || has("services.categories.delete")
+          || has("services.services.view") || has("services.services.create")
+          || has("services.services.edit") || has("services.services.delete")
+          || has("services.pricing.view") || has("services.pricing.edit")
+          || has("content.banners.view") || has("content.banners.create")
+          || has("content.banners.edit") || has("content.banners.delete")
+        ))
+        || (permission == "payments.read" && (has("payments.view") || has("payments.transactions.view") || has("payments.refunds.view") || has("payments.payouts.view") || has("operations.commandCenter.view") || has("operations.advancedSearch.view") || has("operations.reports.view")))
+        || (permission == "payments.manage" && (
+          has("payments.edit") || has("payments.refund") || has("payments.payout")
+          || has("payments.verify") || has("payments.wallet") || has("payments.sensitive")
+          || has("payments.transactions.edit") || has("payments.refunds.create")
+          || has("payments.refunds.approve") || has("payments.payouts.approve")
+          || has("payments.payouts.payout") || has("payments.disputes.resolve")
+        ))
+        || (permission == "trust.manage" && (
+          has("trust.view") || has("trust.create") || has("trust.edit")
+          || has("trust.assign") || has("trust.change_status") || has("trust.sensitive")
+          || has("support.view") || has("support.create") || has("support.edit") || has("support.reply")
+          || has("complaints.view") || has("complaints.create") || has("complaints.edit")
+          || has("complaints.assign") || has("complaints.resolve")
+          || has("support.liveChat.view") || has("support.liveChat.reply")
+        ))
+        || (permission == "promotions.manage" && (
+          has("notifications.view") || has("notifications.create") || has("notifications.edit")
+          || has("notifications.delete") || has("promotions.view") || has("promotions.create")
+          || has("promotions.edit") || has("promotions.delete")
+        ))
+        || (permission == "notifications.send" && (
+          has("notifications.send")
+        ))
+        || (permission == "settings.edit" && (
+          has("settings.company.edit") || has("settings.branding.edit") || has("settings.appearance.edit")
+          || has("settings.integrations.edit") || has("settings.integrations.apiCenter.edit")
+          || has("settings.security.edit") || has("settings.notifications.edit")
+        ))
+        || (permission == "audit.read" && has("audit.view"));
+    }
+
+    function ownAdminProfile(adminId) {
+      return activeAdmin()
+        && request.auth.uid == adminId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          "name", "email", "phone", "jobTitle", "department", "avatar",
+          "twoFactorEnabled", "theme", "locale", "lastSeen"
+        ]);
+    }
+
+    function rolePermissionSafe(roleId) {
+      return !("permissions" in request.resource.data)
+        || !("system.reset" in request.resource.data.permissions)
+        || (
+          roleId == "super-admin"
+          && request.resource.data.name == "Super admin"
+          && request.resource.data.system == true
+        );
+    }
+
+    match /admins/{adminId} {
+      allow get: if signedIn() && request.auth.uid == adminId;
+      allow list: if realAdmin() && (superAdmin() || can("admins.manage") || can("users.view"));
+      allow create, delete: if can("admins.manage");
+      allow update: if can("admins.manage") || ownAdminProfile(adminId);
+
+      match /sessions/{sessionId} {
+        allow read, create, update, delete: if activeAdmin()
+          && (request.auth.uid == adminId || can("admins.manage"));
+      }
+    }
+
+    match /roles/{id} {
+      allow read: if activeAdmin();
+      allow create: if (can("admins.manage") || can("roles.create")) && rolePermissionSafe(id);
+      allow update: if (can("admins.manage") || can("roles.edit")) && rolePermissionSafe(id);
+      allow delete: if can("admins.manage") || can("roles.delete");
+    }
+
+    match /adminInvites/{id} {
+      allow read: if can("admins.manage") || can("users.invite") || can("users.create");
+      allow write: if false;
+    }
+
+    // Customer/Technician app canonical people collection.
+    // Production dashboard reads/writes customers and technicians here so the
+    // mobile apps, technician app, and admin dashboard share one backend model.
+    match /users/{id} {
+      allow read: if realAdmin() && (
+        superAdmin()
+        || (resource.data.role == "customer" && (can("customers.read") || can("customers.write") || can("payments.read")))
+        || (resource.data.role == "technician" && (can("providers.read") || can("providers.approve") || can("providers.suspend") || can("technicians.performance.view")))
+      );
+      allow create: if realAdmin() && (
+        (request.resource.data.role == "customer" && (can("customers.write") || can("payments.manage")))
+        || (request.resource.data.role == "technician" && (can("providers.approve") || can("providers.suspend")))
+      );
+      allow update: if realAdmin() && (
+        superAdmin()
+        || (resource.data.role == "customer" && (can("customers.write") || can("payments.manage")))
+        || (resource.data.role == "technician" && (
+          can("providers.approve") || can("providers.suspend")
+          || can("technicians.warning.create") || can("technicians.warning.delete")
+          || can("technicians.warnings.create") || can("technicians.warnings.delete")
+          || can("technicians.warnings.reset") || can("technicians.notes")
+          || can("technicians.status.warn") || can("technicians.status.suspend")
+          || can("technicians.status.disable") || can("technicians.status.reactivate")
+          || can("technicians.status.blacklist")
+        ))
+      );
+      allow delete: if realAdmin() && (
+        (resource.data.role == "customer" && (can("customers.write") || can("customers.delete")))
+        || (resource.data.role == "technician" && (can("providers.approve") || can("providers.suspend") || can("providers.delete")))
+      );
+
+      match /wallet/{docId} {
+        allow read: if realAdmin() && (
+          can("payments.read") || can("payments.manage") || can("customers.read") || can("customers.write")
+        );
+        allow create, update: if realAdmin() && (can("payments.manage") || can("customers.write"));
+        allow delete: if false;
+      }
+
+      match /wallet_transactions/{txnId} {
+        allow read: if realAdmin() && (
+          can("payments.read") || can("payments.manage") || can("customers.read") || can("customers.write")
+        );
+        allow create: if realAdmin() && (can("payments.manage") || can("customers.write"));
+        allow update, delete: if false;
+      }
+    }
+
+    match /customers/{id} {
+      allow read: if ((can("customers.read") || can("customers.write")) && productionDoc()) || demoDoc();
+      allow create: if ((can("customers.write") || can("payments.manage")) && productionCreate()) || demoCreate();
+      allow update: if ((can("customers.write") || can("payments.manage")) && productionUpdate()) || demoUpdate();
+      allow delete: if (can("customers.write") || can("payments.manage")) && productionDoc();
+    }
+
+    match /providers/{id} {
+      allow read: if ((can("providers.read") || can("providers.approve") || can("technicians.performance.view")) && productionDoc()) || demoDoc();
+      allow create: if ((can("providers.approve") || can("providers.suspend")) && productionCreate()) || demoCreate();
+      allow update: if ((can("providers.approve") || can("providers.suspend") || can("technicians.warning.create") || can("technicians.warning.delete") || can("technicians.warnings.create") || can("technicians.warnings.delete") || can("technicians.warnings.reset") || can("technicians.notes") || can("technicians.status.warn") || can("technicians.status.suspend") || can("technicians.status.disable") || can("technicians.status.reactivate") || can("technicians.status.blacklist")) && productionUpdate()) || demoUpdate();
+      allow delete: if (can("providers.approve") || can("providers.suspend")) && productionDoc();
+    }
+
+    match /providerLocations/{id} {
+      allow read: if ((can("jobs.read") || can("technicians.performance.view")) && productionDoc()) || demoDoc();
+      allow create: if (can("jobs.write") && productionCreate()) || demoCreate();
+      allow update: if (can("jobs.write") && productionUpdate()) || demoUpdate();
+      allow delete: if false;
+    }
+
+    match /aiExecutions/{id} {
+      allow read: if (realAdmin() && productionDoc()) || demoDoc();
+      allow create: if (realAdmin() && request.resource.data.actorId == request.auth.uid && productionCreate()) || demoCreate();
+      allow update: if activeAdmin()
+        && ((realAdmin() && (resource.data.actorId == request.auth.uid || can("admins.manage")) && productionUpdate()) || demoUpdate());
+      allow delete: if false;
+    }
+
+    match /aiMemories/{id} {
+      allow read: if (realAdmin() && productionDoc()) || demoDoc();
+      allow create: if (realAdmin() && request.resource.data.actorId == request.auth.uid && productionCreate()) || demoCreate();
+      allow update: if (realAdmin() && resource.data.actorId == request.auth.uid && productionUpdate()) || demoUpdate();
+      allow delete: if realAdmin()
+        && (resource.data.actorId == request.auth.uid || can("admins.manage"))
+        && productionDoc();
+    }
+
+    match /aiReports/{id} {
+      allow read: if (realAdmin() && productionDoc()) || demoDoc();
+      allow create: if (realAdmin() && productionCreate()) || demoCreate();
+      allow update, delete: if false;
+    }
+
+    match /orders/{id} {
+      allow read: if ((can("jobs.read") || can("technicians.performance.view")) && productionDoc()) || demoDoc();
+      allow create: if ((can("jobs.write") || can("payments.manage")) && productionCreate()) || demoCreate();
+      allow update: if ((can("jobs.write") || can("payments.manage")) && productionUpdate()) || demoUpdate();
+      allow delete: if (can("jobs.write") || can("payments.manage")) && productionDoc();
+    }
+
+    // Customer app canonical jobs collection.
+    match /jobs/{id} {
+      allow read: if realAdmin() && (can("jobs.read") || can("technicians.performance.view") || can("payments.read") || can("trust.manage"));
+      allow create: if realAdmin() && (can("jobs.write") || can("payments.manage"));
+      allow update: if realAdmin() && (can("jobs.write") || can("payments.manage") || can("trust.manage"));
+      allow delete: if realAdmin() && (can("jobs.write") || can("jobs.delete"));
+
+      match /quotes/{technicianId} {
+        allow read: if realAdmin() && (can("jobs.read") || can("bookings.quotation.view"));
+        allow create, update, delete: if realAdmin() && (can("jobs.write") || can("bookings.quotation.assign") || can("bookings.quotation.approve") || can("bookings.quotation.reject"));
+      }
+
+      match /tracking/{pointId} {
+        allow read: if realAdmin() && (can("jobs.read") || can("operations.map.view"));
+        allow create, update: if realAdmin() && can("jobs.write");
+        allow delete: if false;
+      }
+
+      match /threads/{technicianId} {
+        allow read: if realAdmin() && (can("jobs.read") || can("support.view") || can("trust.manage"));
+        allow create, update: if realAdmin() && (can("support.reply") || can("jobs.write"));
+        allow delete: if realAdmin() && can("trust.manage");
+
+        match /messages/{messageId} {
+          allow read: if realAdmin() && (can("jobs.read") || can("support.view") || can("trust.manage"));
+          allow create: if realAdmin() && (can("support.reply") || can("jobs.write"));
+          allow update, delete: if realAdmin() && can("trust.manage");
+        }
+      }
+
+      match /reviews/{reviewerId} {
+        allow read: if realAdmin() && (can("reviews.view") || can("technicians.reviews.view") || can("technicians.performance.view"));
+        allow create, update: if realAdmin() && (can("reviews.edit") || can("technicians.reviews.approve"));
+        allow delete: if realAdmin() && (can("reviews.delete") || can("technicians.reviews.delete"));
+      }
+    }
+
+    match /categories/{id} {
+      allow read: if (realAdmin() && productionDoc()) || demoDoc();
+      allow create: if (can("services.manage") && productionCreate()) || demoCreate();
+      allow update: if (can("services.manage") && productionUpdate()) || demoUpdate();
+      allow delete: if can("services.manage") && productionDoc();
+    }
+
+    match /services/{id} {
+      allow read: if (realAdmin() && productionDoc()) || demoDoc();
+      allow create: if (can("services.manage") && productionCreate()) || demoCreate();
+      allow update: if (can("services.manage") && productionUpdate()) || demoUpdate();
+      allow delete: if can("services.manage") && productionDoc();
+    }
+
+    match /banners/{id} {
+      allow read: if (realAdmin() && productionDoc()) || demoDoc();
+      allow create: if (can("services.manage") && productionCreate()) || demoCreate();
+      allow update: if (can("services.manage") && productionUpdate()) || demoUpdate();
+      allow delete: if can("services.manage") && productionDoc();
+    }
+
+    match /verificationRequirements/{id} {
+      allow read: if activeAdmin();
+      allow write: if can("providers.approve");
+    }
+
+    match /conversations/{id} {
+      allow read: if ((can("jobs.read") || can("trust.manage")) && productionDoc()) || demoDoc();
+      allow create: if ((can("jobs.write") || can("trust.manage")) && productionCreate()) || demoCreate();
+      allow update: if ((can("jobs.write") || can("trust.manage")) && productionUpdate()) || demoUpdate();
+      allow delete: if (can("jobs.write") || can("trust.manage")) && productionDoc();
+    }
+
+    match /complaints/{id} {
+      allow read: if ((can("trust.manage") || can("technicians.complaints.view")) && productionDoc()) || demoDoc();
+      allow create: if (can("trust.manage") && productionCreate()) || demoCreate();
+      allow update: if (can("trust.manage") && productionUpdate()) || demoUpdate();
+      allow delete: if can("trust.manage") && productionDoc();
+    }
+
+    match /reviews/{id} {
+      allow read: if ((can("reviews.view") || can("technicians.reviews.view") || can("technicians.performance.view")) && productionDoc()) || demoDoc();
+      allow create: if (can("reviews.edit") && productionCreate()) || demoCreate();
+      allow update: if ((can("reviews.edit") || can("technicians.reviews.approve") || can("technicians.reviews.hide")) && productionUpdate()) || demoUpdate();
+      allow delete: if (can("reviews.delete") || can("technicians.reviews.delete")) && productionDoc();
+    }
+
+    match /wallets/{id} {
+      allow read: if ((can("payments.read") || can("payments.manage") || can("customers.read") || can("customers.write") || can("providers.read") || can("technicians.performance.view")) && productionDoc()) || demoDoc();
+      allow create: if ((can("payments.manage") || can("customers.write") || can("providers.approve")) && productionCreate()) || demoCreate();
+      allow update: if ((can("payments.manage") || can("customers.write")) && productionUpdate()) || demoUpdate();
+      allow delete: if false;
+    }
+
+    match /transactions/{id} {
+      allow read: if ((can("payments.read") || can("payments.manage") || can("customers.read") || can("customers.write") || can("providers.read") || can("technicians.performance.view")) && productionDoc()) || demoDoc();
+      allow create: if ((can("payments.manage") || can("customers.write")) && productionCreate()) || demoCreate();
+      allow update: if (can("payments.manage") && productionUpdate()) || demoUpdate();
+      allow delete: if false;
+    }
+
+    match /payouts/{id} {
+      allow read: if ((can("payments.read") || can("payments.manage")) && productionDoc()) || demoDoc();
+      allow create: if (can("payments.manage") && productionCreate()) || demoCreate();
+      allow update: if (can("payments.manage") && productionUpdate()) || demoUpdate();
+      allow delete: if false;
+    }
+
+    match /instapayReviews/{id} {
+      allow read: if ((can("payments.read") || can("payments.manage")) && productionDoc()) || demoDoc();
+      allow create: if (can("payments.manage") && productionCreate()) || demoCreate();
+      allow update: if (can("payments.manage") && productionUpdate()) || demoUpdate();
+      allow delete: if false;
+    }
+
+    match /promos/{id} {
+      allow read: if (realAdmin() && productionDoc()) || demoDoc();
+      allow create: if (can("promotions.manage") && productionCreate()) || demoCreate();
+      allow update: if (can("promotions.manage") && productionUpdate()) || demoUpdate();
+      allow delete: if can("promotions.manage") && productionDoc();
+    }
+
+    match /notifications/{id} {
+      allow read: if (realAdmin() && productionDoc()) || demoDoc();
+      allow create: if (can("notifications.send") && productionCreate()) || demoCreate();
+      allow update: if (can("notifications.send") && productionUpdate()) || demoUpdate();
+      allow delete: if can("notifications.send") && productionDoc();
+    }
+
+    match /settings/{id} {
+      allow read: if activeAdmin();
+      allow write: if can("admins.manage");
+    }
+
+    match /apiIntegrations/{id} {
+      allow read: if false;
+      allow create, update, delete: if false;
+    }
+
+    match /system/{id} {
+      allow read: if activeAdmin();
+      allow create, update: if can("providers.approve");
+      allow delete: if false;
+    }
+
+    match /auditLogs/{id} {
+      allow read: if (can("audit.read") && productionDoc()) || demoDoc();
+      allow create: if (realAdmin() && request.resource.data.actorId == request.auth.uid && productionCreate()) || (demoAdmin() && request.resource.data.actorId == request.auth.uid && demoCreate());
+      allow update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

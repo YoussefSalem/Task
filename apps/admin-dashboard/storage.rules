@@ -1,0 +1,63 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function activeAdmin() {
+      return request.auth != null
+        && firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid))
+        && firestore.get(/databases/(default)/documents/admins/$(request.auth.uid)).data.status == "Active";
+    }
+
+    function can(permission) {
+      return activeAdmin()
+        && (firestore.get(/databases/(default)/documents/admins/$(request.auth.uid)).data.role == "Super admin"
+          || permission in firestore.get(/databases/(default)/documents/admins/$(request.auth.uid)).data.permissions);
+    }
+
+    function validUpload() {
+      return request.resource != null
+        && request.resource.size > 0
+        && request.resource.size < 20 * 1024 * 1024;
+    }
+
+    match /provider-documents/{providerId}/{allPaths=**} {
+      allow read: if can("providers.read") || can("providers.approve");
+      allow create, update: if can("providers.approve") && validUpload();
+      allow delete: if can("providers.approve");
+    }
+
+    match /branding/{allPaths=**} {
+      allow read: if activeAdmin();
+      allow create, update: if can("admins.manage") && validUpload();
+      allow delete: if can("admins.manage");
+    }
+
+    match /avatar/{allPaths=**} {
+      allow read: if activeAdmin();
+      allow create, update: if activeAdmin() && validUpload();
+      allow delete: if activeAdmin();
+    }
+
+    match /services/{allPaths=**} {
+      allow read: if activeAdmin();
+      allow create, update: if can("services.manage") && validUpload();
+      allow delete: if can("services.manage");
+    }
+
+    match /banners/{allPaths=**} {
+      allow read: if activeAdmin();
+      allow create, update: if can("services.manage") && validUpload();
+      allow delete: if can("services.manage");
+    }
+
+    match /complaint-evidence/{allPaths=**} {
+      allow read: if can("trust.manage");
+      allow create, update: if can("trust.manage") && validUpload();
+      allow delete: if can("trust.manage");
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

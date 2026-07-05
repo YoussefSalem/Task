@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js / build output
+.next/
+out/
+build/
+dist/
+
+# Deployment/build tooling
+.vercel/
+.firebase/
+firebase-debug.log
+firebase-*.log
+firestore-debug.log
+ui-debug.log
+*-debug.log
+firebase.functions.generated.json
+firebase.hosting.generated.json
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+*.local
+*.pem
+*.key
+*serviceAccount*.json
+*service-account*.json
+*firebase-admin*.json
+*credentials*.json
+*secret*.json
+service-account*.json
+
+# Logs and caches
+*.log
+.eslintcache
+.turbo/
+.cache/
+.swc/
+tsconfig.tsbuildinfo
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

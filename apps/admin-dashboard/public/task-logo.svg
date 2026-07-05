@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Task">
+  <defs><linearGradient id="p" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#6d28d9"/><stop offset="1" stop-color="#a855f7"/></linearGradient><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#313442"/><stop offset="1" stop-color="#11131b"/></linearGradient></defs>
+  <path fill="url(#g)" stroke="#55596d" stroke-width="2" stroke-linejoin="round" d="M55 37h80v28H89v44l32 28 35-38v43l-35 36-66-54z"/>
+  <path fill="url(#p)" stroke="#b48aff" stroke-width="2" stroke-linejoin="round" d="M107 91 168 29l17 18-78 80z"/>
+  <text x="120" y="217" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="54" font-weight="650" text-anchor="middle" letter-spacing="-3">task</text>
+</svg>
