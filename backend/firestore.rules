@@ -86,10 +86,16 @@ service cloud.firestore {
       allow create: if isSelf(request.resource.data.customer_id);
       // Job owner can update their own job (accept, counter, cancel, etc).
       // Technician can only advance stage. Admin unrestricted.
+      // NOTE: these must be the snake_case WIRE values (see
+      // packages/task_data/lib/src/mappers/enum_codecs.dart JobStatusCodec),
+      // not the Dart enum member names - the client never writes 'enRoute'/
+      // 'inProgress' literally, only 'en_route'/'in_progress'/'completed'.
+      // A prior version of this rule used the enum names and would have
+      // rejected every real technician status-advance write.
       allow update: if isAdmin()
         || isSelf(resource.data.customer_id)
         || (isSignedIn() && role() == 'technician' &&
-            request.resource.data.status in ['enRoute', 'inProgress', 'completed']);
+            request.resource.data.status in ['en_route', 'in_progress', 'completed']);
       allow delete: if isAdmin();
 
       // Sealed bids: a technician writes only their own quote (doc id == uid)
