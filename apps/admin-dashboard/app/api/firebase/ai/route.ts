@@ -8,6 +8,7 @@ import { buildAiContext } from "@/lib/ai/context";
 import { runGeminiAiExecution } from "@/lib/ai/gemini";
 import { memoryFromExecution } from "@/lib/ai/memory";
 import { hasPermission } from "@/lib/permissions";
+import { isCollectionAllowedForAi, redactDocForAi } from "@/lib/ai/context-redaction";
 import type {
   AiExecution,
   AiMemory,
@@ -134,20 +135,37 @@ function clean<T>(value: T): T {
   ) as T;
 }
 
+/**
+ * Cap on documents per collection sent into AI context. This is a "minimal
+ * context" limit, not a UI display limit (contrast with the dashboard's own
+ * limit(1000) reads) - the AI route previously pulled up to 1000 docs from
+ * every one of ~23 collections into every single prompt, unfiltered and
+ * unredacted, sent whole to a third-party LLM.
+ */
+const AI_CONTEXT_DOC_LIMIT = 150;
+
 async function readState(actor: AdminUser): Promise<DatabaseState> {
   const state = structuredClone(emptyDatabase);
   const environment = environmentForActor(actor);
   await Promise.all(
     (Object.entries(collections) as Array<[ArrayStateKey, string]>).map(
       async ([key, name]) => {
+        // Collections that must never reach a third-party LLM (admin role
+        // assignments, wallet balances) are skipped entirely and stay as the
+        // empty arrays already in `emptyDatabase`. Collections the actor
+        // lacks view permission for are likewise skipped - a support-role
+        // admin's AI query gets a narrower context than a Super Admin's.
+        if (!isCollectionAllowedForAi(key, actor)) return;
         const ref = firebaseAdminDb.collection(name);
         const snapshot = environmentScopedCollections.has(key)
-          ? await ref.where("environment", "==", environment).limit(1000).get()
-          : await ref.limit(1000).get();
-        (state[key] as unknown[]) = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...(normalizeFirestore(doc.data()) as Record<string, unknown>),
-        }));
+          ? await ref.where("environment", "==", environment).limit(AI_CONTEXT_DOC_LIMIT).get()
+          : await ref.limit(AI_CONTEXT_DOC_LIMIT).get();
+        (state[key] as unknown[]) = snapshot.docs.map((doc) =>
+          redactDocForAi({
+            id: doc.id,
+            ...(normalizeFirestore(doc.data()) as Record<string, unknown>),
+          }),
+        );
       },
     ),
   );

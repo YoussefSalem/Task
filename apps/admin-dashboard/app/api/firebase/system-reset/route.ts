@@ -4,8 +4,8 @@ import {
   firebaseApiError,
   requireFirebaseAdmin,
 } from "@/lib/firebase/server-auth";
-import { hasPermission, isSuperAdminRole } from "@/lib/permissions";
 import { requestId, serverLog } from "@/lib/server/logger";
+import { checkSystemResetAccess } from "@/lib/firebase/system-reset-guard";
 
 export const runtime = "nodejs";
 
@@ -92,25 +92,22 @@ const schema = z.discriminatedUnion("action", [
   }),
 ]);
 
-function isSuperAdmin(actor: unknown) {
-  const admin = actor as {
-    role?: string;
-    roleId?: string;
-    permissions?: string[];
-  };
-  return (
-    isSuperAdminRole(admin.role) ||
-    admin.roleId === "super-admin" ||
-    admin.roleId === "super_admin" ||
-    hasPermission(admin.role, admin.permissions, "system.reset")
-  );
-}
-
+/**
+ * This route ALWAYS targets `environment == "production"` data (see
+ * getProductionDocs/countProductionCollection below) - there is no demo-mode
+ * variant of system-reset. Demo data has its own reset path: POST
+ * /api/firebase/demo/reset. See lib/firebase/system-reset-guard.ts for the
+ * actual (unit-tested) access decision - a demo actor is refused here
+ * regardless of role/roleId/permissions.
+ */
 function requireSystemResetActor(actor: unknown) {
-  if (!isSuperAdmin(actor)) {
-    throw new Response("Only Super Admin can reset the system.", {
+  const check = checkSystemResetAccess(
+    (actor ?? {}) as Parameters<typeof checkSystemResetAccess>[0],
+  );
+  if (!check.allowed) {
+    throw new Response(check.reason, {
       status: 403,
-      statusText: "Only Super Admin can reset the system.",
+      statusText: check.reason,
     });
   }
 }

@@ -1730,6 +1730,15 @@ export async function performFirestoreOperation<T>(
           if (!orderSnapshot.exists() || !customerSnapshot.exists())
             throw new Error("Refund records changed; retry the operation");
           const latest = mapJobDoc(order.id, orderSnapshot.data() as Record<string, unknown>);
+          // Re-check inside the transaction, not just before it started (the
+          // pre-transaction check above is a fast-path only and is racy on
+          // its own - two concurrent refundJob calls for the same job would
+          // both pass it before either transaction commits). Without this,
+          // a double-click or retried request double-credits the customer's
+          // real wallet. The demo branch of this same action already has an
+          // equivalent in-transaction re-check further down; this mirrors it.
+          if (latest.payment?.status === "Refunded")
+            throw new Error("This order is already refunded");
           const amount = Number(latest.payment?.amount ?? latest.amount ?? 0);
           const currentMinor = Number(walletSnapshot.data()?.balance_minor ?? 0);
           const amountMinor = Math.round(amount * 100);
