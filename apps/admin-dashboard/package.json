@@ -12,6 +12,7 @@
     "migrate:environments": "node --import tsx scripts/migrate-environments.ts",
     "migrate:rbac": "node --import tsx scripts/migrate-rbac-roles.ts",
     "test:wiring": "node scripts/test-production-wiring.mjs",
+    "test": "node --import tsx --test tests/**/*.test.ts",
     "deploy:rules": "firebase deploy --only firestore:rules,firestore:indexes,storage",
     "deploy": "node scripts/preflight-production-env.mjs && firebase deploy"
   },

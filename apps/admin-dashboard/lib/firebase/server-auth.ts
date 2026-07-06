@@ -1,6 +1,7 @@
 import { firebaseAdminAuth, firebaseAdminDb } from "@/lib/firebase/admin";
 import { hasPermission } from "@/lib/permissions";
 import { errorMessage, requestId, serverLog } from "@/lib/server/logger";
+import { resolveAdminIdentity, type CustomerAppRole } from "@/lib/firebase/admin-identity";
 
 async function loadRolePermissions(roleId: string | undefined, fallback: string[] = []) {
   if (!roleId) return fallback;
@@ -51,10 +52,20 @@ export async function requireFirebaseAdmin(request: Request, permission?: string
     );
   }
   const snapshot = await firebaseAdminDb.collection("admins").doc(token.uid).get();
-  if (!snapshot.exists) {
-    serverLog("warn", "Admin profile missing for authenticated user", {
+  // Defense in depth for a future shared Firebase project: never treat a uid
+  // as an admin if it also carries a real Customer App users/{uid} doc with
+  // role customer|technician, even if an admins/{uid} doc exists for it too.
+  // See lib/firebase/admin-identity.ts.
+  const customerAppUserSnapshot = await firebaseAdminDb.collection("users").doc(token.uid).get();
+  const customerAppUserRole = customerAppUserSnapshot.exists
+    ? ((customerAppUserSnapshot.data()?.role as CustomerAppRole | undefined) ?? null)
+    : null;
+  const identity = resolveAdminIdentity(snapshot.exists, customerAppUserRole);
+  if (!identity.allowed) {
+    serverLog("warn", "Admin identity check failed", {
       requestId: id,
       uid: token.uid,
+      reason: identity.reason,
       path: new URL(request.url).pathname,
     });
     throw new Response("Unauthorized", {

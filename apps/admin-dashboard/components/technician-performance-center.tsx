@@ -564,7 +564,7 @@ export function TechnicianPerformanceCenter({ notify }: { notify: (message: stri
                           { label: "Open complaints", onClick: () => setSelectedId(item.provider.id) },
                           ...(can("technicians.warnings.create") || can("technicians.status.warn") ? [{ label: "Warn technician", onClick: () => setWarningProvider(item.provider), separator: true }] : []),
                           ...(can("technicians.notes.create") ? [{ label: "Add private note", onClick: () => setNoteProvider(item.provider) }] : []),
-                          ...(can("notifications.send") ? [{ label: "Send notification", onClick: () => actions.createNotification({ title: `Task update for ${item.provider.name}`, body: "Please review the latest update in your Task Provider app.", audience: "Individual" }).then(() => notify("Notification queued")) }] : []),
+                          ...(can("notifications.send") ? [{ label: "Send notification", onClick: () => actions.createNotification({ title: `Task update for ${item.provider.name}`, body: "Please review the latest update in your Task Provider app.", audience: "Individual", targetUserId: item.provider.id }).then(() => notify("Notification queued")) }] : []),
                           ...(can("technicians.warnings.create") ? [{ label: "Request explanation", onClick: () => setWarningProvider(item.provider) }] : []),
                           ...(can("technicians.status.suspend") ? [{ label: "Suspend technician", onClick: () => updateStatus(item.provider, "Suspended"), danger: true }] : []),
                           ...(can("technicians.status.disable") ? [{ label: "Disable account", onClick: () => updateStatus(item.provider, "Disabled"), danger: true }] : []),

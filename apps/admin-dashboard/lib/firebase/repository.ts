@@ -8,6 +8,7 @@ import {
   onSnapshot,
   query,
   runTransaction,
+  serverTimestamp,
   setDoc,
   updateDoc,
   where,
@@ -40,6 +41,18 @@ import {
   isDemoData,
 } from "@/lib/demo-mode";
 import { hasPermission, isSuperAdminRole } from "@/lib/permissions";
+import { adminJobStatusFromWire, jobWireStatusFromAdmin } from "@/lib/firebase/job-status-mapping";
+import {
+  buildRealNotificationDoc,
+  resolveNotificationFanout,
+  type NotificationAudience,
+} from "@/lib/firebase/notification-fanout";
+import {
+  providerSourceCollection,
+  customerSourceCollection,
+  jobSourceCollection,
+} from "@/lib/firebase/entity-routing";
+import { adminStatusFromUser } from "@/lib/firebase/account-status-mapping";
 
 const emptyState: DatabaseState = {
   aiExecutions: [],
@@ -167,14 +180,8 @@ const displayNameFromUser = (data: Record<string, unknown>) => {
     .trim();
 };
 
-const adminStatusFromUser = (data: Record<string, unknown>) => {
-  if (data.disabled === true) return "Disabled" as const;
-  const status = String(data.status ?? "").toLowerCase();
-  if (["suspended", "rejected"].includes(status)) return "Suspended" as const;
-  if (["banned", "blacklisted", "blocked"].includes(status)) return "Banned" as const;
-  if (["pending", "applied", "under_review"].includes(status)) return "Pending" as const;
-  return "Active" as const;
-};
+// adminStatusFromUser moved to account-status-mapping.ts so an unrecognized
+// (but present) status value never silently defaults to "Active".
 
 const providerStatusFromUser = (data: Record<string, unknown>): Provider["status"] => {
   if (data.disabled === true) return "Disabled";
@@ -195,60 +202,9 @@ const providerVerifiedFromUser = (data: Record<string, unknown>) =>
   data.status === "approved" ||
   data.status === "active";
 
-const adminJobStatusFromWire = (value: unknown): Job["status"] => {
-  const normalized = String(value ?? "").trim();
-  switch (normalized) {
-    case "pendingScheduled":
-    case "pending_scheduled":
-    case "Scheduled":
-      return "Scheduled";
-    case "accepted":
-    case "Assigned":
-      return "Assigned";
-    case "enRoute":
-    case "en_route":
-    case "En route":
-      return "En route";
-    case "inProgress":
-    case "in_progress":
-    case "In progress":
-      return "In progress";
-    case "completed":
-    case "Completed":
-      return "Completed";
-    case "cancelled":
-    case "Cancelled":
-      return "Cancelled";
-    case "refunded":
-    case "Refunded":
-      return "Refunded";
-    case "biddingActive":
-    case "bidding_active":
-    case "searching":
-    default:
-      return "Scheduled";
-  }
-};
-
-const jobWireStatusFromAdmin = (status: string) => {
-  switch (status) {
-    case "Assigned":
-      return "accepted";
-    case "En route":
-      return "enRoute";
-    case "In progress":
-      return "inProgress";
-    case "Completed":
-      return "completed";
-    case "Cancelled":
-      return "cancelled";
-    case "Refunded":
-      return "refunded";
-    case "Scheduled":
-    default:
-      return "pendingScheduled";
-  }
-};
+// adminJobStatusFromWire / jobWireStatusFromAdmin moved to job-status-mapping.ts
+// so unknown/new Customer App status values (e.g. disputed, pausedForApproval)
+// are mapped explicitly instead of silently coerced to "Scheduled".
 
 const bookingTypeFromWire = (value: unknown, urgency?: unknown): Job["bookingType"] => {
   const normalized = String(value ?? "").trim();
@@ -602,7 +558,9 @@ export function subscribeDashboard(
               ? query(collectionGroup(db, "wallet"), limit(1000))
               : !actor.isDemoUser && key === "transactions"
                 ? query(collectionGroup(db, "wallet_transactions"), limit(1000))
-                : environmentScopedCollections.has(key)
+                : !actor.isDemoUser && key === "reviews"
+                  ? query(collectionGroup(db, "reviews"), limit(1000))
+                  : environmentScopedCollections.has(key)
                   ? query(collection(db, name), where("environment", "==", environmentForActor(actor)), limit(1000))
                   : query(collection(db, name), limit(1000));
     unsubs.push(
@@ -656,6 +614,29 @@ export function subscribeDashboard(
                 status: "Completed",
                 createdAt: asIso(data.created_at as FirestoreLikeDate),
                 reference: String(data.title ?? ""),
+                environment: "production",
+                isDemoData: false,
+              };
+            }
+            if (!actor.isDemoUser && key === "reviews") {
+              // Real reviews live at jobs/{jobId}/reviews/{reviewerId} - the
+              // Customer App is write-only here today (no moderation status
+              // field exists), so newly-read reviews default to "Visible".
+              const jobId = item.ref.parent.parent?.id ?? "";
+              const tags = Array.isArray(data.tags) ? (data.tags as string[]) : [];
+              const note = String(data.note ?? "").trim();
+              return {
+                id: item.id,
+                providerId: String(data.technician_id ?? ""),
+                customerId: String(data.reviewer_id ?? item.id),
+                customerName: "Customer",
+                jobId,
+                rating: (Number(data.rating ?? 5) || 5) as 1 | 2 | 3 | 4 | 5,
+                comment: note || tags.join(", "),
+                pictures: [],
+                adminNotes: [],
+                status: "Visible" as const,
+                createdAt: asIso(data.created_at as FirestoreLikeDate),
                 environment: "production",
                 isDemoData: false,
               };
@@ -886,7 +867,7 @@ export async function performFirestoreOperation<T>(
     }
     case "createCustomer": {
       const input = p.input as Record<string, string>;
-      const id = doc(collection(db, actor.isDemoUser ? "customers" : "users")).id;
+      const id = doc(collection(db, customerSourceCollection(actor.isDemoUser))).id;
       const name = String(input.name ?? "").trim();
       const [firstName = name, ...lastParts] = name.split(/\s+/);
       const item = {
@@ -916,7 +897,7 @@ export async function performFirestoreOperation<T>(
         isDemoData: Boolean(actor.isDemoUser),
       };
       const batch = writeBatch(db);
-      batch.set(doc(db, actor.isDemoUser ? "customers" : "users", id), item);
+      batch.set(doc(db, customerSourceCollection(actor.isDemoUser), id), item);
       if (actor.isDemoUser) {
         batch.set(doc(db, "wallets", `wallet-${id}`), {
           id: `wallet-${id}`,
@@ -944,17 +925,17 @@ export async function performFirestoreOperation<T>(
     }
     case "updateCustomer":
       result = await patch(
-        actor.isDemoUser ? "customers" : "users",
+        customerSourceCollection(actor.isDemoUser),
         String(p.id),
         p.patch as Record<string, unknown>,
       );
       break;
     case "deleteCustomer":
-      await deleteDoc(doc(db, actor.isDemoUser ? "customers" : "users", String(p.id)));
+      await deleteDoc(doc(db, customerSourceCollection(actor.isDemoUser), String(p.id)));
       result = { ok: true, id: String(p.id) };
       break;
     case "suspendCustomer": {
-      const collectionName = actor.isDemoUser ? "customers" : "users";
+      const collectionName = customerSourceCollection(actor.isDemoUser);
       const item = await read<{ status: string }>(collectionName, String(p.id));
       result = await patch(collectionName, String(p.id), {
         status: item.status === "Suspended" || item.status === "suspended" ? "active" : "suspended",
@@ -1068,7 +1049,7 @@ export async function performFirestoreOperation<T>(
     }
     case "createProvider": {
       const input = p.input as Record<string, unknown>;
-      const providerRef = doc(collection(db, actor.isDemoUser ? "providers" : "users"));
+      const providerRef = doc(collection(db, providerSourceCollection(actor.isDemoUser)));
       const { getDocs } = await import("firebase/firestore");
       const requirements = await getDocs(
         collection(db, "verificationRequirements"),
@@ -1173,13 +1154,13 @@ export async function performFirestoreOperation<T>(
     }
     case "updateProvider":
       result = await patch(
-        actor.isDemoUser ? "providers" : "users",
+        providerSourceCollection(actor.isDemoUser),
         String(p.id),
         p.patch as Record<string, unknown>,
       );
       break;
     case "updateProviderLocation": {
-      const provider = await read<Provider>(actor.isDemoUser ? "providers" : "users", String(p.providerId));
+      const provider = await read<Provider>(providerSourceCollection(actor.isDemoUser), String(p.providerId));
       const status =
         String(p.status ?? (provider.available ? "Available" : "Offline")) as
           | "Available"
@@ -1206,7 +1187,7 @@ export async function performFirestoreOperation<T>(
       batch.set(doc(db, "providerLocations", provider.id), clean(item), {
         merge: true,
       });
-      batch.update(doc(db, actor.isDemoUser ? "providers" : "users", provider.id), {
+      batch.update(doc(db, providerSourceCollection(actor.isDemoUser), provider.id), {
         available: status !== "Offline",
         online: status !== "Offline",
         lastActive: now(),
@@ -1218,11 +1199,11 @@ export async function performFirestoreOperation<T>(
       break;
     }
     case "deleteProvider":
-      await deleteDoc(doc(db, actor.isDemoUser ? "providers" : "users", String(p.id)));
+      await deleteDoc(doc(db, providerSourceCollection(actor.isDemoUser), String(p.id)));
       result = { ok: true, id: String(p.id) };
       break;
     case "setProviderDecision": {
-      const collectionName = actor.isDemoUser ? "providers" : "users";
+      const collectionName = providerSourceCollection(actor.isDemoUser);
       const provider = mapProviderDoc(String(p.id), await read<Record<string, unknown>>(collectionName, String(p.id)));
       const decision = String(p.decision);
       const required =
@@ -1266,7 +1247,7 @@ export async function performFirestoreOperation<T>(
     case "reviewProviderDocument":
     case "deleteProviderDocument": {
       const providerId = String(p.providerId);
-      const providerCollection = actor.isDemoUser ? "providers" : "users";
+      const providerCollection = providerSourceCollection(actor.isDemoUser);
       const provider = mapProviderDoc(
         providerId,
         await read<Record<string, unknown>>(providerCollection, providerId),
@@ -1356,7 +1337,7 @@ export async function performFirestoreOperation<T>(
     case "assignVerificationOfficer":
     case "addProviderVerificationNote":
     case "updateProviderBackgroundCheck": {
-      const providerCollection = actor.isDemoUser ? "providers" : "users";
+      const providerCollection = providerSourceCollection(actor.isDemoUser);
       const provider = mapProviderDoc(
         String(p.providerId),
         await read<Record<string, unknown>>(providerCollection, String(p.providerId)),
@@ -1498,7 +1479,7 @@ export async function performFirestoreOperation<T>(
       const customer = mapCustomerDoc(
         String(input.customerId),
         await read<Record<string, unknown>>(
-          actor.isDemoUser ? "customers" : "users",
+          customerSourceCollection(actor.isDemoUser),
           String(input.customerId),
         ),
       );
@@ -1507,7 +1488,7 @@ export async function performFirestoreOperation<T>(
         ? mapProviderDoc(
             String(input.providerId),
             await read<Record<string, unknown>>(
-              actor.isDemoUser ? "providers" : "users",
+              providerSourceCollection(actor.isDemoUser),
               String(input.providerId),
             ),
           )
@@ -1530,7 +1511,7 @@ export async function performFirestoreOperation<T>(
           Math.abs(gps.lng) > 180)
       )
         throw new Error("Job GPS coordinates are outside valid bounds");
-      const jobId = doc(collection(db, actor.isDemoUser ? "orders" : "jobs")).id;
+      const jobId = doc(collection(db, jobSourceCollection(actor.isDemoUser))).id;
       const item: Job = clean({
         id: jobId,
         customerId: String(input.customerId),
@@ -1655,7 +1636,7 @@ export async function performFirestoreOperation<T>(
     }
     case "updateJob":
       result = await patch(
-        actor.isDemoUser ? "orders" : "jobs",
+        jobSourceCollection(actor.isDemoUser),
         String(p.id),
         p.patch as Record<string, unknown>,
       );
@@ -1664,7 +1645,7 @@ export async function performFirestoreOperation<T>(
       const provider = mapProviderDoc(
         String(p.providerId),
         await read<Record<string, unknown>>(
-          actor.isDemoUser ? "providers" : "users",
+          providerSourceCollection(actor.isDemoUser),
           String(p.providerId),
         ),
       );
@@ -1675,7 +1656,7 @@ export async function performFirestoreOperation<T>(
           !provider.available)
       )
         throw new Error("Provider is not verified, active, and available");
-      const jobCollection = actor.isDemoUser ? "orders" : "jobs";
+      const jobCollection = jobSourceCollection(actor.isDemoUser);
       const order = actor.isDemoUser
         ? await read<Job>(jobCollection, String(p.jobId))
         : mapJobDoc(String(p.jobId), await read<Record<string, unknown>>(jobCollection, String(p.jobId)));
@@ -1698,7 +1679,7 @@ export async function performFirestoreOperation<T>(
       break;
     }
     case "changeJobStatus": {
-      const jobCollection = actor.isDemoUser ? "orders" : "jobs";
+      const jobCollection = jobSourceCollection(actor.isDemoUser);
       const order = actor.isDemoUser
         ? await read<Job>(jobCollection, String(p.id))
         : mapJobDoc(String(p.id), await read<Record<string, unknown>>(jobCollection, String(p.id)));
@@ -1752,8 +1733,12 @@ export async function performFirestoreOperation<T>(
           const amount = Number(latest.payment?.amount ?? latest.amount ?? 0);
           const currentMinor = Number(walletSnapshot.data()?.balance_minor ?? 0);
           const amountMinor = Math.round(amount * 100);
+          // Do not write status: "refunded" - the real Customer App JobStatus
+          // enum has no such value, and this job doc is read by the real
+          // Customer App client. "payment_status: refunded" is safe: it's a
+          // real value in the Customer App's own PaymentStatus enum (just
+          // never written by the app itself yet).
           transaction.update(orderRef, {
-            status: "refunded",
             payment_status: "refunded",
             refunded_at: now(),
           });
@@ -1842,7 +1827,7 @@ export async function performFirestoreOperation<T>(
       break;
     }
     case "addJobNote": {
-      const jobCollection = actor.isDemoUser ? "orders" : "jobs";
+      const jobCollection = jobSourceCollection(actor.isDemoUser);
       const order = actor.isDemoUser
         ? await read<Job>(jobCollection, String(p.id))
         : mapJobDoc(String(p.id), await read<Record<string, unknown>>(jobCollection, String(p.id)));
@@ -1866,7 +1851,7 @@ export async function performFirestoreOperation<T>(
       break;
     }
     case "updateCancellation": {
-      const jobCollection = actor.isDemoUser ? "orders" : "jobs";
+      const jobCollection = jobSourceCollection(actor.isDemoUser);
       const order = actor.isDemoUser
         ? await read<Job>(jobCollection, String(p.id))
         : mapJobDoc(String(p.id), await read<Record<string, unknown>>(jobCollection, String(p.id)));
@@ -1877,8 +1862,23 @@ export async function performFirestoreOperation<T>(
       break;
     }
     case "flagMessage": {
-      const order = await read<Job>("orders", String(p.jobId));
-      result = await patch("orders", order.id, {
+      const jobCollection = jobSourceCollection(actor.isDemoUser);
+      if (!actor.isDemoUser) {
+        // The real Customer App `jobs` document has no inline `messages`
+        // array - chat lives in a separate jobs/{id}/threads/{tech}/messages
+        // subcollection with a different shape entirely. mapJobDoc() always
+        // reports `messages: []` for real jobs, so silently patching would
+        // write a meaningless empty array to a real production document
+        // instead of actually flagging anything. Refuse explicitly rather
+        // than pretend this succeeded - do not invent a new schema for it.
+        throw new Error(
+          "Flagging chat messages is not supported for real Customer App jobs yet " +
+            "(chat lives in a separate threads/messages subcollection, not an inline array). " +
+            "This action currently only works in demo mode.",
+        );
+      }
+      const order = await read<Job>(jobCollection, String(p.jobId));
+      result = await patch(jobCollection, order.id, {
         messages: (order.messages ?? []).map((item) =>
           item.id === p.messageId
             ? { ...item, flagged: true, reviewNote: String(p.note) }
@@ -1888,8 +1888,19 @@ export async function performFirestoreOperation<T>(
       break;
     }
     case "reviewCall": {
-      const order = await read<Job>("orders", String(p.jobId));
-      result = await patch("orders", order.id, {
+      const jobCollection = jobSourceCollection(actor.isDemoUser);
+      if (!actor.isDemoUser) {
+        // Same reasoning as flagMessage: real jobs have no persisted call
+        // history (mapJobDoc() always reports `calls: []`), so there is
+        // nothing real to review yet. Refuse rather than silently no-op.
+        throw new Error(
+          "Reviewing calls is not supported for real Customer App jobs yet " +
+            "(no call history is persisted on the real jobs schema today). " +
+            "This action currently only works in demo mode.",
+        );
+      }
+      const order = await read<Job>(jobCollection, String(p.jobId));
+      result = await patch(jobCollection, order.id, {
         calls: (order.calls ?? []).map((item) =>
           item.id === p.callId ? { ...item, ...(p.patch as object) } : item,
         ),
@@ -1965,25 +1976,42 @@ export async function performFirestoreOperation<T>(
       result = { id: p.id };
       break;
     case "createPayout": {
-      const provider = await read<Provider>("providers", String(p.providerId));
+      const providerCollection = providerSourceCollection(actor.isDemoUser);
+      const provider = actor.isDemoUser
+        ? await read<Provider>(providerCollection, String(p.providerId))
+        : mapProviderDoc(
+            String(p.providerId),
+            await read<Record<string, unknown>>(providerCollection, String(p.providerId)),
+          );
       const amount = Number(p.amount);
       if (amount <= 0)
         throw new Error("Payout amount must be greater than zero");
-      const { getDocs, where } = await import("firebase/firestore");
-      const wallets = await getDocs(
-        query(
-          collection(db, "wallets"),
-          where("ownerId", "==", provider.id),
-          where("environment", "==", environmentForActor(actor)),
-          limit(1),
-        ),
-      );
-      if (wallets.empty) throw new Error("Provider wallet not found");
-      const walletRef = wallets.docs[0].ref;
+      // Real technician wallets live at users/{uid}/wallet/summary (the same
+      // schema the Customer App uses for customer wallets - role is
+      // irrelevant to the wallet subcollection's own schema). The dashboard's
+      // demo mode keeps using its flat top-level "wallets" collection since
+      // there is no real per-provider wallet concept to bridge to there.
+      const walletRef = actor.isDemoUser
+        ? await (async () => {
+            const { getDocs, where } = await import("firebase/firestore");
+            const wallets = await getDocs(
+              query(
+                collection(db, "wallets"),
+                where("ownerId", "==", provider.id),
+                where("environment", "==", environmentForActor(actor)),
+                limit(1),
+              ),
+            );
+            if (wallets.empty) throw new Error("Provider wallet not found");
+            return wallets.docs[0].ref;
+          })()
+        : doc(db, "users", provider.id, "wallet", "summary");
       const payoutId = publicId("PAY");
       result = await runTransaction(db, async (transaction) => {
         const walletSnapshot = await transaction.get(walletRef);
-        const balance = Number(walletSnapshot.data()?.balance ?? 0);
+        const balance = actor.isDemoUser
+          ? Number(walletSnapshot.data()?.balance ?? 0)
+          : Number(walletSnapshot.data()?.balance_minor ?? 0) / 100;
         if (balance < amount) throw new Error("Insufficient provider balance");
         const payout = {
           id: payoutId,
@@ -1994,10 +2022,26 @@ export async function performFirestoreOperation<T>(
           status: "Pending",
           createdAt: now(),
         };
-        transaction.update(walletRef, {
-          balance: balance - amount,
-          updatedAt: now(),
-        });
+        if (actor.isDemoUser) {
+          transaction.update(walletRef, {
+            balance: balance - amount,
+            updatedAt: now(),
+          });
+        } else {
+          transaction.set(
+            walletRef,
+            { balance_minor: Math.round((balance - amount) * 100), currency: "EGP", updated_at: now() },
+            { merge: true },
+          );
+          const transactionRef = doc(collection(db, "users", provider.id, "wallet_transactions"));
+          transaction.set(transactionRef, {
+            type: "debit",
+            amount_minor: -Math.round(amount * 100),
+            title: `Payout ${payoutId}`,
+            created_at: now(),
+            created_by: actor.id,
+          });
+        }
         transaction.set(doc(db, "payouts", payoutId), payout);
         const transactionRef = doc(collection(db, "transactions"));
         transaction.set(transactionRef, {
@@ -2079,19 +2123,35 @@ export async function performFirestoreOperation<T>(
         reviewedAt: now(),
       });
       if (p.status === "Approved" && review.jobId) {
-        const order = await read<Job>("orders", String(review.jobId));
-        batch.update(doc(db, "orders", order.id), {
-          paymentStatus: "Paid",
-          payment: order.payment
-            ? {
-                ...order.payment,
-                status: "Paid",
-                instapayAmount: Number(review.amount ?? order.amount),
-                outstandingAmount: 0,
-                paidAt: now(),
-              }
-            : null,
-        });
+        const jobCollection = jobSourceCollection(actor.isDemoUser);
+        const order = actor.isDemoUser
+          ? await read<Job>(jobCollection, String(review.jobId))
+          : mapJobDoc(
+              String(review.jobId),
+              await read<Record<string, unknown>>(jobCollection, String(review.jobId)),
+            );
+        if (actor.isDemoUser) {
+          batch.update(doc(db, jobCollection, order.id), {
+            paymentStatus: "Paid",
+            payment: order.payment
+              ? {
+                  ...order.payment,
+                  status: "Paid",
+                  instapayAmount: Number(review.amount ?? order.amount),
+                  outstandingAmount: 0,
+                  paidAt: now(),
+                }
+              : null,
+          });
+        } else {
+          // Real jobs have no "paymentStatus"/"payment" object - the closest
+          // real, valid field is payment_status, using the Customer App's own
+          // PaymentStatus enum value "captured" (mapped to "Paid" by
+          // paymentStatusFromWire). No new schema invented.
+          batch.update(doc(db, jobCollection, order.id), {
+            payment_status: "captured",
+          });
+        }
         const transactionRef = doc(collection(db, "transactions"));
         batch.set(transactionRef, {
           id: transactionRef.id,
@@ -2169,11 +2229,35 @@ export async function performFirestoreOperation<T>(
       result = { id: p.id };
       break;
     case "createNotification": {
-      const input = p.input as Record<string, unknown>;
+      const input = p.input as Record<string, unknown> & {
+        audience: NotificationAudience;
+        targetUserId?: string;
+        targetUserIds?: string[];
+      };
       const ref = doc(collection(db, "notifications"));
       result = { id: ref.id, ...input, status: "Sent", createdAt: now(), environment: environmentForActor(actor), isDemoData: Boolean(actor.isDemoUser) };
       await setDoc(ref, result as DocumentData);
       entityId = ref.id;
+      // Fan out to the real Customer App per-user feed for non-demo admins,
+      // bounded to whatever recipients the caller actually specified. Throws
+      // for unbounded broadcast audiences instead of silently doing nothing.
+      if (!actor.isDemoUser) {
+        const plan = resolveNotificationFanout(
+          input.audience,
+          input.targetUserId,
+          input.targetUserIds,
+        );
+        const doc_ = buildRealNotificationDoc(
+          String(input.title ?? ""),
+          String(input.body ?? ""),
+          serverTimestamp(),
+        );
+        await Promise.all(
+          plan.targetUserIds.map((uid) =>
+            setDoc(doc(collection(db, "users", uid, "notifications")), doc_ as DocumentData),
+          ),
+        );
+      }
       break;
     }
     case "createConversation": {

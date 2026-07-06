@@ -126,6 +126,10 @@ export function ProviderManagement({
         title: `Provider account update · ${selected.length} recipients`,
         body: "Please review the latest update in your Task Provider app.",
         audience: "All providers",
+        // Bounded to the admin's actual selection, not every provider in the
+        // system - see notification-fanout.ts for why unbounded broadcast
+        // audiences are refused against real data.
+        targetUserIds: selected,
       });
       setSelected([]);
     }

@@ -14,7 +14,9 @@ export type JobStatus =
   | "Delayed"
   | "Completed"
   | "Cancelled"
-  | "Refunded";
+  | "Refunded"
+  | "Disputed"
+  | "Paused for approval";
 export type Severity = "Critical" | "High" | "Medium" | "Low";
 
 export interface Customer {
