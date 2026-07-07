@@ -7,6 +7,10 @@ import { firebaseAdminAuth, firebaseAdminDb } from "@/lib/firebase/admin";
 import { requestId, serverLog } from "@/lib/server/logger";
 import { DEMO_RESTRICTED_MESSAGE } from "@/lib/demo-mode";
 import { hasPermission } from "@/lib/permissions";
+import {
+  PRODUCTION_READ_ONLY,
+  PRODUCTION_WRITE_DISABLED_MESSAGE,
+} from "@/lib/firebase/read-only-mode";
 
 export const runtime = "nodejs";
 
@@ -358,6 +362,15 @@ export async function POST(request: Request) {
         createdAt: new Date().toISOString(),
       });
       return Response.json({ error: DEMO_RESTRICTED_MESSAGE }, { status: 403 });
+    }
+    // Phase D.1: every action this route performs (delete/toggle customer or
+    // provider) is a destructive production write. They are all disabled while
+    // the dashboard is in production read-only mode, until migration approval.
+    if (PRODUCTION_READ_ONLY) {
+      return Response.json(
+        { error: PRODUCTION_WRITE_DISABLED_MESSAGE },
+        { status: 403 },
+      );
     }
     if (parsed.action === "deleteCustomer")
       return await deleteCustomer(parsed.id, actor);

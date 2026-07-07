@@ -14,6 +14,7 @@ import {
   where,
   writeBatch,
   type DocumentData,
+  type QueryConstraint,
   type Unsubscribe,
 } from "firebase/firestore";
 import { getFirebaseClient } from "@/lib/firebase/client";
@@ -51,8 +52,10 @@ import {
   providerSourceCollection,
   customerSourceCollection,
   jobSourceCollection,
+  resolveReadSource,
 } from "@/lib/firebase/entity-routing";
 import { adminStatusFromUser } from "@/lib/firebase/account-status-mapping";
+import { checkProductionWriteAccess } from "@/lib/firebase/read-only-mode";
 
 const emptyState: DatabaseState = {
   aiExecutions: [],
@@ -539,30 +542,27 @@ export function subscribeDashboard(
       }
       continue;
     }
-    const sourceName =
-      !actor.isDemoUser && key === "customers"
-        ? "users"
-        : !actor.isDemoUser && key === "providers"
-          ? "users"
-          : !actor.isDemoUser && key === "jobs"
-            ? "jobs"
-            : name;
-    const sourceQuery =
-      !actor.isDemoUser && key === "customers"
-        ? query(collection(db, "users"), where("role", "==", "customer"), limit(1000))
-        : !actor.isDemoUser && key === "providers"
-          ? query(collection(db, "users"), where("role", "==", "technician"), limit(1000))
-          : !actor.isDemoUser && key === "jobs"
-            ? query(collection(db, "jobs"), limit(1000))
-            : !actor.isDemoUser && key === "wallets"
-              ? query(collectionGroup(db, "wallet"), limit(1000))
-              : !actor.isDemoUser && key === "transactions"
-                ? query(collectionGroup(db, "wallet_transactions"), limit(1000))
-                : !actor.isDemoUser && key === "reviews"
-                  ? query(collectionGroup(db, "reviews"), limit(1000))
-                  : environmentScopedCollections.has(key)
-                  ? query(collection(db, name), where("environment", "==", environmentForActor(actor)), limit(1000))
-                  : query(collection(db, name), limit(1000));
+    // Read routing is centralized in resolveReadSource (entity-routing.ts):
+    // non-demo actors read the real Customer App schema for the five bridged
+    // concepts; everyone else reads the dashboard-native collection, scoped by
+    // the environment field so demo and production reads never mix.
+    const source = resolveReadSource(
+      key,
+      actor.isDemoUser,
+      name,
+      environmentScopedCollections.has(key),
+    );
+    const sourceName = source.collection;
+    const baseRef =
+      source.kind === "collectionGroup"
+        ? collectionGroup(db, source.collection)
+        : collection(db, source.collection);
+    const constraints: QueryConstraint[] = [];
+    if (source.roleFilter) constraints.push(where("role", "==", source.roleFilter));
+    if (source.environmentScoped)
+      constraints.push(where("environment", "==", environmentForActor(actor)));
+    constraints.push(limit(1000));
+    const sourceQuery = query(baseRef, ...constraints);
     unsubs.push(
       onSnapshot(
         sourceQuery,
@@ -741,6 +741,16 @@ export async function performFirestoreOperation<T>(
   } catch (error) {
     await auditDemoBlocked(actor, action, String(p.id ?? p.providerId ?? p.jobId ?? "batch"));
     throw error;
+  }
+  // Phase D.1: production is read-only until migration is approved. Every
+  // action in the switch below mutates data; for a non-demo actor we refuse
+  // ALL of them here (a single choke point), so no production write - refund,
+  // payout, notification fan-out, status change, delete, wallet adjustment,
+  // etc. - can run. Demo actors are unaffected (their writes are isolated to
+  // demo data). See lib/firebase/read-only-mode.ts.
+  const writeAccess = checkProductionWriteAccess(actor);
+  if (!writeAccess.allowed) {
+    throw new Error(writeAccess.reason);
   }
   if (actor.isDemoUser) {
     if (action === "updateCustomer") await assertDemoRecord(actor, action, "customers", String(p.id));

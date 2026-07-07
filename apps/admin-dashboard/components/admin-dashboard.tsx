@@ -89,6 +89,7 @@ import { LiveOperationsMap } from "@/components/live-operations-map";
 import { ManualJobDialog } from "@/components/manual-job-dialog";
 import { AccountPage, SettingsPage } from "@/components/account-settings-pages";
 import { BrandLogo } from "@/components/brand-logo";
+import { EnvironmentBadges } from "@/components/environment-badges";
 import { useDashboardSettings } from "@/components/settings-provider";
 import { ProviderVerificationCenter } from "@/components/provider-verification-center";
 import { ProviderManagement } from "@/components/provider-management";
@@ -894,7 +895,7 @@ function Topbar({
   navigate: (section: Section) => void;
 }) {
   const { theme, setTheme, locale, setLocale, t } = usePreferences();
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
   const { db } = useAdminData();
   const { profile } = useDashboardSettings();
   const alertCount = operationalAlertCount(db);
@@ -927,11 +928,11 @@ function Topbar({
         </span>
       </button>
       <div className="ml-auto flex items-center gap-1.5 pl-3">
-        {user?.isDemoUser && (
-          <span className="hidden rounded-full border border-amber-400/30 bg-amber-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-300 sm:inline-flex">
-            Demo Mode
-          </span>
-        )}
+        {/* Phase D.1: Demo Data / Production Read-only / Production Write
+            Disabled badges. Replaces the old demo-only "Demo Mode" pill. */}
+        <div className="hidden sm:flex">
+          <EnvironmentBadges />
+        </div>
         <div className="hidden items-center gap-2 rounded-md px-2 py-1 text-xs text-zinc-500 md:flex">
           <span
             className={cn(

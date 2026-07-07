@@ -6,6 +6,10 @@ import {
 } from "@/lib/firebase/server-auth";
 import { requestId, serverLog } from "@/lib/server/logger";
 import { checkSystemResetAccess } from "@/lib/firebase/system-reset-guard";
+import {
+  PRODUCTION_READ_ONLY,
+  PRODUCTION_WRITE_DISABLED_MESSAGE,
+} from "@/lib/firebase/read-only-mode";
 
 export const runtime = "nodejs";
 
@@ -320,9 +324,22 @@ export async function POST(request: Request) {
     const parsed = schema.parse(await request.json());
 
     if (parsed.action === "counts") {
+      // `counts` is a read-only preview and is allowed even in read-only mode.
       return Response.json({
         modules: await countAllModules(),
         confirmationPhrase: RESET_PHRASE,
+        readOnly: PRODUCTION_READ_ONLY,
+      });
+    }
+
+    // Phase D.1: the actual destructive reset is disabled while the dashboard
+    // is in production read-only mode - even for a real Super Admin - until
+    // the migration is approved. System reset is the most destructive
+    // production write there is.
+    if (PRODUCTION_READ_ONLY) {
+      throw new Response(PRODUCTION_WRITE_DISABLED_MESSAGE, {
+        status: 403,
+        statusText: PRODUCTION_WRITE_DISABLED_MESSAGE,
       });
     }
 
