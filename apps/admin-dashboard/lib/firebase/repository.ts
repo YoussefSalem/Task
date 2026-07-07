@@ -344,6 +344,29 @@ const mapOffer = (jobId: string, offer: Record<string, unknown>) => {
   };
 };
 
+/**
+ * Maps a real Customer App `promotions/{id}` doc to the dashboard's Banner
+ * shape (Phase D.2). Same marketing-carousel purpose, different field shape:
+ * the real collection has no image/action-link fields at all (it's a
+ * headline/subtitle/badge/accent-color carousel, not an image banner), so
+ * `imageUrl`/`actionUrl` are left empty rather than guessed at - the banner
+ * list UI will show these entries without an image, which is honest given
+ * what's actually there.
+ */
+export const mapPromotionToBanner = (id: string, data: Record<string, unknown>): Banner => ({
+  id,
+  title: String(data.headline ?? ""),
+  subtitle: String(data.subtitle ?? ""),
+  imageUrl: "",
+  actionUrl: undefined,
+  enabled: Boolean(data.active ?? true),
+  sortOrder: Number(data.order ?? 0),
+  createdAt: asIso(data.created_at as FirestoreLikeDate),
+  updatedAt: asIso(data.updated_at as FirestoreLikeDate, asIso(data.created_at as FirestoreLikeDate)),
+  environment: "production",
+  isDemoData: false,
+});
+
 const mapJobDoc = (id: string, data: Record<string, unknown>): Job => {
   const offers = ((data.offers as Record<string, unknown>[] | undefined) ?? []).map((offer) =>
     mapOffer(id, offer),
@@ -640,6 +663,9 @@ export function subscribeDashboard(
                 environment: "production",
                 isDemoData: false,
               };
+            }
+            if (!actor.isDemoUser && key === "banners") {
+              return mapPromotionToBanner(item.id, data);
             }
             return { id: item.id, ...data };
           });
