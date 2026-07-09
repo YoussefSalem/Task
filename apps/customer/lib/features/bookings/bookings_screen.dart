@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:task_design/task_design.dart';
 import 'package:task_domain/task_domain.dart';
 
+import '../complaints/report_problem_sheet.dart';
+import '../marketplace/job_create_screen.dart' show formatScheduledSlot;
 import '../marketplace/marketplace_providers.dart';
 import '../services/category_l10n.dart';
 import 'rebook_actions.dart';
@@ -136,6 +138,27 @@ class BookingsScreen extends ConsumerWidget {
                             label: jobStatusLabel(job.status, l),
                             tint: badge.$1,
                             icon: badge.$2),
+                        if (job.timing == JobTiming.scheduled &&
+                            job.scheduledAt != null) ...<Widget>[
+                          const SizedBox(height: 6),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(Icons.event_rounded,
+                                  size: 13, color: subtitleColor),
+                              const SizedBox(width: 4),
+                              Flexible(
+                                child: Text(
+                                  l.scheduledForLabel(formatScheduledSlot(
+                                      context, job.scheduledAt!)),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: text.bodySmall
+                                      ?.copyWith(color: subtitleColor),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                         if (job.status == JobStatus.cancelled &&
                             (job.cancellationReason?.isNotEmpty ?? false)) ...<Widget>[
                           const SizedBox(height: 6),
@@ -164,6 +187,20 @@ class BookingsScreen extends ConsumerWidget {
                             foregroundColor: AppColors.error,
                           ),
                           child: Text(l.cancelBookingTitle,
+                              style: text.labelMedium
+                                  ?.copyWith(fontWeight: FontWeight.w600)),
+                        ),
+                      if (job.acceptedOffer != null)
+                        TextButton(
+                          onPressed: () => _reportProblem(context, ref, job),
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: AppSpacing.sm),
+                            minimumSize: const Size(0, 32),
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            foregroundColor: AppColors.textSecondary,
+                          ),
+                          child: Text('Report a problem',
                               style: text.labelMedium
                                   ?.copyWith(fontWeight: FontWeight.w600)),
                         ),
@@ -203,6 +240,29 @@ class BookingsScreen extends ConsumerWidget {
       ..clearSnackBars()
       ..showSnackBar(SnackBar(
         content: Text(AppLocalizations.of(context).bookingCancelled),
+        behavior: SnackBarBehavior.floating,
+      ));
+  }
+
+  /// Opens the "Report a problem" sheet for [job]. Available regardless of
+  /// job status (a customer might want to report an issue with a completed
+  /// job too, not just an active one).
+  Future<void> _reportProblem(
+      BuildContext context, WidgetRef ref, JobRequest job) async {
+    final bool? submitted = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => ReportProblemSheet(
+        jobId: job.id,
+        technicianId: job.acceptedOffer?.technicianId,
+      ),
+    );
+    if (submitted != true || !context.mounted) return;
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(const SnackBar(
+        content: Text('Your report has been submitted.'),
         behavior: SnackBarBehavior.floating,
       ));
   }
