@@ -160,6 +160,33 @@ service cloud.firestore {
         allow read: if isSignedIn();
         allow update, delete: if isAdmin();
       }
+
+      // Problem reports filed by a job's customer or assigned technician
+      // against the other party. See
+      // docs/superpowers/specs/2026-07-09-complaints-firestore-rule.md.
+      match /complaints/{complaintId} {
+        function isComplaintParticipant() {
+          return isSignedIn() && (
+            resource.data.reporter_id == request.auth.uid
+            || resource.data.subject_id == request.auth.uid
+            || isAdmin()
+          );
+        }
+
+        function canCreateComplaint() {
+          return isSignedIn() && (
+            request.resource.data.reporter_id == request.auth.uid
+            && request.resource.data.job_id == jobId
+            && request.resource.data.status == 'open'
+          );
+        }
+
+        allow read: if isComplaintParticipant();
+        allow create: if canCreateComplaint();
+        // Only admins change status (investigating/resolved/closed) or add
+        // resolution notes; reporters cannot edit or withdraw after filing.
+        allow update, delete: if isAdmin();
+      }
     }
 
     // --- threads inbox (collection-group query) ---
@@ -183,6 +210,11 @@ service cloud.firestore {
     match /promotions/{promotionId} {
       allow read: if isSignedIn();
       allow write: if isAdmin();
+    }
+
+    // --- complaints inbox (collection-group query, admin dashboard only) ---
+    match /{path=**}/complaints/{complaintId} {
+      allow read: if isAdmin();
     }
   }
 }

@@ -1,0 +1,9 @@
+{
+  "name": "task-app-rules-tests",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^3.0.4",
+    "tsx": "^4.19.2"
+  }
+}
