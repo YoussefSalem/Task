@@ -25,6 +25,7 @@ import type {
   AiReport,
   Banner,
   Complaint,
+  ComplaintHistoryEntry,
   DatabaseState,
   Job,
   JobPaymentStatus,
@@ -2023,7 +2024,7 @@ export async function performFirestoreOperation<T>(
         jobId: input.jobId,
         customer: input.customer ?? "Linked customer",
         severity: input.severity,
-        status: "New",
+        status: "Pending",
         owner: "Unassigned",
         age: "now",
         notes: [],
@@ -2031,6 +2032,7 @@ export async function performFirestoreOperation<T>(
         createdAt: now(),
         environment: environmentForActor(actor),
         isDemoData: Boolean(actor.isDemoUser),
+        history: [{ at: now(), action: "Case created", detail: "Filed by admin" }],
       });
       await setDoc(
         doc(db, "complaints", (result as Complaint).id),
@@ -2039,18 +2041,34 @@ export async function performFirestoreOperation<T>(
       entityId = (result as Complaint).id;
       break;
     }
-    case "updateComplaint":
-      result = await patch(
-        "complaints",
-        String(p.id),
-        p.patch as Record<string, unknown>,
-      );
+    case "updateComplaint": {
+      const before = await read<Complaint>("complaints", String(p.id));
+      const patchData = p.patch as Record<string, unknown>;
+      const historyEntry: ComplaintHistoryEntry = {
+        at: now(),
+        action: "Case updated",
+        detail:
+          typeof patchData.status === "string" && patchData.status !== before.status
+            ? `Status changed from ${before.status} to ${patchData.status}`
+            : `Fields updated: ${Object.keys(patchData).join(", ")}`,
+      };
+      result = await patch("complaints", String(p.id), {
+        ...patchData,
+        history: [...(before.history ?? []), historyEntry],
+      });
       break;
+    }
     case "setCaseOwner": {
       const admin = await read<AdminUser>("admins", String(p.adminId));
+      const before = await read<Complaint>("complaints", String(p.id));
       result = await patch("complaints", String(p.id), {
         ownerId: admin.id,
         owner: admin.name,
+        status: before.status === "Pending" || before.status === "New" ? "Assigned" : before.status,
+        history: [
+          ...(before.history ?? []),
+          { at: now(), action: "Assigned", detail: `Assigned to ${admin.name}` },
+        ],
       });
       break;
     }
@@ -2063,17 +2081,29 @@ export async function performFirestoreOperation<T>(
       const item = await read<Complaint>("complaints", String(p.id));
       result = await patch("complaints", item.id, {
         notes: [String(p.note), ...item.notes],
+        history: [
+          ...(item.history ?? []),
+          { at: now(), action: "Internal note added", detail: String(p.note) },
+        ],
       });
       break;
     }
-    case "closeCase":
-      result = await patch("complaints", String(p.id), { status: "Resolved" });
-      break;
-    case "reopenCase":
+    case "closeCase": {
+      const before = await read<Complaint>("complaints", String(p.id));
       result = await patch("complaints", String(p.id), {
-        status: "Reopened",
+        status: "Resolved",
+        history: [...(before.history ?? []), { at: now(), action: "Case resolved", detail: "Marked resolved" }],
       });
       break;
+    }
+    case "reopenCase": {
+      const before = await read<Complaint>("complaints", String(p.id));
+      result = await patch("complaints", String(p.id), {
+        status: "Reopened",
+        history: [...(before.history ?? []), { at: now(), action: "Case reopened", detail: "Reopened for further review" }],
+      });
+      break;
+    }
     case "deleteComplaint":
       await deleteDoc(doc(db, "complaints", String(p.id)));
       result = { id: p.id };

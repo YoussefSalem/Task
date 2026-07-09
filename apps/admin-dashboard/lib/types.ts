@@ -528,6 +528,15 @@ export interface Complaint {
   createdAt: ISODate;
   environment?: DataEnvironment;
   isDemoData?: boolean;
+  // Audit trail of admin actions taken on this case (assignment, status
+  // changes, notes). Native/demo complaints only - bridged real complaints
+  // have no history subcollection today, so this is always absent for them.
+  history?: ComplaintHistoryEntry[];
+}
+export interface ComplaintHistoryEntry {
+  at: ISODate;
+  action: string;
+  detail: string;
 }
 export type Incident = Complaint;
 

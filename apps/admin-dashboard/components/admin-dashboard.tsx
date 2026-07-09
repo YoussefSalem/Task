@@ -103,6 +103,7 @@ import { AiExecutivePage } from "@/components/ai-executive-page";
 import { SystemResetPage } from "@/components/system-reset-page";
 import { EnterpriseOperationsPage } from "@/components/enterprise-operations-pages";
 import { ComplaintRealDataDialog } from "@/components/complaint-real-data-dialog";
+import { ComplaintDetailDrawer } from "@/components/complaint-detail-drawer";
 import {
   fullAccessPermissions,
   groupPermissions,
@@ -2957,15 +2958,53 @@ function TrustPage({ notify }: { notify: (s: string) => void }) {
   >(null);
   const [evidenceCase,setEvidenceCase]=useState<(typeof db.complaints)[number]|null>(null);const[evidenceUploading,setEvidenceUploading]=useState(false);
   const [viewingRealData, setViewingRealData] = useState<(typeof db.complaints)[number] | null>(null);
+  const [viewingDetail, setViewingDetail] = useState<(typeof db.complaints)[number] | null>(null);
+  const [statusFilter, setStatusFilter] = useState<"all" | (typeof db.complaints)[number]["status"]>("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const isClosedLike=(status: (typeof db.complaints)[number]["status"])=>["Closed","Resolved","Rejected"].includes(status);
   const closedCases=db.complaints.filter((item)=>isClosedLike(item.status)).length;const riskCases=db.complaints.filter((item)=>!isClosedLike(item.status)&&(item.severity==="High"||item.severity==="Medium")).length;const breachedCases=db.complaints.filter((item)=>!isClosedLike(item.status)&&item.severity==="Critical").length;const caseTotal=Math.max(1,db.complaints.length);const caseHealth=[{value:closedCases,fill:"#22c55e"},{value:riskCases,fill:"#f59e0b"},{value:breachedCases,fill:"#ef4444"}];
+  const allStatuses: (typeof db.complaints)[number]["status"][] = ["Pending","Under Review","Assigned","Investigating","Evidence review","Monitoring","Resolved","Reopened","Rejected","New","Closed"];
+  const statusCounts = Object.fromEntries(
+    allStatuses.map((s) => [s, db.complaints.filter((c) => c.status === s).length]),
+  ) as Record<(typeof db.complaints)[number]["status"], number>;
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const visibleComplaints = db.complaints.filter((i) => {
+    if (statusFilter !== "all" && i.status !== statusFilter) return false;
+    if (!normalizedQuery) return true;
+    return (
+      i.title.toLowerCase().includes(normalizedQuery) ||
+      i.description.toLowerCase().includes(normalizedQuery) ||
+      i.customer.toLowerCase().includes(normalizedQuery) ||
+      i.id.toLowerCase().includes(normalizedQuery) ||
+      (i.jobId ?? "").toLowerCase().includes(normalizedQuery)
+    );
+  });
+  // Per-party complaint counts, used for the technician/customer complaint
+  // statistics chips below. Not a caching layer - db.complaints is already
+  // held in memory by useAdminData, so this is a plain in-render reduce.
+  const complaintsByProvider = new Map<string, number>();
+  const complaintsByCustomer = new Map<string, number>();
+  for (const complaint of db.complaints) {
+    if (complaint.providerId) {
+      complaintsByProvider.set(complaint.providerId, (complaintsByProvider.get(complaint.providerId) ?? 0) + 1);
+    }
+    if (complaint.customerId) {
+      complaintsByCustomer.set(complaint.customerId, (complaintsByCustomer.get(complaint.customerId) ?? 0) + 1);
+    }
+  }
+  const topProvidersByComplaints = [...complaintsByProvider.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+  const topCustomersByComplaints = [...complaintsByCustomer.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
   return (
     <div className="space-y-5">
       <div className="grid gap-4 md:grid-cols-4">
         <StatBlock
           label="Open cases"
           value={String(
-            db.complaints.filter((x) => x.status !== "Closed").length,
+            db.complaints.filter((x) => !isClosedLike(x.status)).length,
           )}
           icon={ShieldCheck}
           tone="indigo"
@@ -2974,7 +3013,7 @@ function TrustPage({ notify }: { notify: (s: string) => void }) {
           label="Critical"
           value={String(
             db.complaints.filter(
-              (x) => x.severity === "Critical" && x.status !== "Closed",
+              (x) => x.severity === "Critical" && !isClosedLike(x.status),
             ).length,
           )}
           icon={AlertTriangle}
@@ -2982,11 +3021,65 @@ function TrustPage({ notify }: { notify: (s: string) => void }) {
         />
         <StatBlock
           label="Closed cases"
-          value={String(db.complaints.filter((item)=>item.status==="Closed").length)}
+          value={String(closedCases)}
           icon={Clock3}
           tone="green"
         />
-        <StatBlock label="Priority at risk" value={String(db.complaints.filter((item)=>item.status!=="Closed"&&(item.severity==="Critical"||item.severity==="High")).length)} icon={Gauge} tone="amber" />
+        <StatBlock label="Priority at risk" value={String(riskCases + breachedCases)} icon={Gauge} tone="amber" />
+      </div>
+      <div className="panel p-4">
+        <PanelTitle title="Complaint statistics" subtitle="By status, technician, and customer" />
+        <div className="mt-3 flex flex-wrap gap-2">
+          {allStatuses
+            .filter((s) => statusCounts[s] > 0)
+            .map((s) => (
+              <button
+                key={s}
+                onClick={() => setStatusFilter(statusFilter === s ? "all" : s)}
+                className={`rounded-full border px-2.5 py-1 text-[10px] font-medium ${
+                  statusFilter === s
+                    ? "border-indigo-400 bg-indigo-500/20 text-indigo-200"
+                    : "border-white/10 bg-white/[.03] text-zinc-400 hover:text-zinc-200"
+                }`}
+              >
+                {s} · {statusCounts[s]}
+              </button>
+            ))}
+        </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div>
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+              Technicians with most complaints
+            </p>
+            {topProvidersByComplaints.length === 0 && (
+              <p className="text-[11px] text-zinc-600">No provider-linked complaints yet.</p>
+            )}
+            <ul className="space-y-1">
+              {topProvidersByComplaints.map(([providerId, count]) => (
+                <li key={providerId} className="flex justify-between text-[11px] text-zinc-400">
+                  <span>{db.providers.find((p) => p.id === providerId)?.name ?? providerId}</span>
+                  <span className="text-zinc-200">{count}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+              Customers with most complaints
+            </p>
+            {topCustomersByComplaints.length === 0 && (
+              <p className="text-[11px] text-zinc-600">No customer-linked complaints yet.</p>
+            )}
+            <ul className="space-y-1">
+              {topCustomersByComplaints.map(([customerId, count]) => (
+                <li key={customerId} className="flex justify-between text-[11px] text-zinc-400">
+                  <span>{db.customers.find((c) => c.id === customerId)?.name ?? customerId}</span>
+                  <span className="text-zinc-200">{count}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </div>
       <div className="grid gap-5 xl:grid-cols-[1.35fr_.65fr]">
         <div className="panel overflow-hidden">
@@ -3003,8 +3096,27 @@ function TrustPage({ notify }: { notify: (s: string) => void }) {
               </button>
             }
           />
+          <div className="flex flex-wrap items-center gap-2 border-b border-white/[.05] p-3">
+            <input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by title, description, customer, case id, or job id..."
+              className="min-w-0 flex-1 rounded-md border border-white/10 bg-white/[.03] px-3 py-1.5 text-[11px] text-zinc-200 placeholder:text-zinc-600"
+            />
+            {statusFilter !== "all" && (
+              <button
+                onClick={() => setStatusFilter("all")}
+                className="rounded-full border border-white/10 bg-white/[.03] px-2.5 py-1 text-[10px] text-zinc-400 hover:text-zinc-200"
+              >
+                Clear filter: {statusFilter} ×
+              </button>
+            )}
+          </div>
           <div className="divide-y divide-white/[.05]">
-            {db.complaints.map((i) => (
+            {visibleComplaints.length === 0 && (
+              <p className="p-4 text-[11px] text-zinc-600">No cases match this search/filter.</p>
+            )}
+            {visibleComplaints.map((i) => (
               <div
                 key={i.id}
                 className="flex w-full items-center gap-3 p-4 text-left hover:bg-white/[.025]"
@@ -3028,6 +3140,10 @@ function TrustPage({ notify }: { notify: (s: string) => void }) {
                 <RowActions
                   label={`Actions for ${i.id}`}
                   actions={[
+                    {
+                      label: "View details",
+                      onClick: () => setViewingDetail(i),
+                    },
                     { label: "Edit case", onClick: () => setEditing(i) },
                     ...(can("complaints.assign")
                       ? [{ label: "Assign case owner", onClick: () => setEditing(i) }]
@@ -3257,6 +3373,7 @@ function TrustPage({ notify }: { notify: (s: string) => void }) {
       />
       {evidenceCase&&<div className="fixed inset-0 z-[120] grid place-items-center bg-black/75 p-4" onMouseDown={()=>setEvidenceCase(null)}><div className="panel w-full max-w-md p-5" onMouseDown={(event)=>event.stopPropagation()}><h2 className="font-semibold">Upload evidence · {evidenceCase.id}</h2><p className="mt-2 text-xs text-zinc-500">The file is stored in Firebase Storage and linked permanently to this complaint.</p><label className="btn-primary mt-5 cursor-pointer">{evidenceUploading?<Loader2 className="animate-spin"/>:<Plus className="h-4 w-4"/>} Choose evidence<input hidden type="file" accept="image/jpeg,image/png,image/webp,application/pdf,video/mp4,audio/mpeg,audio/wav" onChange={async(event)=>{const file=event.target.files?.[0];if(!file)return;setEvidenceUploading(true);try{const stored=await uploadFirebaseFile(file,`complaint-evidence/${evidenceCase.id}`);await actions.updateComplaint(evidenceCase.id,{evidence:[stored.url,...evidenceCase.evidence]});notify("Evidence uploaded and audited");setEvidenceCase(null)}catch(error){notify(error instanceof Error?error.message:"Upload failed")}finally{setEvidenceUploading(false)}}}/></label><button onClick={()=>setEvidenceCase(null)} className="btn-secondary ml-2">Cancel</button></div></div>}
       <ComplaintRealDataDialog complaint={viewingRealData} onClose={() => setViewingRealData(null)} />
+      <ComplaintDetailDrawer complaint={viewingDetail} onClose={() => setViewingDetail(null)} />
     </div>
   );
 }
