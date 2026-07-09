@@ -5,6 +5,7 @@
 library;
 
 export 'src/entities/app_notification.dart';
+export 'src/entities/complaint.dart';
 export 'src/entities/enums.dart';
 export 'src/entities/job_category.dart';
 export 'src/entities/job_enums.dart';
@@ -19,6 +20,7 @@ export 'src/entities/technician_profile.dart';
 export 'src/entities/tracking_point.dart';
 export 'src/entities/wallet.dart';
 export 'src/repositories/auth_repository.dart';
+export 'src/repositories/complaint_repository.dart';
 export 'src/repositories/job_marketplace_repository.dart';
 export 'src/repositories/job_tracking_repository.dart';
 export 'src/repositories/messaging_repository.dart';

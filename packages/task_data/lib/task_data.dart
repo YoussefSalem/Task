@@ -5,7 +5,9 @@
 /// enum codecs below are shared infrastructure used by every DTO.
 library;
 
+export 'src/complaints/firestore_complaint_repository.dart';
 export 'src/directory/firestore_technician_directory_repository.dart';
+export 'src/firestore_paths.dart';
 export 'src/mappers/enum_codecs.dart';
 export 'src/messaging/firestore_messaging_repository.dart';
 export 'src/messaging/firestore_notification_repository.dart';

@@ -187,3 +187,33 @@ extension NotificationTypeCodec on NotificationType {
         _ => throw FormatException('Unknown NotificationType: $v'),
       };
 }
+
+extension ComplaintRaisedByCodec on ComplaintRaisedBy {
+  String toWire() => switch (this) {
+        ComplaintRaisedBy.customer => 'customer',
+        ComplaintRaisedBy.technician => 'technician',
+      };
+
+  static ComplaintRaisedBy fromWire(String v) => switch (v) {
+        'customer' => ComplaintRaisedBy.customer,
+        'technician' => ComplaintRaisedBy.technician,
+        _ => throw FormatException('Unknown ComplaintRaisedBy: $v'),
+      };
+}
+
+extension ComplaintStatusCodec on ComplaintStatus {
+  String toWire() => switch (this) {
+        ComplaintStatus.open => 'open',
+        ComplaintStatus.investigating => 'investigating',
+        ComplaintStatus.resolved => 'resolved',
+        ComplaintStatus.closed => 'closed',
+      };
+
+  static ComplaintStatus fromWire(String v) => switch (v) {
+        'open' => ComplaintStatus.open,
+        'investigating' => ComplaintStatus.investigating,
+        'resolved' => ComplaintStatus.resolved,
+        'closed' => ComplaintStatus.closed,
+        _ => throw FormatException('Unknown ComplaintStatus: $v'),
+      };
+}
