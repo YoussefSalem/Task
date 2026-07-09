@@ -54,13 +54,14 @@ test("bridged entries have no leftover nativeReason", () => {
   }
 });
 
-test("the 7 genuinely bridged concepts are exactly: customers, providers, jobs, wallets, transactions, reviews, banners", () => {
+test("the 8 genuinely bridged concepts are exactly: customers, providers, jobs, wallets, transactions, reviews, banners, complaints", () => {
   const bridged = Object.entries(ADAPTER_REGISTRY)
     .filter(([, info]) => info.status === "bridged")
     .map(([key]) => key)
     .sort();
   assert.deepEqual(bridged, [
     "banners",
+    "complaints",
     "customers",
     "jobs",
     "providers",
@@ -98,5 +99,17 @@ test("production read routing: banners bridges to the real top-level promotions 
 test("demo separation: a demo actor reading banners stays on the dashboard-native banners collection, never promotions", () => {
   const source = resolveReadSource("banners", true, "banners", true);
   assert.equal(source.collection, "banners");
+  assert.equal(source.environmentScoped, true);
+});
+
+test("production read routing: complaints bridge to the real jobs/{jobId}/complaints collectionGroup", () => {
+  const source = resolveReadSource("complaints", false, "complaints", true);
+  assert.deepEqual(source, { collection: "complaints", kind: "collectionGroup", environmentScoped: false });
+});
+
+test("demo separation: a demo actor reading complaints stays on the dashboard-native, environment-scoped complaints collection", () => {
+  const source = resolveReadSource("complaints", true, "complaints", true);
+  assert.equal(source.collection, "complaints");
+  assert.equal(source.kind, "collection");
   assert.equal(source.environmentScoped, true);
 });

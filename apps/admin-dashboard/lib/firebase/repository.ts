@@ -56,6 +56,14 @@ import {
 } from "@/lib/firebase/entity-routing";
 import { adminStatusFromUser } from "@/lib/firebase/account-status-mapping";
 import { checkProductionWriteAccess } from "@/lib/firebase/read-only-mode";
+import {
+  mapRealChatMessage,
+  mapRealChatThread,
+  mapRealNotification,
+  type RealChatMessage,
+  type RealChatThread,
+  type RealNotification,
+} from "@/lib/firebase/real-schema-types";
 
 const emptyState: DatabaseState = {
   aiExecutions: [],
@@ -367,6 +375,45 @@ export const mapPromotionToBanner = (id: string, data: Record<string, unknown>):
   isDemoData: false,
 });
 
+/**
+ * Real complaints live at jobs/{jobId}/complaints/{id} (see
+ * packages/task_domain/lib/src/entities/complaint.dart) - a subcollection of
+ * the job, read here via collectionGroup('complaints') the same way reviews
+ * already are. `jobId` is read off the document's own path rather than
+ * trusted from a `job_id` field, since the path is authoritative.
+ */
+export const mapJobComplaintToComplaint = (
+  id: string,
+  jobId: string,
+  data: Record<string, unknown>,
+): Complaint => {
+  const status = String(data.status ?? "open").toLowerCase();
+  const dashboardStatus: Complaint["status"] =
+    status === "investigating"
+      ? "Investigating"
+      : status === "resolved" || status === "closed"
+        ? "Closed"
+        : "New";
+  return {
+    id,
+    title: String(data.category ?? "Complaint"),
+    description: String(data.description ?? ""),
+    jobId,
+    customerId: data.raised_by === "customer" ? String(data.reporter_id ?? "") : String(data.subject_id ?? ""),
+    providerId: data.raised_by === "technician" ? String(data.reporter_id ?? "") : String(data.subject_id ?? ""),
+    customer: "Customer",
+    severity: "Medium",
+    owner: "Unassigned",
+    status: dashboardStatus,
+    age: asIso(data.created_at as FirestoreLikeDate),
+    notes: data.resolution_note ? [String(data.resolution_note)] : [],
+    evidence: (data.evidence as string[] | undefined) ?? [],
+    createdAt: asIso(data.created_at as FirestoreLikeDate),
+    environment: "production",
+    isDemoData: false,
+  };
+};
+
 const mapJobDoc = (id: string, data: Record<string, unknown>): Job => {
   const offers = ((data.offers as Record<string, unknown>[] | undefined) ?? []).map((offer) =>
     mapOffer(id, offer),
@@ -666,6 +713,10 @@ export function subscribeDashboard(
             }
             if (!actor.isDemoUser && key === "banners") {
               return mapPromotionToBanner(item.id, data);
+            }
+            if (!actor.isDemoUser && key === "complaints") {
+              const jobId = item.ref.parent.parent?.id ?? "";
+              return mapJobComplaintToComplaint(item.id, jobId, data);
             }
             return { id: item.id, ...data };
           });
@@ -2380,4 +2431,66 @@ export async function performFirestoreOperation<T>(
 
 export async function loadAdminProfile(uid: string) {
   return read<AdminUser>("admins", uid);
+}
+
+/**
+ * Read-only drill-down into a single job's REAL chat thread with one
+ * technician (jobs/{jobId}/threads/{technicianId}(+/messages)) - additive to,
+ * not a replacement for, the dashboard's native `conversations` list (see
+ * real-schema-types.ts's module doc for why these stay separate concepts).
+ * One-shot reads (not a live listener) since this is an on-demand
+ * investigation view, not part of the main dashboard subscription set.
+ * Demo actors have no real jobs to inspect, so this always returns empty for
+ * them rather than attempting a lookup against a nonexistent path.
+ */
+export async function readRealJobChat(
+  jobId: string,
+  technicianId: string,
+  actor: AdminUser,
+): Promise<{ thread: RealChatThread | null; messages: RealChatMessage[] }> {
+  if (
+    actor.isDemoUser ||
+    !(hasPermission(actor.role, actor.permissions, "trust.view") || hasPermission(actor.role, actor.permissions, "support.view"))
+  ) {
+    return { thread: null, messages: [] };
+  }
+  const { getDoc, getDocs, orderBy, query: buildQuery } = await import("firebase/firestore");
+  const { db } = getFirebaseClient();
+  const threadRef = doc(db, "jobs", jobId, "threads", technicianId);
+  const threadSnapshot = await getDoc(threadRef);
+  const thread = threadSnapshot.exists()
+    ? mapRealChatThread(jobId, technicianId, threadSnapshot.data() as Record<string, unknown>)
+    : null;
+  const messagesSnapshot = await getDocs(
+    buildQuery(collection(threadRef, "messages"), orderBy("created_at")),
+  );
+  const messages = messagesSnapshot.docs.map((item) =>
+    mapRealChatMessage(item.id, item.data() as Record<string, unknown>),
+  );
+  return { thread, messages };
+}
+
+/**
+ * Read-only drill-down into one user's REAL notification feed
+ * (users/{uid}/notifications) - additive to, not a replacement for, the
+ * dashboard's native `notifications` broadcast list. One-shot read, same
+ * reasoning as readRealJobChat above.
+ */
+export async function readRealUserNotifications(
+  uid: string,
+  actor: AdminUser,
+): Promise<RealNotification[]> {
+  if (actor.isDemoUser || !hasPermission(actor.role, actor.permissions, "notifications.view")) {
+    return [];
+  }
+  const { getDocs, orderBy, query: buildQuery, limit: limitDocs } = await import("firebase/firestore");
+  const { db } = getFirebaseClient();
+  const snapshot = await getDocs(
+    buildQuery(
+      collection(db, "users", uid, "notifications"),
+      orderBy("created_at", "desc"),
+      limitDocs(200),
+    ),
+  );
+  return snapshot.docs.map((item) => mapRealNotification(item.id, item.data() as Record<string, unknown>));
 }

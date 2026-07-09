@@ -51,6 +51,7 @@ export const ADAPTER_REGISTRY: Record<string, AdapterInfo> = {
   transactions: { status: "bridged" },
   reviews: { status: "bridged" },
   banners: { status: "bridged" },
+  complaints: { status: "bridged" },
   categories: {
     status: "native",
     nativeReason:
@@ -63,11 +64,6 @@ export const ADAPTER_REGISTRY: Record<string, AdapterInfo> = {
   promos: {
     status: "native",
     nativeReason: "Discount-code promo campaigns have no Customer App equivalent at all.",
-  },
-  complaints: {
-    status: "native",
-    nativeReason:
-      "The Customer App has no complaints/disputes feature - only an unused 'disputed' JobStatus enum value that no code path ever writes.",
   },
   conversations: {
     status: "native",
@@ -182,6 +178,12 @@ export function resolveReadSource(
         // shape (no imageUrl/actionUrl on the real side). Mapped in
         // mapPromotionToBanner (repository.ts).
         return { collection: "promotions", kind: "collection", environmentScoped: false };
+      case "complaints":
+        // Real complaints live at jobs/{jobId}/complaints/{id} (see
+        // packages/task_domain/lib/src/entities/complaint.dart) - a new
+        // subcollection, read the same way reviews already are. Mapped in
+        // mapJobComplaintToComplaint (repository.ts).
+        return { collection: "complaints", kind: "collectionGroup", environmentScoped: false };
       default:
         break;
     }
