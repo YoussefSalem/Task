@@ -7,6 +7,15 @@ type FirebaseDefaults = {
   };
 };
 
+const taskAdminEgPublicConfig = {
+  apiKey: "AIzaSyDA9womM6pIGo-5VN1HLQe-rcU8l1gfSxM",
+  authDomain: "task-admin-eg.firebaseapp.com",
+  projectId: "task-admin-eg",
+  storageBucket: "task-admin-eg.firebasestorage.app",
+  messagingSenderId: "440448218166",
+  appId: "1:440448218166:web:7d6abe05e9f2a17adcd497",
+} satisfies FirebaseOptions;
+
 const envConfig = (): FirebaseOptions => ({
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -37,6 +46,7 @@ export function resolveFirebaseClientConfig(): FirebaseOptions {
   const fromEnv = envConfig();
   const defaults = readDefaultsFromEnvironment() ?? readDefaultsFromGlobal();
   return {
+    ...taskAdminEgPublicConfig,
     ...defaults?.config,
     ...Object.fromEntries(
       Object.entries(fromEnv).filter(([, value]) => Boolean(value)),
