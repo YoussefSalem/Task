@@ -388,12 +388,19 @@ export const mapJobComplaintToComplaint = (
   data: Record<string, unknown>,
 ): Complaint => {
   const status = String(data.status ?? "open").toLowerCase();
+  // The real Complaint.status wire values (packages/task_data/lib/src/mappers/
+  // enum_codecs.dart ComplaintStatusCodec) are open/investigating/resolved/
+  // closed only - there is no real "rejected" or "assigned" distinction, so
+  // this mapping only ever produces the subset of the dashboard's richer
+  // status set that the real schema can actually distinguish.
   const dashboardStatus: Complaint["status"] =
     status === "investigating"
       ? "Investigating"
-      : status === "resolved" || status === "closed"
-        ? "Closed"
-        : "New";
+      : status === "resolved"
+        ? "Resolved"
+        : status === "closed"
+          ? "Closed"
+          : "Pending";
   return {
     id,
     title: String(data.category ?? "Complaint"),
@@ -2060,11 +2067,11 @@ export async function performFirestoreOperation<T>(
       break;
     }
     case "closeCase":
-      result = await patch("complaints", String(p.id), { status: "Closed" });
+      result = await patch("complaints", String(p.id), { status: "Resolved" });
       break;
     case "reopenCase":
       result = await patch("complaints", String(p.id), {
-        status: "Investigating",
+        status: "Reopened",
       });
       break;
     case "deleteComplaint":

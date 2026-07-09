@@ -19,7 +19,7 @@ test("maps real jobs/{jobId}/complaints fields into the Complaint shape", () => 
   assert.equal(complaint.description, "Technician never arrived.");
   assert.equal(complaint.customerId, "cust1");
   assert.equal(complaint.providerId, "tech1");
-  assert.equal(complaint.status, "New");
+  assert.equal(complaint.status, "Pending");
   assert.deepEqual(complaint.evidence, ["https://example.com/photo.jpg"]);
   assert.equal(complaint.environment, "production");
   assert.equal(complaint.isDemoData, false);
@@ -45,14 +45,14 @@ test("technician-raised complaints swap customerId/providerId correctly", () => 
 
 test("maps status: investigating/resolved/closed to the dashboard's status vocabulary", () => {
   assert.equal(mapJobComplaintToComplaint("c1", "j1", { status: "investigating" }).status, "Investigating");
-  assert.equal(mapJobComplaintToComplaint("c1", "j1", { status: "resolved" }).status, "Closed");
+  assert.equal(mapJobComplaintToComplaint("c1", "j1", { status: "resolved" }).status, "Resolved");
   assert.equal(mapJobComplaintToComplaint("c1", "j1", { status: "closed" }).status, "Closed");
-  assert.equal(mapJobComplaintToComplaint("c1", "j1", { status: "open" }).status, "New");
+  assert.equal(mapJobComplaintToComplaint("c1", "j1", { status: "open" }).status, "Pending");
 });
 
 test("defaults safely when fields are absent", () => {
   const complaint = mapJobComplaintToComplaint("c1", "j1", {});
-  assert.equal(complaint.status, "New");
+  assert.equal(complaint.status, "Pending");
   assert.deepEqual(complaint.evidence, []);
   assert.deepEqual(complaint.notes, []);
 });

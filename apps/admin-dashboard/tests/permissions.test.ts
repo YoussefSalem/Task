@@ -57,3 +57,53 @@ test("a super admin role bypasses all of the above checks", () => {
   assert.equal(hasPermission("super_admin", [], "complaints.reopen"), true);
   assert.equal(hasPermission("super_admin", [], "chat.view"), true);
 });
+
+test("complaints.assign already existed as a real leaf permission", () => {
+  assert.ok(allPermissions.includes("complaints.assign"));
+});
+
+test("complaints.internalNotes, complaints.timeline, complaints.attachments are new real leaves", () => {
+  assert.ok(allPermissions.includes("complaints.internalNotes"));
+  assert.ok(allPermissions.includes("complaints.timeline"));
+  assert.ok(allPermissions.includes("complaints.attachments"));
+  assert.equal(
+    hasPermission("staff", ["complaints.internalNotes"], "complaints.internalNotes"),
+    true,
+  );
+  assert.equal(
+    hasPermission("staff", [], "complaints.internalNotes"),
+    false,
+  );
+});
+
+test("notifications.read is an alias for notifications.view", () => {
+  assert.equal(allPermissions.includes("notifications.read" as never), false);
+  assert.equal(
+    hasPermission("staff", ["notifications.view"], "notifications.read"),
+    true,
+  );
+});
+
+test("notifications.manage implies the full notifications CRUD set", () => {
+  assert.equal(
+    hasPermission("staff", ["notifications.manage"], "notifications.view"),
+    true,
+  );
+  assert.equal(
+    hasPermission("staff", ["notifications.manage"], "notifications.create"),
+    true,
+  );
+  assert.equal(
+    hasPermission("staff", ["notifications.manage"], "notifications.delete"),
+    true,
+  );
+});
+
+test("chat.search is an alias for support.liveChat.view, same as chat.view", () => {
+  assert.equal(allPermissions.includes("chat.search" as never), false);
+  assert.equal(
+    hasPermission("staff", ["support.liveChat.view"], "chat.search"),
+    true,
+  );
+  assert.equal(hasPermission("staff", [], "chat.search"), false);
+});

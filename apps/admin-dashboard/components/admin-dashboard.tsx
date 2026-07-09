@@ -2957,7 +2957,8 @@ function TrustPage({ notify }: { notify: (s: string) => void }) {
   >(null);
   const [evidenceCase,setEvidenceCase]=useState<(typeof db.complaints)[number]|null>(null);const[evidenceUploading,setEvidenceUploading]=useState(false);
   const [viewingRealData, setViewingRealData] = useState<(typeof db.complaints)[number] | null>(null);
-  const closedCases=db.complaints.filter((item)=>item.status==="Closed").length;const riskCases=db.complaints.filter((item)=>item.status!=="Closed"&&(item.severity==="High"||item.severity==="Medium")).length;const breachedCases=db.complaints.filter((item)=>item.status!=="Closed"&&item.severity==="Critical").length;const caseTotal=Math.max(1,db.complaints.length);const caseHealth=[{value:closedCases,fill:"#22c55e"},{value:riskCases,fill:"#f59e0b"},{value:breachedCases,fill:"#ef4444"}];
+  const isClosedLike=(status: (typeof db.complaints)[number]["status"])=>["Closed","Resolved","Rejected"].includes(status);
+  const closedCases=db.complaints.filter((item)=>isClosedLike(item.status)).length;const riskCases=db.complaints.filter((item)=>!isClosedLike(item.status)&&(item.severity==="High"||item.severity==="Medium")).length;const breachedCases=db.complaints.filter((item)=>!isClosedLike(item.status)&&item.severity==="Critical").length;const caseTotal=Math.max(1,db.complaints.length);const caseHealth=[{value:closedCases,fill:"#22c55e"},{value:riskCases,fill:"#f59e0b"},{value:breachedCases,fill:"#ef4444"}];
   return (
     <div className="space-y-5">
       <div className="grid gap-4 md:grid-cols-4">
@@ -3028,12 +3029,16 @@ function TrustPage({ notify }: { notify: (s: string) => void }) {
                   label={`Actions for ${i.id}`}
                   actions={[
                     { label: "Edit case", onClick: () => setEditing(i) },
+                    ...(can("complaints.assign")
+                      ? [{ label: "Assign case owner", onClick: () => setEditing(i) }]
+                      : []),
                     { label: "Add internal note", onClick: () => setNoting(i) },
                     {
-                      label:
-                        i.status === "Closed" ? "Reopen case" : "Close case",
+                      label: ["Closed", "Resolved", "Rejected"].includes(i.status)
+                        ? "Reopen case"
+                        : "Close case",
                       onClick: () =>
-                        i.status === "Closed"
+                        ["Closed", "Resolved", "Rejected"].includes(i.status)
                           ? actions.reopenCase(i.id)
                           : actions.closeCase(i.id),
                     },
@@ -3194,9 +3199,15 @@ function TrustPage({ notify }: { notify: (s: string) => void }) {
             required: true,
             options: [
               "New",
+              "Pending",
+              "Under Review",
+              "Assigned",
               "Investigating",
               "Evidence review",
               "Monitoring",
+              "Resolved",
+              "Reopened",
+              "Rejected",
               "Closed",
             ].map((x) => ({ label: x, value: x })),
           },

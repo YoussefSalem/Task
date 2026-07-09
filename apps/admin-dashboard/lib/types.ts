@@ -510,7 +510,18 @@ export interface Complaint {
   severity: Severity;
   ownerId?: string;
   owner: string;
-  status: "New" | "Investigating" | "Evidence review" | "Monitoring" | "Closed";
+  status:
+    | "New"
+    | "Pending"
+    | "Under Review"
+    | "Investigating"
+    | "Evidence review"
+    | "Assigned"
+    | "Monitoring"
+    | "Resolved"
+    | "Reopened"
+    | "Rejected"
+    | "Closed";
   age: string;
   notes: string[];
   evidence: string[];

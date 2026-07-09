@@ -38,6 +38,9 @@ export const permissionActions = [
   { id: "blacklist", label: "Blacklist" },
   { id: "sensitive", label: "Sensitive Data" },
   { id: "reset", label: "System Reset" },
+  { id: "internalNotes", label: "Internal Notes" },
+  { id: "timeline", label: "Timeline" },
+  { id: "attachments", label: "Attachments" },
 ] as const;
 
 type PermissionActionId = (typeof permissionActions)[number]["id"];
@@ -133,7 +136,7 @@ export const permissionTree = [
       { id: "bookings.emergency", label: "Emergency Bookings", actions: ["view", "assign", "cancel", "refund", "editFee"] },
       { id: "bookings.scheduled", label: "Scheduled Bookings", actions: ["view", "reschedule", "assign", "cancel"] },
       { id: "bookings.quotation", label: "Quotation Requests", actions: ["view", "assign", "approve", "reject", "convertToBooking", "export"] },
-      { id: "complaints", label: "Complaints", actions: ["view", "create", "edit", "delete", "assign", "resolve", "reopen", "sensitive", "export"] },
+      { id: "complaints", label: "Complaints", actions: ["view", "create", "edit", "delete", "assign", "resolve", "reopen", "sensitive", "export", "internalNotes", "timeline", "attachments"] },
       { id: "reviews", label: "Reviews", actions: ["view", "edit", "delete", "export"] },
     ],
   },
@@ -419,11 +422,14 @@ const legacyPermissionAliases: Record<string, Permission[]> = {
   "promotions.delete": ["promotions.delete"],
   "promotions.manage": ["promotions.view", "promotions.create", "promotions.edit", "promotions.delete"],
   "chat.view": ["support.liveChat.view"],
+  "chat.search": ["support.liveChat.view"],
   "notifications.view": ["notifications.view"],
   "notifications.create": ["notifications.create"],
   "notifications.edit": ["notifications.edit"],
   "notifications.delete": ["notifications.delete"],
   "notifications.send": ["notifications.view", "notifications.send"],
+  "notifications.read": ["notifications.view"],
+  "notifications.manage": ["notifications.view", "notifications.create", "notifications.edit", "notifications.delete"],
   "analytics.view": ["analytics.overview.view", "analytics.revenue.view", "analytics.bookings.view", "analytics.users.view", "analytics.technicians.view", "analytics.growth.view", "analytics.reports.view"],
   "analytics.export": ["analytics.overview.export", "analytics.revenue.export", "analytics.bookings.export", "analytics.users.export", "analytics.technicians.export", "analytics.growth.export", "analytics.reports.export"],
   "reports.view": ["analytics.reports.view"],
