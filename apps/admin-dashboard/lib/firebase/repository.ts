@@ -2450,7 +2450,11 @@ export async function readRealJobChat(
 ): Promise<{ thread: RealChatThread | null; messages: RealChatMessage[] }> {
   if (
     actor.isDemoUser ||
-    !(hasPermission(actor.role, actor.permissions, "trust.view") || hasPermission(actor.role, actor.permissions, "support.view"))
+    !(
+      hasPermission(actor.role, actor.permissions, "chat.view") ||
+      hasPermission(actor.role, actor.permissions, "trust.view") ||
+      hasPermission(actor.role, actor.permissions, "support.view")
+    )
   ) {
     return { thread: null, messages: [] };
   }

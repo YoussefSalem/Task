@@ -102,6 +102,7 @@ import { ContentManagementPage, SupportConversationsPage } from "@/components/fi
 import { AiExecutivePage } from "@/components/ai-executive-page";
 import { SystemResetPage } from "@/components/system-reset-page";
 import { EnterpriseOperationsPage } from "@/components/enterprise-operations-pages";
+import { ComplaintRealDataDialog } from "@/components/complaint-real-data-dialog";
 import {
   fullAccessPermissions,
   groupPermissions,
@@ -2943,6 +2944,7 @@ function CustomersPage({ notify }: { notify: (s: string) => void }) {
 
 function TrustPage({ notify }: { notify: (s: string) => void }) {
   const { db, actions } = useAdminData();
+  const { can } = usePermissions();
   const [createOpen, setCreateOpen] = useState(false);
   const [editing, setEditing] = useState<(typeof db.complaints)[number] | null>(
     null,
@@ -2954,6 +2956,7 @@ function TrustPage({ notify }: { notify: (s: string) => void }) {
     (typeof db.complaints)[number] | null
   >(null);
   const [evidenceCase,setEvidenceCase]=useState<(typeof db.complaints)[number]|null>(null);const[evidenceUploading,setEvidenceUploading]=useState(false);
+  const [viewingRealData, setViewingRealData] = useState<(typeof db.complaints)[number] | null>(null);
   const closedCases=db.complaints.filter((item)=>item.status==="Closed").length;const riskCases=db.complaints.filter((item)=>item.status!=="Closed"&&(item.severity==="High"||item.severity==="Medium")).length;const breachedCases=db.complaints.filter((item)=>item.status!=="Closed"&&item.severity==="Critical").length;const caseTotal=Math.max(1,db.complaints.length);const caseHealth=[{value:closedCases,fill:"#22c55e"},{value:riskCases,fill:"#f59e0b"},{value:breachedCases,fill:"#ef4444"}];
   return (
     <div className="space-y-5">
@@ -3039,6 +3042,14 @@ function TrustPage({ notify }: { notify: (s: string) => void }) {
                       onClick: () => setEvidenceCase(i),
                       separator: true,
                     },
+                    ...(can("chat.view") || can("notifications.view")
+                      ? [
+                          {
+                            label: "View real chat & notifications",
+                            onClick: () => setViewingRealData(i),
+                          },
+                        ]
+                      : []),
                     {
                       label: "Delete case",
                       onClick: () => setDeleting(i),
@@ -3234,6 +3245,7 @@ function TrustPage({ notify }: { notify: (s: string) => void }) {
         onConfirm={() => deleting && actions.deleteComplaint(deleting.id)}
       />
       {evidenceCase&&<div className="fixed inset-0 z-[120] grid place-items-center bg-black/75 p-4" onMouseDown={()=>setEvidenceCase(null)}><div className="panel w-full max-w-md p-5" onMouseDown={(event)=>event.stopPropagation()}><h2 className="font-semibold">Upload evidence · {evidenceCase.id}</h2><p className="mt-2 text-xs text-zinc-500">The file is stored in Firebase Storage and linked permanently to this complaint.</p><label className="btn-primary mt-5 cursor-pointer">{evidenceUploading?<Loader2 className="animate-spin"/>:<Plus className="h-4 w-4"/>} Choose evidence<input hidden type="file" accept="image/jpeg,image/png,image/webp,application/pdf,video/mp4,audio/mpeg,audio/wav" onChange={async(event)=>{const file=event.target.files?.[0];if(!file)return;setEvidenceUploading(true);try{const stored=await uploadFirebaseFile(file,`complaint-evidence/${evidenceCase.id}`);await actions.updateComplaint(evidenceCase.id,{evidence:[stored.url,...evidenceCase.evidence]});notify("Evidence uploaded and audited");setEvidenceCase(null)}catch(error){notify(error instanceof Error?error.message:"Upload failed")}finally{setEvidenceUploading(false)}}}/></label><button onClick={()=>setEvidenceCase(null)} className="btn-secondary ml-2">Cancel</button></div></div>}
+      <ComplaintRealDataDialog complaint={viewingRealData} onClose={() => setViewingRealData(null)} />
     </div>
   );
 }
