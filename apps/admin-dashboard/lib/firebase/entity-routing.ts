@@ -103,7 +103,7 @@ export const ADAPTER_REGISTRY: Record<string, AdapterInfo> = {
   locations: {
     status: "native",
     nativeReason:
-      "Real technician location is per-job (jobs/{jobId}/tracking), not per-provider - a different granularity than this collection models. Aggregating per-job points into a per-provider 'current location' view would require new logic, not a simple field bridge, and was left undone rather than guessed at.",
+      "Real technician location is per-job (jobs/{jobId}/tracking), not per-provider - a different granularity than this collection models. Aggregating per-job points into a per-provider 'current location' view would require new logic, not a simple field bridge, and was left undone rather than guessed at. The real per-job trail IS readable on demand via readRealJobTracking (repository.ts) for the live-ops map; only the per-provider aggregation stays native.",
   },
   instapayReviews: {
     status: "native",

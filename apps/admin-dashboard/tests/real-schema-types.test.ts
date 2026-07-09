@@ -4,7 +4,30 @@ import {
   mapRealChatMessage,
   mapRealChatThread,
   mapRealNotification,
+  mapRealTrackingPoint,
 } from "../lib/firebase/real-schema-types";
+
+test("mapRealTrackingPoint reads lat/lng/at/eta_minutes from the real tracking doc", () => {
+  const point = mapRealTrackingPoint("p1", {
+    lat: 30.05,
+    lng: 31.23,
+    at: "2026-07-09T12:00:00.000Z",
+    eta_minutes: 8,
+  });
+  assert.equal(point.id, "p1");
+  assert.equal(point.lat, 30.05);
+  assert.equal(point.lng, 31.23);
+  assert.equal(point.at, "2026-07-09T12:00:00.000Z");
+  assert.equal(point.etaMinutes, 8);
+});
+
+test("mapRealTrackingPoint defaults missing/invalid numeric fields to null (not 0)", () => {
+  const point = mapRealTrackingPoint("p2", {});
+  assert.equal(point.lat, null);
+  assert.equal(point.lng, null);
+  assert.equal(point.at, null);
+  assert.equal(point.etaMinutes, null);
+});
 
 test("mapRealChatThread reads the exact real Customer App field names", () => {
   const thread = mapRealChatThread("job1", "tech1", {

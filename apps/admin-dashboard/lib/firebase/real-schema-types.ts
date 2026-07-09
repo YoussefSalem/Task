@@ -49,6 +49,21 @@ export interface RealNotification {
   createdAt: string | null;
 }
 
+/**
+ * One real technician location sample under jobs/{jobId}/tracking/{id}
+ * (packages/task_data/lib/src/tracking/firestore_job_tracking_repository.dart:
+ * fields lat/lng/at/eta_minutes). Keyed by job, not provider - the real schema
+ * has no per-provider "current location" doc, so this is the honest granularity
+ * the dashboard's live map can consume.
+ */
+export interface RealTrackingPoint {
+  id: string;
+  lat: number | null;
+  lng: number | null;
+  at: string | null;
+  etaMinutes: number | null;
+}
+
 function toIsoOrNull(value: unknown): string | null {
   if (!value) return null;
   if (typeof value === "string") return value;
@@ -100,5 +115,18 @@ export function mapRealNotification(id: string, data: Record<string, unknown>): 
     threadId: data.thread_id ? String(data.thread_id) : null,
     read: Boolean(data.read ?? false),
     createdAt: toIsoOrNull(data.created_at),
+  };
+}
+
+export function mapRealTrackingPoint(id: string, data: Record<string, unknown>): RealTrackingPoint {
+  const lat = typeof data.lat === "number" ? data.lat : null;
+  const lng = typeof data.lng === "number" ? data.lng : null;
+  const eta = typeof data.eta_minutes === "number" ? data.eta_minutes : null;
+  return {
+    id,
+    lat,
+    lng,
+    at: toIsoOrNull(data.at),
+    etaMinutes: eta,
   };
 }

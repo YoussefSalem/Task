@@ -318,6 +318,7 @@ const legacyPermissionAliases: Record<string, Permission[]> = {
   "customers.wallet": ["customers.wallet"],
   "customers.sensitive": ["customers.sensitive"],
   "customers.read": ["customers.view"],
+  "customers.detail.view": ["customers.view"],
   "customers.write": ["customers.create", "customers.edit", "customers.delete", "customers.disable", "customers.wallet"],
   "providers.view": ["providers.view"],
   "providers.create": ["providers.create"],
@@ -358,6 +359,9 @@ const legacyPermissionAliases: Record<string, Permission[]> = {
   "technicians.edit": ["providers.edit"],
   "technicians.delete": ["providers.delete"],
   "technicians.change_status": ["providers.disable", "providers.enable"],
+  // Integration sprint aliases: technician detail page and live-location view.
+  "technicians.detail.view": ["providers.view", "technicians.performance.view"],
+  "technicians.location.view": ["operations.map.view", "operations.liveJobs.view", "providers.view"],
   "jobs.view": ["jobs.view"],
   "jobs.create": ["jobs.create"],
   "jobs.edit": ["jobs.edit"],
@@ -368,6 +372,12 @@ const legacyPermissionAliases: Record<string, Permission[]> = {
   "jobs.refund": ["jobs.refund", "payments.refunds.create"],
   "jobs.read": ["jobs.view", "operations.liveJobs.view"],
   "jobs.write": ["jobs.create", "jobs.edit", "jobs.assign", "jobs.cancel"],
+  // Integration sprint aliases: live-ops board, per-job timeline drill-down,
+  // and status transitions. Each resolves onto existing real leaves so no new
+  // module/tree entry is required (matches the file's alias convention).
+  "jobs.live.view": ["operations.liveJobs.view", "jobs.view"],
+  "jobs.timeline.view": ["operations.timeline.view", "jobs.view"],
+  "jobs.status.update": ["jobs.edit"],
   "bookings.emergency.view": ["bookings.emergency.view", "jobs.view", "operations.bookingControl.view"],
   "bookings.emergency.assign": ["bookings.emergency.assign", "jobs.assign", "operations.bookingControl.assign"],
   "bookings.emergency.cancel": ["bookings.emergency.cancel", "jobs.cancel"],

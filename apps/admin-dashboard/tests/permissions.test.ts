@@ -107,3 +107,41 @@ test("chat.search is an alias for support.liveChat.view, same as chat.view", () 
   );
   assert.equal(hasPermission("staff", [], "chat.search"), false);
 });
+
+test("jobs.live.view / jobs.timeline.view are aliases onto real operations+jobs leaves", () => {
+  assert.equal(hasPermission("staff", ["operations.liveJobs.view"], "jobs.live.view"), true);
+  assert.equal(hasPermission("staff", ["jobs.view"], "jobs.live.view"), true);
+  assert.equal(hasPermission("staff", ["operations.timeline.view"], "jobs.timeline.view"), true);
+  assert.equal(hasPermission("staff", [], "jobs.live.view"), false);
+});
+
+test("jobs.status.update resolves onto jobs.edit", () => {
+  assert.equal(hasPermission("staff", ["jobs.edit"], "jobs.status.update"), true);
+  assert.equal(hasPermission("staff", ["jobs.view"], "jobs.status.update"), false);
+});
+
+test("customers.detail.view resolves onto customers.view", () => {
+  assert.equal(hasPermission("staff", ["customers.view"], "customers.detail.view"), true);
+  assert.equal(hasPermission("staff", [], "customers.detail.view"), false);
+});
+
+test("technicians.detail.view / technicians.location.view resolve onto real leaves", () => {
+  assert.equal(hasPermission("staff", ["providers.view"], "technicians.detail.view"), true);
+  assert.equal(hasPermission("staff", ["technicians.performance.view"], "technicians.detail.view"), true);
+  assert.equal(hasPermission("staff", ["operations.map.view"], "technicians.location.view"), true);
+  assert.equal(hasPermission("staff", ["providers.view"], "technicians.location.view"), true);
+  assert.equal(hasPermission("staff", [], "technicians.location.view"), false);
+});
+
+test("the new job/customer/technician aliases are aliases, not standalone leaves", () => {
+  for (const p of [
+    "jobs.live.view",
+    "jobs.timeline.view",
+    "jobs.status.update",
+    "customers.detail.view",
+    "technicians.detail.view",
+    "technicians.location.view",
+  ]) {
+    assert.equal(allPermissions.includes(p as never), false, `${p} should not be a real leaf`);
+  }
+});

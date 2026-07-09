@@ -33,6 +33,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useAdminData } from "@/components/admin-data-provider";
 import { usePermissions } from "@/components/use-permissions";
+import { LiveJobsBoard } from "@/components/live-jobs-board";
 import type { Customer, DatabaseState, Job, Provider } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -249,6 +250,7 @@ export function EnterpriseOperationsPage({ page, openJob, notify }: EnterprisePr
             <AlertList alerts={alerts.slice(0, 8)} openJob={openJob} db={db} />
           </Panel>
         </div>
+        <LiveJobsBoard openJob={openJob} />
       </div>
     );
   }

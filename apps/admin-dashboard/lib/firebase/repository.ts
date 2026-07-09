@@ -61,9 +61,11 @@ import {
   mapRealChatMessage,
   mapRealChatThread,
   mapRealNotification,
+  mapRealTrackingPoint,
   type RealChatMessage,
   type RealChatThread,
   type RealNotification,
+  type RealTrackingPoint,
 } from "@/lib/firebase/real-schema-types";
 
 const emptyState: DatabaseState = {
@@ -2534,4 +2536,34 @@ export async function readRealUserNotifications(
     ),
   );
   return snapshot.docs.map((item) => mapRealNotification(item.id, item.data() as Record<string, unknown>));
+}
+
+/**
+ * Read-only drill-down into one job's REAL technician location trail
+ * (jobs/{jobId}/tracking) - the map-ready data for the live-ops view. One-shot
+ * read (newest first), permission-gated, demo-actor-refused. The real schema
+ * keys tracking by job (not provider), so this returns per-job samples; the
+ * caller pairs it with the job's assigned technician for a map pin.
+ */
+export async function readRealJobTracking(
+  jobId: string,
+  actor: AdminUser,
+  max = 50,
+): Promise<RealTrackingPoint[]> {
+  if (
+    actor.isDemoUser ||
+    !(
+      hasPermission(actor.role, actor.permissions, "technicians.location.view") ||
+      hasPermission(actor.role, actor.permissions, "jobs.live.view") ||
+      hasPermission(actor.role, actor.permissions, "jobs.view")
+    )
+  ) {
+    return [];
+  }
+  const { getDocs, orderBy, query: buildQuery, limit: limitDocs } = await import("firebase/firestore");
+  const { db } = getFirebaseClient();
+  const snapshot = await getDocs(
+    buildQuery(collection(db, "jobs", jobId, "tracking"), orderBy("at", "desc"), limitDocs(max)),
+  );
+  return snapshot.docs.map((item) => mapRealTrackingPoint(item.id, item.data() as Record<string, unknown>));
 }
