@@ -7,6 +7,7 @@ import {
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
+import { firebaseProjectId, firebaseStorageBucket } from "@/lib/firebase/config";
 
 function credential() {
   const raw = process.env.FIREBASE_SERVICE_ACCOUNT_JSON?.trim();
@@ -35,8 +36,8 @@ const app =
   getApps()[0] ??
   initializeApp({
     credential: credential(),
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    projectId: firebaseProjectId(),
+    storageBucket: firebaseStorageBucket(),
   });
 
 export const firebaseAdminAuth = getAuth(app);

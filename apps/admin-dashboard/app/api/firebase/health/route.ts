@@ -1,4 +1,5 @@
 import { firebaseAdminAuth, firebaseAdminDb } from "@/lib/firebase/admin";
+import { firebaseProjectId, firebaseStorageBucket } from "@/lib/firebase/config";
 import { requestId, serverLog } from "@/lib/server/logger";
 
 export const runtime = "nodejs";
@@ -9,10 +10,10 @@ export async function GET(request: Request) {
   const id = requestId(request);
   const startedAt = Date.now();
   const checks = {
-    firebaseProject: has("NEXT_PUBLIC_FIREBASE_PROJECT_ID"),
+    firebaseProject: Boolean(firebaseProjectId()),
     firestore: false,
     auth: false,
-    storageBucket: has("NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET"),
+    storageBucket: Boolean(firebaseStorageBucket()),
     resend: has("RESEND_API_KEY") && has("RESEND_FROM_EMAIL") && has("RESEND_FROM_NAME"),
     maps: has("NEXT_PUBLIC_GOOGLE_MAPS_API_KEY"),
     gemini: has("GEMINI_API_KEY"),

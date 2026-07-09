@@ -1,4 +1,5 @@
 import { requireFirebaseAdmin, firebaseApiError } from "@/lib/firebase/server-auth";
+import { firebaseProjectId, firebaseStorageBucket } from "@/lib/firebase/config";
 import { activeAiProvider } from "@/lib/integrations/api-center";
 
 export const runtime = "nodejs";
@@ -14,15 +15,15 @@ export async function GET(request: Request) {
     const aiConfigured = Boolean(ai.credentials.apiKey);
     return Response.json({
       firebase: {
-        configured: has("NEXT_PUBLIC_FIREBASE_PROJECT_ID"),
+        configured: Boolean(firebaseProjectId()),
         label: "Firebase project",
       },
       firestore: {
-        configured: has("NEXT_PUBLIC_FIREBASE_PROJECT_ID"),
+        configured: Boolean(firebaseProjectId()),
         label: "Cloud Firestore",
       },
       storage: {
-        configured: has("NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET"),
+        configured: Boolean(firebaseStorageBucket()),
         label: "Firebase Storage",
       },
       maps: {
