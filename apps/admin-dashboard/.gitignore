@@ -47,3 +47,10 @@ tsconfig.tsbuildinfo
 Thumbs.db
 .idea/
 .vscode/
+
+# Playwright / E2E smoke-test artifacts (never commit temp test manifests or run logs)
+/test-results/
+/playwright-report/
+/blob-report/
+e2e/.manifest.json
+e2e/.next-dev.log
