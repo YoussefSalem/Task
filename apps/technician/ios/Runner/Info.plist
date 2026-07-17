@@ -7,7 +7,11 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Technician</string>
+	<string>Task Pro</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Task Pro shares your live location with the customer while you're on the way to and working a job.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Task Pro uses the microphone for voice calls with the customer about a job.</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
